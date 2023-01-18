@@ -2,7 +2,7 @@
 defineProps({
     type: {
         type: String,
-        validator: (value) => ['button', 'link'].includes(value)
+        validator: (value) => ['button', 'link', 'submit'].includes(value)
     },
     to: {
         type: Object,
@@ -36,6 +36,7 @@ defineProps({
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
+    cursor: pointer;
 
     &.outline {
         background: var(--white);
