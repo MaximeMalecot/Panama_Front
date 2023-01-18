@@ -4,14 +4,14 @@ import Btn from '@/components/common/Btn.vue'
 
 <template>
     <header class="header">
-        <div class="header__logo">
+        <RouterLink :to="{ name: 'home' }" class="header__logo">
             <img class="header__logo__image" src="/logo.png" alt="Logo panama">
             <span class="header__logo__text">Panama</span>
-        </div>
+        </RouterLink>
         <nav class="header__nav">
             <ul class="header__nav__list">
                 <li class="header__nav__list__item">
-                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Offres</RouterLink>
+                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'offers' }">Offres</RouterLink>
                 </li>
                 <li class="header__nav__list__item">
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?</RouterLink>
@@ -42,6 +42,8 @@ import Btn from '@/components/common/Btn.vue'
     justify-content: flex-start;
     align-items: center;
     gap: .625rem;
+    text-decoration: none;
+
 
     &__text {
         font-family: 'Titan one';
