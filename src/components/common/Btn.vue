@@ -36,6 +36,7 @@ defineProps({
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
+    cursor: pointer;
 
     &.outline {
         background: var(--white);
