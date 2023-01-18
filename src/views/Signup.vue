@@ -5,6 +5,7 @@ import { reactive, onMounted, computed } from "vue";
 import { useRoute } from 'vue-router';
 import { ROLES } from "@/constants/roles";
 import { checkMail } from "@/utils";
+import { displayMsg } from "@/utils/toast";
 
 const handledRoles = {
     CLIENT: 'client',
@@ -43,36 +44,37 @@ const formData = reactive({
 const onSubmit = () => {
     const { surname, name, email, password, passwordConfirmation, tosAgreed } = formData;
     if (!role.value) {
-        console.error("Invalid signin type")
+        console.error("Invalid signin type");
+        displayMsg({ msg: "Une erreur est survenue avec le type d'inscription", type: "error" });
         return;
     }
 
     if (!checkMail(email)) {
-        //todo show error
+        displayMsg({ msg: "Veuillez saisir une adresse e-mail valide", type: "error" });
         return;
     }
 
     if(name === '' || surname === '') {
-        //todo show error
+        displayMsg({ msg: "Veuillez saisir un nom et un prénom", type: "error" });
         console.error("Name or surname is empty");
         return;
     }
 
     if (password.length < 1) {
-        //todo show error
+        displayMsg({ msg: "Veuillez saisir un mot de passe", type: "error" });
         console.error("Password is too short");
         return;
     }
 
     if (password !== passwordConfirmation) {
-        //todo show error
+        displayMsg({ msg: "Les mots de passe ne correspondent pas", type: "error" });
         console.error("Password confirmation doesn't match")
         return;
     }
 
     if (!tosAgreed) {
-        console.error("You must agree to the ToS")
-        //todo show error
+        console.error("You must agree to the ToS");
+        displayMsg({ msg: "Vous devez accepter les conditions d'utilisation", type: "error" });
         return;
     }
     store.signup({...formData, role: role.value});
