@@ -29,10 +29,12 @@ function updateValue(value) {
 
 <template>
     <div class="select" :class="{ 'opened': isSelectOpened }" @click="isSelectOpened = !isSelectOpened">
-        <span class="select__content">
-            <template v-if="!modelValue">{{ placeholder }}</template>
-            <template v-else>{{ selectName }}</template>
-        </span>
+        <template v-if="!modelValue">
+            <span class="select__content placeholder">{{ placeholder }}</span>
+        </template>
+        <template v-else>
+            <span class="select__content">{{ selectName }}</span>
+        </template>
         <div v-show="isSelectOpened" class="select__dropdown">
             <ul class="select__dropdown__list">
                 <li v-for="value, index in values" class="select__dropdown__list__item" :key="`selectitem-${index}`"
@@ -63,6 +65,9 @@ function updateValue(value) {
 
     &__content {
         user-select: none;
+        &.placeholder {
+            color: var(--text-gray)
+        }
     }
 
     &__dropdown {
@@ -73,6 +78,7 @@ function updateValue(value) {
         background: var(--background);
         border-bottom-right-radius: var(--radius-2);
         border-bottom-left-radius: var(--radius-2);
+        z-index: 2;
 
         &__list {
             list-style: none;
