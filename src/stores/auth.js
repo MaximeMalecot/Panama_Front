@@ -39,24 +39,19 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    function login(payload = {}){
-        //const { email, password } = payload;
+    function login(email, password){
+        if( !email || !password ){
+            return;
+        }
+        //userData.value = {...emptyUserData, token: ''};
+    }
 
-        //userData.value = {...emptyUserData, token: 'eee'};
+    function signup(email, password, accountType){
+        if( !email || !password || !accountType ){
+            return;
+        }
+        //userData.value = {...emptyUserData, token: ''};
     }
 
     return { userData, tryLogin, isConnected, login };
-
-    //State properties
-    // const count = ref(0)
-    // const name = ref('Eduardo')
-
-    //getters
-    // const doubleCount = computed(() => count.value * 2)
-
-    //actions
-    // function increment() {
-    //   count.value++
-    // }
-    // return { count, name, doubleCount, increment }
   })
