@@ -1,4 +1,4 @@
-export default TECHNOS = {
+export const TECHNOS = {
     htmlcss: {
         name: 'HTML/CSS',
         key: 'htmlcss',

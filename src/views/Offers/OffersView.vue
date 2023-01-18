@@ -1,6 +1,10 @@
 <script setup>
+import { useOffersStore } from '@/stores/offers'
 import OffersFilter from '@/views/Offers/OffersFilter.vue';
 import OfferCard from '@/components/OfferCard.vue';
+
+const OffersStore = useOffersStore();
+OffersStore.getOffers();
 </script>
 
 <template>
@@ -9,13 +13,11 @@ import OfferCard from '@/components/OfferCard.vue';
             <OffersFilter></OffersFilter>
         </section>
         <section class="header">
-            <h2>413 offres disponibles</h2>
+            <h2>{{ OffersStore.count }} offres disponibles</h2>
         </section>
         <section class="results">
             <div class="results__list">
-                <OfferCard></OfferCard>
-                <OfferCard></OfferCard>
-                <OfferCard></OfferCard>
+                <OfferCard v-for="offer in OffersStore.offers" :offerData="offer"></OfferCard>
             </div>
             <div class="results__pagination">
                 1 2 3 4 5
@@ -47,5 +49,12 @@ import OfferCard from '@/components/OfferCard.vue';
 
 .results {
     grid-area: results;
+    &__list {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 }
 </style>

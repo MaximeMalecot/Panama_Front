@@ -1,20 +1,39 @@
 <script setup>
-import Tag from './common/Tag.vue';
-</script>
+import Tag from '@/components/common/Tag.vue';
+import { TECHNOS } from '@/constants/technos';
 
+defineProps({
+    offerData: {
+        type: Object,
+        required: true,
+    }
+})
+
+function displayPriceRange(price) {
+    const prices = [1000, 2000, 5000, 10000, 20000];
+    if (price > prices[prices.length - 1]) {
+        return `> ${prices[prices.length - 1]}`;
+    }
+    if (price < prices[0]) {
+        return `< ${prices[0]}`;
+    }
+    const index = prices.findIndex((p) => price < p);
+    return `${prices[index - 1]} - ${prices[index]}`;
+}
+
+</script>
 
 <template>
     <article class="card">
-        <div class="card__thumbnail"></div>
+        <div class="card__thumbnail" :style="{ background: TECHNOS[offerData.tags[0]].color }"></div>
         <div class="card__content">
-            <p class="card__content__title">Conception d'un site avec Shopify</p>
+            <p class="card__content__title">{{ offerData.title }}</p>
             <div class="card__content__technos">
-                <Tag>Shopify</Tag>
-                <Tag>HTML/CSS</Tag>
+                <Tag v-for="techno in offerData.tags" :color="TECHNOS[techno].color">{{ TECHNOS[techno].name }}</Tag>
             </div>
             <div class="card__content__footer">
-                <span class="card__content__footer__price">2000€ - 5000€</span>
-                <span class="card__content__footer__time">4 mois</span>
+                <span class="card__content__footer__price"> {{ displayPriceRange(offerData.price) }} €</span>
+                <span class="card__content__footer__time">{{ offerData.time }} mois</span>
             </div>
         </div>
 
@@ -26,10 +45,11 @@ import Tag from './common/Tag.vue';
     display: inline-block;
     border: 1px solid var(--border);
     border-radius: var(--radius-1);
+    width: 400px;
 
     &__thumbnail {
-        background: green;
-        height: 50px;
+        background: #4287f5;
+        height: 80px;
         width: 100%;
         border-top-right-radius: var(--radius-1);
         border-top-left-radius: var(--radius-1);
@@ -40,9 +60,13 @@ import Tag from './common/Tag.vue';
 
         &__title {
             margin: 0 0 1rem 0;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
         &__technos {
             display: flex;
             justify-content: flex-start;
@@ -50,6 +74,7 @@ import Tag from './common/Tag.vue';
             gap: .5rem;
             margin-bottom: 1rem;
         }
+
         &__footer {
             display: flex;
             justify-content: space-between;
