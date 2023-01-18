@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import jwt_decode from "jwt-decode";
 import { TOKEN_STORAGE_KEY } from "../constants/storage_keys";
+import AuthService from "../services/auth.service";
 
 const checkToken = (token) => {
     try {
@@ -46,12 +47,13 @@ export const useAuthStore = defineStore('auth', () => {
         //userData.value = {...emptyUserData, token: ''};
     }
 
-    function signup(email, password, accountType){
-        if( !email || !password || !accountType ){
+    async function signup(payload){
+        const { name, surname, email, password: plainPassword, role } = payload;
+        if( !email || !plainPassword || !role ){
             return;
         }
-        //userData.value = {...emptyUserData, token: ''};
+        const res = await AuthService.signup({ name, surname, email, plainPassword, role });
     }
 
-    return { userData, tryLogin, isConnected, login };
+    return { userData, tryLogin, isConnected, login, signup };
   })

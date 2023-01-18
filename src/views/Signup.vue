@@ -8,13 +8,12 @@ import { checkMail } from "@/utils";
 
 const handledRoles = {
     CLIENT: 'client',
-    FREELANCE: 'freelance',
+    FREELANCER: 'freelancer',
 };
 
 const route = useRoute();
 
 onMounted(() => {
-    console.log(route.query);
     if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
         //todo redirect to home
     }
@@ -26,8 +25,8 @@ const role = computed(() => {
     }
     if (route.query.role === handledRoles.CLIENT) {
         return ROLES.CLIENT;
-    } else if (route.query.role === handledRoles.FREELANCE) {
-        return ROLES.FREELANCE;
+    } else if (route.query.role === handledRoles.FREELANCER) {
+        return ROLES.FREELANCER;
     }
 });
 
@@ -35,12 +34,14 @@ const store = useAuthStore();
 const formData = reactive({
     email: '',
     password: '',
+    surname: '',
+    name: '',
     passwordConfirmation: '',
     tosAgreed: false,
 });
 
 const onSubmit = () => {
-    const { email, password, passwordConfirmation, tosAgreed } = formData;
+    const { surname, name, email, password, passwordConfirmation, tosAgreed } = formData;
     if (!role.value) {
         console.error("Invalid signin type")
         return;
@@ -48,6 +49,12 @@ const onSubmit = () => {
 
     if (!checkMail(email)) {
         //todo show error
+        return;
+    }
+
+    if(name === '' || surname === '') {
+        //todo show error
+        console.error("Name or surname is empty");
         return;
     }
 
@@ -68,8 +75,7 @@ const onSubmit = () => {
         //todo show error
         return;
     }
-
-    store.login(email, password, role.value);
+    store.signup({...formData, role: role.value});
 }
 
 </script>
@@ -77,6 +83,8 @@ const onSubmit = () => {
 <template>
     <div class="auth">
         <form @submit.prevent="onSubmit">
+            <input name="name" placeholder="Nom" type="text" v-model="formData.name" />
+            <input name="surname" placeholder="Prénom" type="text" v-model="formData.surname" />
             <input name="email" placeholder="Addresse e-mail" type="text" v-model="formData.email" />
             <input name="password" placeholder="Mot de passe" type="password" v-model="formData.password" />
             <input name="passwordConfirmation" placeholder="Confirmation du mot de passe" type="password"

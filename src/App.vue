@@ -8,7 +8,6 @@ import { onMounted } from 'vue';
 const store = useAuthStore();
 
 onMounted(() => {
-  console.log(store.isConnected)
   store.tryLogin();
 })
 
