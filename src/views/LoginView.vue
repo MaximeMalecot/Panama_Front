@@ -2,6 +2,7 @@
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 import { reactive } from "vue";
+import { displayMsg } from "@/utils/toast";
 
 const store = useAuthStore();
 const formData = reactive({
@@ -12,16 +13,23 @@ const formData = reactive({
 const onSubmit = () => {
     const { email, password } = formData;
     if (!email) {
-        console.error("Missing email")
+        console.error("Missing email");
+        displayMsg({ msg: "Veuillez saisir une adresse e-mail", type: "error" });
         return;
     }
 
     if (!password) {
-        console.error("Missing password")
+        console.error("Missing password");
+        displayMsg({ msg: "Veuillez saisir un mot de passe", type: "error" });
         return;
     }
 
-    store.login(formData.email, formData.password);
+    const res = store.login(formData.email, formData.password);
+    if (res === true) {
+        displayMsg({ msg: "Connexion réussie", type: "success" });
+    } else {
+        displayMsg({ msg: "Une erreur est survenue", type: "error" });
+    }
 }
 
 </script>
