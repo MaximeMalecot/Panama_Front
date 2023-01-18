@@ -2,7 +2,7 @@
 defineProps({
     type: {
         type: String,
-        validator: (value) => ['button', 'link'].includes(value)
+        validator: (value) => ['button', 'link', 'submit'].includes(value)
     },
     to: {
         type: Object,
