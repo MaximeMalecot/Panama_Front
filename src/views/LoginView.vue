@@ -10,7 +10,7 @@ const formData = reactive({
     password: ''
 });
 
-const onSubmit = () => {
+const onSubmit = async () => {
     const { email, password } = formData;
     if (!email) {
         console.error("Missing email");
@@ -24,7 +24,7 @@ const onSubmit = () => {
         return;
     }
 
-    const res = store.login(formData.email, formData.password);
+    const res = await store.login(formData.email, formData.password);
     if (res === true) {
         displayMsg({ msg: "Connexion réussie", type: "success" });
     } else {

@@ -53,9 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
                 return true;
             }
         }
-        console.log("nope")
         return false;
-        //userData.value = {...emptyUserData, token: ''};
     }
 
     async function signup(payload){
@@ -64,7 +62,13 @@ export const useAuthStore = defineStore('auth', () => {
             return;
         }
         const res = await AuthService.signup({ name, surname, email, plainPassword, roles: [role] });
+        return res;
     }
 
-    return { userData, tryLogin, isConnected, login, signup };
+    function logout(){
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        userData.value = emptyUserData;
+    }
+
+    return { userData, tryLogin, isConnected, login, signup, logout };
   })
