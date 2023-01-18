@@ -40,10 +40,21 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    function login(email, password){
+    async function login(email, password){
         if( !email || !password ){
             return;
         }
+        const res = await AuthService.login(email, password);
+        if( res && res?.token ){
+            const decoded = checkToken(res.token);
+            if( decoded ){
+                localStorage.setItem(TOKEN_STORAGE_KEY, res.token);
+                userData.value = {...decoded, token: res.token};
+                return true;
+            }
+        }
+        console.log("nope")
+        return false;
         //userData.value = {...emptyUserData, token: ''};
     }
 
