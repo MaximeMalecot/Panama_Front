@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
         if( !email || !plainPassword || !role ){
             return;
         }
-        const res = await AuthService.signup({ name, surname, email, plainPassword, role });
+        const res = await AuthService.signup({ name, surname, email, plainPassword, roles: [role] });
     }
 
     return { userData, tryLogin, isConnected, login, signup };
