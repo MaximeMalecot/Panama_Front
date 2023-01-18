@@ -28,8 +28,8 @@ const authStore = useAuthStore();
             </ul>
         </nav>
         <div v-if="!authStore.isConnected" class="header__login">
-            <Btn type="link" :to="{ name: 'signup' }" outline>Je suis client</Btn>
-            <Btn type="link" :to="{ name: 'signup' }">Je suis freelance</Btn>
+            <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>Je suis client</Btn>
+            <Btn type="link" :to="{ name: 'signup', query: { role: 'freelancer'} }">Je suis freelance</Btn>
         </div>
         <div v-else>
             <button @click="authStore.logout">Logout</button>
