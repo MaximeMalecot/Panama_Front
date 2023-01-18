@@ -82,9 +82,12 @@ const onSubmit = () => {
             <input name="passwordConfirmation" placeholder="Confirmation du mot de passe" type="password"
                 v-model="formData.passwordConfirmation" />
             <input type="checkbox" v-model="formData.tosAgreed" />
-            <label for="tosAgreed">J'accepte les conditions générales d'utilisation</label> 
-            <button type="submit">Se connecter</button>
+            <label for="tosAgreed">J'accepte les CGU</label>
+            <button type="submit">S'inscrire dès maintenant'</button>
         </form>
+        <div>
+            <a href="">Déjà inscrit? Se connecter</a>
+        </div>
     </div>
 </template>
 

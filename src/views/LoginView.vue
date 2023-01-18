@@ -20,7 +20,7 @@ const onSubmit = () => {
         console.error("Missing password")
         return;
     }
-    
+
     store.login(formData.email, formData.password);
 }
 
@@ -33,6 +33,10 @@ const onSubmit = () => {
             <input name="password" placeholder="Mot de passe" type="password" v-model="formData.password" />
             <button type="submit">Se connecter</button>
         </form>
+        <div>
+            <a href="">Mot de passe oublié</a>
+            <a href="">Pas de compte? S'inscrire</a>
+        </div>
     </div>
 </template>
 
