@@ -12,7 +12,7 @@ class AuthService {
 
     async signup(payload){
         try{
-            const res = await fetch(`${API_URL}/authentication_register`, {
+            const res = await fetch(`${API_URL}/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
