@@ -21,6 +21,28 @@ const router = createRouter({
       component: () => import('../views/Offer/OfferView.vue')
     },
     {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboard/DashboardView.vue'),
+      children: [
+        {
+          path: '',
+          name: 'dashboard-home',
+          component: () => import('../views/Dashboard/DashboardOffers/DashboardOffersView.vue'),
+        },
+        {
+          path: 'offers',
+          name: 'dashboard-offers',
+          component: () => import('../views/Dashboard/DashboardOffers/DashboardOffersView.vue'),
+        },
+        {
+          path: 'projects',
+          name: 'dashboard-projects',
+          component: () => import('../views/Dashboard/DashboardProjects/DashboardProjectsView.vue'),
+        },
+      ],
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
