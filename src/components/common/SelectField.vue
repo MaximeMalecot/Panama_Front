@@ -65,6 +65,7 @@ function updateValue(value) {
 
     &__content {
         user-select: none;
+
         &.placeholder {
             color: var(--text-gray)
         }
