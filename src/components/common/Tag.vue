@@ -20,5 +20,6 @@ defineProps({
     background: var(--border);
     padding: .25rem .5rem;
     border-radius: var(--radius-4);
+    font-size: .9rem;
 }
 </style>

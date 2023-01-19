@@ -1,7 +1,7 @@
 <script setup>
 import { useOffersStore } from '@/stores/offers'
 import OffersFilter from '@/views/Offers/OffersFilter.vue';
-import OfferCard from '@/components/OfferCard.vue';
+import OfferCard from '@/components/Offers/OfferCard.vue';
 import Pagination from '@/components/common/Pagination.vue';
 
 const OffersStore = useOffersStore();
