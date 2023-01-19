@@ -1,22 +1,39 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import ToggleBtn from "../../../components/common/ToggleBtn.vue";
+import '@vueform/slider/themes/default.css'
+import Slider from '@vueform/slider'
 
 const props = defineProps({
     formData: Object
 });
 
 const enablePriceRange = ref(false);
-const priceRange = ref({
-    minPrice: props.formData.price_range.minPrice,
-    maxPrice: props.formData.price_range.maxPrice
-});
+const priceRange = ref([props.formData.price_range.minPrice, props.formData.price_range.maxPrice]);
 
 const enableDuration = ref(false);
 const duration = ref({
     value: props.formData.duration.value,
     unit: props.formData.duration.unit
 });
+
+watch(priceRange, (newVal) => {
+    console.log(newVal);
+    const [minPrice, maxPrice] = newVal;
+    props.formData.price_range = { minPrice, maxPrice };
+});
+
+watch(enablePriceRange, (val) => {
+    if (!val) {
+        props.formData.price_range = { minPrice: 0, maxPrice: 0 };
+    }
+});
+
+onMounted(()=>{
+    if(props.formData.price_range.minPrice !== 0 && props.formData.price_range.maxPrice !== 0){
+        enablePriceRange.value = true;
+    }
+})
 
 </script>
 
@@ -32,26 +49,33 @@ const duration = ref({
         <div class="content">
             <div class="selector">
                 <div class="toggle">
-                    <div class="checkbox">
-                        <input type="checkbox" @click="enablePriceRange = !enablePriceRange" />
+                    <div class="checkbox" @click="enablePriceRange = !enablePriceRange">
+                        <input :checked="enablePriceRange" type="checkbox" />
                         <p>Specifier une gamme de prix</p>
                     </div>
-                    <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia soluta, nostrum
+                    <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia
+                        soluta, nostrum
                         quis
                         nulla animi facilis, rerum ex repellat eligendi maiores dolor sequi laborum, ullam aliquid
                         adipisci eum. Illo!</p>
                 </div>
                 <div class="sub_content" v-show="enablePriceRange">
-
+                    <Slider 
+                        :min="1" 
+                        :max="1000"
+                        v-model="priceRange"
+                        />
+                        <!-- :value="[Object.values(formData.price_range)]" -->
                 </div>
             </div>
             <div class="selector">
                 <div class="toggle">
-                    <div class="checkbox">
-                        <input type="checkbox" @click="enableDuration = !enableDuration" />
+                    <div class="checkbox" @click="enableDuration = !enableDuration">
+                        <input :checked="enableDuration" type="checkbox" />
                         <p>Specifier une durée pour la mission</p>
                     </div>
-                    <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia soluta, nostrum
+                    <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia
+                        soluta, nostrum
                         quis
                         nulla animi facilis, rerum ex repellat eligendi maiores dolor sequi laborum, ullam aliquid
                         adipisci eum. Illo!</p>
@@ -91,7 +115,7 @@ const duration = ref({
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
-            
+
             .toggle {
                 width: 100%;
                 display: flex;
@@ -100,6 +124,8 @@ const duration = ref({
                 .checkbox {
                     width: 100%;
                     display: flex;
+                    cursor: pointer;
+
                     p {
                         margin: 0;
                         padding: 0;
@@ -108,8 +134,12 @@ const duration = ref({
 
             }
 
-            .description{
+            .description {
                 font-size: 14px;
+            }
+
+            .sub_content{
+                padding: 20px 0;
             }
         }
     }

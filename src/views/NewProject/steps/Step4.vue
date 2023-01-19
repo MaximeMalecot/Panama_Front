@@ -23,7 +23,15 @@ const props = defineProps({
                     <TagItem v-for="(tag, index) in formData.filters" :key="index" :data="tag" :id="index"
                         :onClick="() => null" />
                 </div>
-                <div v-else>Aucun filtre séléctionné</div>
+                <div v-else><p style="font-style: italic">Aucun filtre séléctionné</p></div>
+                <div v-if="formData.price_range.minPrice > 0">
+                    <p>Budget compris entre: <b>{{ formData.price_range.minPrice }}€</b> et <b>{{ formData.price_range.maxPrice }}€</b></p>
+                </div>
+                <div v-else><p style="font-style: italic">Aucun budget spécifié</p></div>
+                <div v-if="formData.duration.value > 0">
+                    <p>Durée: <b>{{ formData.duration.value }} {{ formData.duration.unit }}</b></p>
+                </div>
+                <div v-else><p style="font-style: italic">Aucune durée spécifiée</p></div>
             </div>
             <div class="fees">
                 <h4>Coût du projet: 40$</h4>

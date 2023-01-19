@@ -17,7 +17,7 @@ const formData = reactive({
             name: "TAG1",
         }
     ],
-    price_range: { minPrice: null, maxPrice: null },
+    price_range: { minPrice: 0, maxPrice: 0 },
     duration: { value: null, unit: null },
 });
 
