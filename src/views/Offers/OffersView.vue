@@ -2,6 +2,7 @@
 import { useOffersStore } from '@/stores/offers'
 import OffersFilter from '@/views/Offers/OffersFilter.vue';
 import OfferCard from '@/components/OfferCard.vue';
+import Pagination from '@/components/common/Pagination.vue';
 
 const OffersStore = useOffersStore();
 OffersStore.getOffers();
@@ -20,7 +21,7 @@ OffersStore.getOffers();
                 <OfferCard v-for="offer in OffersStore.offers" :offerData="offer"></OfferCard>
             </div>
             <div class="results__pagination">
-                1 2 3 4 5
+                <Pagination :currentPage="1" :totalItemCount="34"/>
             </div>
         </section>
     </main>
@@ -55,6 +56,11 @@ OffersStore.getOffers();
         align-items: flex-start;
         flex-wrap: wrap;
         gap: 1rem;
+    }
+    &__pagination {
+        display: flex;
+        justify-content: center;
+        padding: 2rem 0;
     }
 }
 </style>
