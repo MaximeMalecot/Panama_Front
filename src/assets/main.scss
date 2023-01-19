@@ -1,0 +1,21 @@
+@import './base.css';
+
+$containerWidths: (
+    'xl' 1100px 1301px,
+    'l' 900px 1101px,
+    'm' 750px 901px,
+    's' 500px 751px,
+    'xs' 100% 501px,
+);
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+@each $size, $width, $maxWidth in $containerWidths {
+    @media screen and (max-width: $maxWidth) {
+        .container {
+            max-width: $width;
+        }
+    }
+}
