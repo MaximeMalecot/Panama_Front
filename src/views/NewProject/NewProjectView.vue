@@ -33,9 +33,6 @@ const prevStep = () => {
     }
 };
 
-// provide("new_project:nextStep", nextStep);
-// provide("new_project:prevStep", prevStep);
-
 const steps = [
     {
         title: "Presentation",
@@ -55,18 +52,23 @@ const steps = [
     }
 ];
 
+const createPost = async () => {
+    console.log("create post");
+};
+
 </script>
 
 <template>
     <div class="new_project">
         <Timeline :currentStep="currentStep" :steps="steps" />
     </div>
-    <div class="container">
+    <div class="container content">
         <component :is="steps[currentStep].component" :formData="formData">
             <slot>
                 <div class="change_step">
                     <Btn v-if="currentStep > 0" @click="prevStep" outline>Previous</Btn>
                     <Btn v-if="currentStep < (steps.length - 1)" @click="nextStep">Next</Btn>
+                    <Btn v-else @click="createPost">Valider et procéder au paiement</Btn>
                 </div>
             </slot>
         </component>
@@ -78,7 +80,10 @@ const steps = [
     margin-bottom: 2rem;
 }
 
-.container {
+.content {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-1);
     .change_step {
         display: flex;
         gap: 10px;

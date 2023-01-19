@@ -26,6 +26,7 @@ const props = defineProps({
     background-color: var(--background);
     border: 1px solid var(--border);
     transition: 0.3s;
+    width: fit-content;
     cursor: pointer;
 
     &:hover {
