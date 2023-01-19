@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, reactive } from "vue";
 import ToggleBtn from "../../../components/common/ToggleBtn.vue";
 import '@vueform/slider/themes/default.css'
 import Slider from '@vueform/slider'
@@ -12,7 +12,7 @@ const enablePriceRange = ref(false);
 const priceRange = ref([props.formData.price_range.minPrice, props.formData.price_range.maxPrice]);
 
 const enableDuration = ref(false);
-const duration = ref({
+let duration = reactive({
     value: props.formData.duration.value,
     unit: props.formData.duration.unit
 });
@@ -37,7 +37,8 @@ watch(duration, (newVal) => {
 
 watch(enableDuration, (val, prev) => {
     if (!prev && val) {
-        duration.value = { value: 1, unit: UNITS[0] }
+        duration.value = 1;
+        duration.unit = UNITS[0];
     }
 });
 
