@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
-import { reactive, onMounted, computed, ref } from "vue";
+import { reactive, onMounted, watch, computed, ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import { ROLES } from "@/constants/roles";
 import { checkMail } from "@/utils";
@@ -17,11 +17,6 @@ const handledRoles = {
 const route = useRoute();
 const router = useRouter();
 
-onMounted(() => {
-    if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
-        //todo redirect to home
-    }
-});
 
 const role = computed(() => {
     if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
@@ -103,6 +98,33 @@ const onSubmit = async () => {
     }
     loading.value = false;
 }
+
+// onMounted(() => {
+//     console.log(role)
+//     if(role.value){
+//         document.title = `Panama Agency - Inscription en tant que ${role.value === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+//     }else{
+//         document.title = `Panama Agency - Inscription`;
+//     }
+// });
+
+watch(role, val => {
+    console.log(val)
+    if(val){
+        document.title = `Panama Agency - Inscription en tant que ${val === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+    }else{
+        document.title = `Panama Agency - Inscription`;
+    }
+});
+
+onMounted(() => {
+    console.log(role)
+    if(role.value){
+        document.title = `Panama Agency - Inscription en tant que ${role.value === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+    }else{
+        document.title = `Panama Agency - Inscription`;
+    }
+});
 
 </script>
 
