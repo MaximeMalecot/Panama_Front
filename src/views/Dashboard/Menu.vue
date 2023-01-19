@@ -1,24 +1,42 @@
 <script setup>
+import { ROLES } from '@/constants/roles';
+// @todo import authStore
+
+const user = {
+    role: ROLES.FREELANCER,
+}
+
 const dashboardRoutes = [
     {
         name: 'dashboard-offers',
-        title: 'Mes offres'
+        title: 'Mes offres',
+        role: ROLES.CLIENT,
+    },
+    {
+        name: 'dashboard-propositions',
+        title: 'Mes propositions',
+        role: ROLES.FREELANCER,
     },
     {
         name: 'dashboard-projects',
-        title: 'Mes projets'
+        title: 'Mes projets',
+        role: -1,
     },
     {
         name: 'dashboard-projects',
-        title: 'Paramètres'
+        title: 'Paramètres',
+        role: -1,
     },
 ];
+
+const authorizedRoutes = dashboardRoutes.filter((route) => route.role === -1 || route.role === user.role)
+
 </script>
 
 <template>
     <nav class="nav">
         <ul class="nav__list">
-            <li v-for="dashboardRoute in dashboardRoutes " class="nav__list__item">
+            <li v-for="dashboardRoute in authorizedRoutes " class="nav__list__item">
                 <RouterLink :to="{ name: dashboardRoute.name }" class="nav__list__item__link" active-class="active">
                     {{ dashboardRoute.title }}
                 </RouterLink>
