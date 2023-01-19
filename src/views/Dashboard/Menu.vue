@@ -3,7 +3,7 @@ import { ROLES } from '@/constants/roles';
 // @todo import authStore
 
 const user = {
-    role: ROLES.FREELANCER,
+    role: ROLES.CLIENT,
 }
 
 const dashboardRoutes = [
