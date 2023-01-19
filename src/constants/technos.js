@@ -2,7 +2,7 @@ export const TECHNOS = {
     htmlcss: {
         name: 'HTML/CSS',
         key: 'htmlcss',
-        color: '#cf791d',
+        color: '#ff9900',
     },
     javascript: {
         name: 'Javascript',

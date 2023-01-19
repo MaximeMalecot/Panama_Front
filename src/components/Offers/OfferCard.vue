@@ -1,16 +1,33 @@
 <script setup>
 import Tag from '@/components/common/Tag.vue';
 import { TECHNOS } from '@/constants/technos';
-import { useRouter } from 'vue-router';
 
 defineProps({
     offerData: {
         type: Object,
         required: true,
-    }
+    },
+    status: {
+        type: String,
+        validator: (value) => ['inprogress', 'issued'].includes(value),
+    },
+    type: {
+        type: String,
+        validator: (value) => ['project', 'offer'].includes(value),
+    },
+    editable: {
+        type: Boolean,
+        default: false,
+    },
+    hasLink: {
+        type: Boolean,
+        default: false,
+    },
+    customLinkText: {
+        type: String,
+        default: 'Voir le projet',
+    },
 })
-
-const router = useRouter();
 
 function displayPriceRange(price) {
     const prices = [1000, 2000, 5000, 10000, 20000];
@@ -27,7 +44,9 @@ function displayPriceRange(price) {
 </script>
 
 <template>
-    <article class="card" @click="router.push({ name: 'offer', params: { id: 1 } })">
+    <article class="card">
+        <Tag v-if="status === 'inprogress'" class="card__status-tag" color="var(--warning)">En cours</Tag>
+        <Tag v-if="status === 'issued'" class="card__status-tag" color="var(--success)">Terminé</Tag>
         <div class="card__thumbnail" :style="{ background: TECHNOS[offerData.tags[0]].color }"></div>
         <div class="card__content">
             <p class="card__content__title">{{ offerData.title }}</p>
@@ -39,17 +58,24 @@ function displayPriceRange(price) {
                 <span class="card__content__footer__time">{{ offerData.time }} mois</span>
             </div>
         </div>
-
+        <div v-if="hasLink" class="card__link">{{ customLinkText }}</div>
     </article>
 </template>
 
 <style lang="scss" scoped>
 .card {
+    position: relative;
     display: inline-block;
     border: 1px solid var(--border);
     border-radius: var(--radius-1);
     width: 400px;
     cursor: pointer;
+
+    &__status-tag {
+        position: absolute;
+        left: .5rem;
+        top: .5rem;
+    }
 
     &__thumbnail {
         background: #4287f5;
@@ -84,6 +110,14 @@ function displayPriceRange(price) {
             justify-content: space-between;
             align-items: center;
         }
+    }
+
+
+    &__link {
+        border-top: 1px solid var(--border);
+        text-align: center;
+        padding: 0.5rem 0;
+        background: var(--background);
     }
 
 }

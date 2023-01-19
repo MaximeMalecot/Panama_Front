@@ -1,8 +1,10 @@
 <script setup>
 import { useOffersStore } from '@/stores/offers'
+import { useRouter } from 'vue-router';
 import OffersFilter from '@/views/Offers/OffersFilter.vue';
 import OfferCard from '@/components/Offers/OfferCard.vue';
 import Pagination from '@/components/common/Pagination.vue';
+const router = useRouter();
 
 const OffersStore = useOffersStore();
 OffersStore.getOffers();
@@ -18,7 +20,7 @@ OffersStore.getOffers();
         </section>
         <section class="results">
             <div class="results__list">
-                <OfferCard v-for="offer in OffersStore.offers" :offerData="offer"></OfferCard>
+                <OfferCard v-for="offer in OffersStore.offers" :offerData="offer" @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
             </div>
             <div class="results__pagination">
                 <Pagination :currentPage="1" :totalItemCount="34"/>
