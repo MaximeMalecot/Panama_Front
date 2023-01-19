@@ -1,6 +1,7 @@
 <script setup>
 import Tag from '@/components/common/Tag.vue';
 import { TECHNOS } from '@/constants/technos';
+import { useRouter } from 'vue-router';
 
 defineProps({
     offerData: {
@@ -8,6 +9,8 @@ defineProps({
         required: true,
     }
 })
+
+const router = useRouter();
 
 function displayPriceRange(price) {
     const prices = [1000, 2000, 5000, 10000, 20000];
@@ -24,7 +27,7 @@ function displayPriceRange(price) {
 </script>
 
 <template>
-    <article class="card">
+    <article class="card" @click="router.push({ name: 'offer', params: { id: 1 } })">
         <div class="card__thumbnail" :style="{ background: TECHNOS[offerData.tags[0]].color }"></div>
         <div class="card__content">
             <p class="card__content__title">{{ offerData.title }}</p>
@@ -46,6 +49,7 @@ function displayPriceRange(price) {
     border: 1px solid var(--border);
     border-radius: var(--radius-1);
     width: 400px;
+    cursor: pointer;
 
     &__thumbnail {
         background: #4287f5;
