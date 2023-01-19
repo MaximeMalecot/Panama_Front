@@ -1,5 +1,10 @@
 <script setup>
-import Btn from '@/components/common/Btn.vue'
+import Btn from '@/components/common/Btn.vue';
+import { useAuthStore } from '../../stores/auth';
+import { ROUTES } from '../../constants/routes';
+
+const authStore = useAuthStore();
+
 </script>
 
 <template>
@@ -14,16 +19,20 @@ import Btn from '@/components/common/Btn.vue'
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'offers' }">Offres</RouterLink>
                 </li>
                 <li class="header__nav__list__item">
-                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?</RouterLink>
+                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?
+                    </RouterLink>
                 </li>
                 <li class="header__nav__list__item">
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">A propos</RouterLink>
                 </li>
             </ul>
         </nav>
-        <div class="header__login">
-            <Btn type="link" :to="{ name: 'home' }" outline>Je suis client</Btn>
-            <Btn type="link" :to="{ name: 'home' }">Je suis freelance</Btn>
+        <div v-if="!authStore.isConnected" class="header__login">
+            <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>Je suis client</Btn>
+            <Btn type="link" :to="{ name: 'signup', query: { role: 'freelancer'} }">Je suis freelance</Btn>
+        </div>
+        <div v-else>
+            <button @click="authStore.logout">Logout</button>
         </div>
     </header>
 </template>

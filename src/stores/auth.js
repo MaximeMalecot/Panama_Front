@@ -40,11 +40,20 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    function login(email, password){
+    async function login(email, password){
         if( !email || !password ){
             return;
         }
-        //userData.value = {...emptyUserData, token: ''};
+        const res = await AuthService.login(email, password);
+        if( res && res?.token ){
+            const decoded = checkToken(res.token);
+            if( decoded ){
+                localStorage.setItem(TOKEN_STORAGE_KEY, res.token);
+                userData.value = {...decoded, token: res.token};
+                return true;
+            }
+        }
+        return false;
     }
 
     async function signup(payload){
@@ -52,8 +61,14 @@ export const useAuthStore = defineStore('auth', () => {
         if( !email || !plainPassword || !role ){
             return;
         }
-        const res = await AuthService.signup({ name, surname, email, plainPassword, role });
+        const res = await AuthService.signup({ name, surname, email, plainPassword, roles: [role] });
+        return res;
     }
 
-    return { userData, tryLogin, isConnected, login, signup };
+    function logout(){
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        userData.value = emptyUserData;
+    }
+
+    return { userData, tryLogin, isConnected, login, signup, logout };
   })
