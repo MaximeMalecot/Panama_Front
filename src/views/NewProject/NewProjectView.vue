@@ -56,6 +56,10 @@ const createPost = async () => {
     console.log("create post");
 };
 
+watch(formData, (newVal) => {
+    const {duration} = newVal;
+    console.log(duration);
+});
 </script>
 
 <template>

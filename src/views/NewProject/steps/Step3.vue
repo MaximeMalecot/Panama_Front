@@ -16,9 +16,9 @@ const duration = ref({
     value: props.formData.duration.value,
     unit: props.formData.duration.unit
 });
+const UNITS = ["jour(s)", "semaine(s)", "mois"];
 
 watch(priceRange, (newVal) => {
-    console.log(newVal);
     const [minPrice, maxPrice] = newVal;
     props.formData.price_range = { minPrice, maxPrice };
 });
@@ -29,11 +29,28 @@ watch(enablePriceRange, (val) => {
     }
 });
 
-onMounted(()=>{
-    if(props.formData.price_range.minPrice !== 0 && props.formData.price_range.maxPrice !== 0){
+watch(duration, (newVal) => {
+    console.log("CALLED")
+    const { value, unit } = newVal;
+    props.formData.duration = { value, unit };
+});
+
+watch(enableDuration, (val, prev) => {
+    if (!prev && val) {
+        duration.value = { value: 1, unit: UNITS[0] }
+    }
+});
+
+onMounted(() => {
+    if (props.formData.price_range.minPrice !== 0 && props.formData.price_range.maxPrice !== 0) {
         enablePriceRange.value = true;
     }
-})
+
+    if (props.formData.duration.value !== null && props.formData.duration.unit !== null) {
+        enableDuration.value = true;
+    }
+});
+
 
 </script>
 
@@ -60,12 +77,7 @@ onMounted(()=>{
                         adipisci eum. Illo!</p>
                 </div>
                 <div class="sub_content" v-show="enablePriceRange">
-                    <Slider 
-                        :min="1" 
-                        :max="1000"
-                        v-model="priceRange"
-                        />
-                        <!-- :value="[Object.values(formData.price_range)]" -->
+                    <Slider :min="1" :max="1000" v-model="priceRange" />
                 </div>
             </div>
             <div class="selector">
@@ -81,7 +93,10 @@ onMounted(()=>{
                         adipisci eum. Illo!</p>
                 </div>
                 <div class="sub_content" v-show="enableDuration">
-                    here
+                    <input type="number" v-model="duration.value" min="1" />
+                    <select v-model="duration.unit" :selected="UNITS[0]">
+                        <option v-for="unit in UNITS" :value="unit">{{ unit }}</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -138,7 +153,7 @@ onMounted(()=>{
                 font-size: 14px;
             }
 
-            .sub_content{
+            .sub_content {
                 padding: 20px 0;
             }
         }
