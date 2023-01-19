@@ -77,6 +77,11 @@ const router = createRouter({
           name: 'dashboard-project',
           component: () => import('../views/Dashboard/DashboardProject/DashboardProjectView.vue'),
         },
+        {
+          path: 'settings',
+          name: 'dashboard-settings',
+          component: () => import('../views/Dashboard/DashboardSettings/DashboardSettingsView.vue'),
+        },
       ],
     },
     {

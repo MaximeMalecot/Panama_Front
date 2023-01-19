@@ -23,7 +23,7 @@ const dashboardRoutes = [
         role: -1,
     },
     {
-        name: 'dashboard-projects',
+        name: 'dashboard-settings',
         title: 'Paramètres',
         role: -1,
     },

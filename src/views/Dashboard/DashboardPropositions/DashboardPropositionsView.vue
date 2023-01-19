@@ -35,6 +35,7 @@ OffersStore.getOffers();
     &__subtitle {
         font-size: 1.5rem;
         margin: 2rem 0 1rem 0;
+        font-weight: 600;
     }
 
     &__list {
