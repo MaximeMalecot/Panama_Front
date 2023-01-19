@@ -19,6 +19,14 @@ defineProps({
         type: Boolean,
         default: false,
     },
+    hasLink: {
+        type: Boolean,
+        default: false,
+    },
+    customLinkText: {
+        type: String,
+        default: 'Voir le projet',
+    },
 })
 
 function displayPriceRange(price) {
@@ -37,8 +45,8 @@ function displayPriceRange(price) {
 
 <template>
     <article class="card">
-        <Tag v-if="status === 'inprogress'" class="card__status-tag" color="var(--warning)">In progress</Tag>
-        <Tag v-if="status === 'issued'" class="card__status-tag" color="var(--success)">Issued</Tag>
+        <Tag v-if="status === 'inprogress'" class="card__status-tag" color="var(--warning)">En cours</Tag>
+        <Tag v-if="status === 'issued'" class="card__status-tag" color="var(--success)">Terminé</Tag>
         <div class="card__thumbnail" :style="{ background: TECHNOS[offerData.tags[0]].color }"></div>
         <div class="card__content">
             <p class="card__content__title">{{ offerData.title }}</p>
@@ -50,7 +58,7 @@ function displayPriceRange(price) {
                 <span class="card__content__footer__time">{{ offerData.time }} mois</span>
             </div>
         </div>
-
+        <div v-if="hasLink" class="card__link">{{ customLinkText }}</div>
     </article>
 </template>
 
@@ -102,6 +110,14 @@ function displayPriceRange(price) {
             justify-content: space-between;
             align-items: center;
         }
+    }
+
+
+    &__link {
+        border-top: 1px solid var(--border);
+        text-align: center;
+        padding: 0.5rem 0;
+        background: var(--background);
     }
 
 }

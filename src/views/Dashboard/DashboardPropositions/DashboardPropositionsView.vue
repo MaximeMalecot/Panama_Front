@@ -1,7 +1,10 @@
 <script setup>
 import { useOffersStore } from '@/stores/offers'
+import { useRouter } from 'vue-router';
 import OfferCard from '@/components/Offers/OfferCard.vue';
 import NoResults from '@/components/NoResults.vue';
+
+const router = useRouter();
 const OffersStore = useOffersStore();
 OffersStore.getOffers();
 </script>
@@ -13,7 +16,8 @@ OffersStore.getOffers();
             lesquelles vous vous êtes positionné.</p>
         <h2 class="propositions__subtitle">Propositions en cours</h2>
         <div v-if="OffersStore.offers.length > 1" class="propositions__list">
-            <OfferCard v-for="offer in OffersStore.offers" :offerData="offer" status="inprogress"></OfferCard>
+            <OfferCard v-for="offer in OffersStore.offers" :offerData="offer" status="inprogress" hasLink customLinkText="Voir l'offre"
+                @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
         </div>
         <div v-else class="propositions__no-results">
             <NoResults>Vous ne vous êtes positionné sur aucune offre dernièrement.</NoResults>
@@ -40,6 +44,7 @@ OffersStore.getOffers();
         flex-wrap: wrap;
         gap: 1rem;
     }
+
     &__no-results {
         display: flex;
         justify-content: center;
