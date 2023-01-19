@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@vueform/slider": "^2.1.7",
     "jwt-decode": "^3.1.2",
     "pinia": "^2.0.29",
     "playwright": "^1.29.2",
