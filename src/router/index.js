@@ -4,6 +4,7 @@ import { ROLES } from '@/constants/roles';
 
 // @todo change this to the store data
 const userRole = ROLES.CLIENT;
+const user = null;
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,11 +79,30 @@ const router = createRouter({
           component: () => import('../views/Dashboard/DashboardProject/DashboardProjectView.vue'),
         },
         {
+          path: '/projects/new',
+          name: 'new_project',
+          component: () => import('../views/NewProject/NewProjectView.vue'),
+          beforeEnter: (async (to, from, next) => {
+            // When accessing /dashboard/ it will redirect the user to the correct page
+            if (to.name === 'new_project' && userRole !== ROLES.CLIENT) {
+              return next({ name: 'dashboard-home' });
+            }
+            return next();
+          }),
+        },
+        {
           path: 'settings',
           name: 'dashboard-settings',
           component: () => import('../views/Dashboard/DashboardSettings/DashboardSettingsView.vue'),
         },
       ],
+      beforeEnter: (async (to, from, next) => {
+        if( !!user ){
+          return next();
+        }else{
+          return next({ name: 'login' });
+        }
+      }),
     },
     {
       path: '/login',
@@ -93,11 +113,6 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('../views/SignupView.vue')
-    },
-    {
-      path: '/project/new',
-      name: 'new_project',
-      component: () => import('../views/NewProject/NewProjectView.vue')
     }
   ]
 })
