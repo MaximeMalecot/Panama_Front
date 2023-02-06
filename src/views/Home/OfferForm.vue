@@ -1,33 +1,57 @@
 <script setup>
-import { ref } from 'vue';
-import SelectField from '@/components/common/SelectField.vue';
-import Btn from '@/components/common/Btn.vue';
+import { ref } from "vue";
+import SelectField from "@/components/common/SelectField.vue";
+import Btn from "@/components/common/Btn.vue";
+import { useRouter } from "vue-router";
 
-const technos = ref('')
-const priceRange = ref('')
+const router = useRouter();
+const technos = ref("");
+const priceRange = ref("");
+
+const handleClick = () => {
+    if (!technos.value && !priceRange.value) return;
+    router.push({
+        name: "offers",
+        query: {
+            technos: technos.value,
+            priceRange: priceRange.value,
+        },
+    });
+};
+
 </script>
 
 <template>
     <div class="offer-form">
         <div class="offer-form__fields">
-            <SelectField v-model="technos" placeholder="🧑‍💻 Technologie" :values="[
-                { name: 'PHP', value: 'php' },
-                { name: 'Javascript', value: 'javascript' },
-                { name: 'HTML/CSS', value: 'html-css' },
-                { name: 'C#', value: 'csharp' },
-                { name: '.NET', value: 'dotnet' },
-                { name: 'Shopify', value: 'shopify' },
-                { name: 'Wordpress', value: 'wordpress' },
-            ]" />
-            <SelectField v-model="priceRange" placeholder="💵 Prix" :values="[
-                { name: '< 5.000€', value: 'lt5000' },
-                { name: '> 5.000€ et < 10.000€', value: 'gt5000&&lt10000' },
-                { name: '> 10.000€', value: 'gt10000' },
-            ]" />
+            <SelectField
+                v-model="technos"
+                placeholder="🧑‍💻 Technologie"
+                :values="[
+                    { name: 'PHP', value: 'php' },
+                    { name: 'Javascript', value: 'javascript' },
+                    { name: 'HTML/CSS', value: 'html-css' },
+                    { name: 'C#', value: 'csharp' },
+                    { name: '.NET', value: 'dotnet' },
+                    { name: 'Shopify', value: 'shopify' },
+                    { name: 'Wordpress', value: 'wordpress' },
+                ]"
+            />
+            <SelectField
+                v-model="priceRange"
+                placeholder="💵 Prix"
+                :values="[
+                    { name: '< 5.000€', value: 'lt5000' },
+                    { name: '> 5.000€ et < 10.000€', value: 'gt5000&&lt10000' },
+                    { name: '> 10.000€', value: 'gt10000' },
+                ]"
+            />
         </div>
         <div class="offer-form__footer">
-            <RouterLink class="offer-form__footer__link" :to="{ name: 'home' }">Déposer une offre</RouterLink>
-            <Btn>Chercher parmis nos offres</Btn>
+            <RouterLink class="offer-form__footer__link" :to="{ name: 'home' }"
+                >Déposer une offre</RouterLink
+            >
+            <Btn @click="handleClick">Chercher parmis nos offres</Btn>
         </div>
     </div>
 </template>

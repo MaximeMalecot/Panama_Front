@@ -1,29 +1,62 @@
 <script setup>
-import { useOffersStore } from '@/stores/offers'
-import { useRouter } from 'vue-router';
-import OffersFilter from '@/views/Offers/OffersFilter.vue';
-import OfferCard from '@/components/Offers/OfferCard.vue';
-import Pagination from '@/components/common/Pagination.vue';
+import { watch, onMounted, reactive } from "vue";
+import { useOffersStore } from "@/stores/offers";
+import { useRouter, useRoute } from "vue-router";
+import OffersFilter from "@/views/Offers/OffersFilter.vue";
+import OfferCard from "@/components/Offers/OfferCard.vue";
+import Pagination from "@/components/common/Pagination.vue";
+
 const router = useRouter();
+const route = useRoute();
+
+const filters = reactive({
+    technos: "",
+    priceRange: "",
+    timeRange: "",
+    title: "",
+});
 
 const OffersStore = useOffersStore();
 OffersStore.getOffers();
+
+onMounted(() => {
+    const { query } = route;
+    const { technos, priceRange, timeRange, title } = query;
+    if (technos) filters.technos = technos;
+    if (priceRange) filters.priceRange = priceRange;
+    if (timeRange) filters.timeRange = timeRange;
+    if (title) filters.title = title;
+});
+
+const filterOnSubmit = () => {
+    const val = filters;
+    const params = Object.entries(val)
+        .filter(([key, value]) => value.trim().length > 0)
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+    router.push({
+        query: params
+    });
+};
 </script>
 
 <template>
     <main class="offers">
         <section class="filters">
-            <OffersFilter></OffersFilter>
+            <OffersFilter :filters="filters" :onClick="filterOnSubmit" />
         </section>
         <section class="header">
             <h2>{{ OffersStore.count }} offres disponibles</h2>
         </section>
         <section class="results">
             <div class="results__list">
-                <OfferCard v-for="offer in OffersStore.offers" :offerData="offer" @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
+                <OfferCard
+                    v-for="offer in OffersStore.offers"
+                    :offerData="offer"
+                    @click="router.push({ name: 'offer', params: { id: 1 } })"
+                ></OfferCard>
             </div>
             <div class="results__pagination">
-                <Pagination :currentPage="1" :totalItemCount="34"/>
+                <Pagination :currentPage="1" :totalItemCount="34" />
             </div>
         </section>
     </main>
@@ -37,8 +70,8 @@ OffersStore.getOffers();
     grid-column-gap: 16px;
     grid-row-gap: 0px;
     grid-template-areas:
-        '. header'
-        'filters results';
+        ". header"
+        "filters results";
     padding: 1rem;
 }
 
