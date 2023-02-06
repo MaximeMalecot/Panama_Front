@@ -7,11 +7,10 @@ import AuthService from "../services/auth.service";
 const checkToken = (token) => {
     try {
         const decoded = jwt_decode(token);
-        if (decoded.exp > Date.now() / 1000) {
-            return decoded;
-        }else{
-            return null;
-        }
+        const current_time = Date.now() / 1000;
+        const hasExpired = decoded.exp < current_time;
+        if(!!hasExpired) throw new Error("Token has expired");
+        return decoded;
     } catch (e) {
         console.log(e);
         return null;
@@ -26,49 +25,53 @@ const emptyUserData = {
     token: null,
 };
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
     const userData = ref(emptyUserData);
     const isConnected = computed(() => !!userData.value.token);
 
-    function tryLogin(){
+    function tryLogin() {
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-        if( token ){
-            const decoded = checkToken(token);
-            if( decoded ){
-                userData.value = {...decoded, token};
-            }
-        }
+        if (!token) return;
+        const decoded = checkToken(token);
+        if( !decoded ) return;
+        userData.value = { ...decoded, token };
     }
 
-    async function login(email, password){
-        if( !email || !password ){
+    async function login(email, password) {
+        if (!email || !password) {
             return;
         }
         const res = await AuthService.login(email, password);
-        if( res && res?.token ){
+        if (res && res?.token) {
             const decoded = checkToken(res.token);
-            if( decoded ){
+            if (decoded) {
                 localStorage.setItem(TOKEN_STORAGE_KEY, res.token);
-                userData.value = {...decoded, token: res.token};
+                userData.value = { ...decoded, token: res.token };
                 return true;
             }
         }
         return false;
     }
 
-    async function signup(payload){
+    async function signup(payload) {
         const { name, surname, email, password: plainPassword, role } = payload;
-        if( !email || !plainPassword || !role ){
+        if (!email || !plainPassword || !role) {
             return;
         }
-        const res = await AuthService.signup({ name, surname, email, plainPassword, roles: [role] });
+        const res = await AuthService.signup({
+            name,
+            surname,
+            email,
+            plainPassword,
+            roles: [role],
+        });
         return res;
     }
 
-    function logout(){
+    function logout() {
         localStorage.removeItem(TOKEN_STORAGE_KEY);
         userData.value = emptyUserData;
     }
 
     return { userData, tryLogin, isConnected, login, signup, logout };
-  })
+});
