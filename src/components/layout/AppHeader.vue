@@ -34,8 +34,7 @@ const authStore = useAuthStore();
         <div v-else class="header__account">
             <p>{{ authStore.userData.email }}</p>
             <span>|</span>
-            <RouterLink class="header__nav__list__item__link" :to="{ path: 'dashboard' }">Dashboard
-            </RouterLink>
+            <RouterLink class="header__nav__list__item__link" :to="{ path: 'dashboard' }">Dashboard</RouterLink>
             <Btn type="button" @click="authStore.logout">Déconnexion</Btn>
         </div>
     </header>

@@ -34,7 +34,6 @@ export const useAuthStore = defineStore("auth", () => {
         if (!token) return;
         const decoded = checkToken(token);
         if( !decoded ) return;
-        console.log(decoded);
         userData.value = { ...decoded, token };
     }
 

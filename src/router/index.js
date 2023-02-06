@@ -21,7 +21,6 @@ const checkUserRole = (role) => {
 
 const checkUserLogged = () => {
     const authStore = useAuthStore();
-    console.log(authStore.userData)
     return authStore.isConnected;
 };
 
