@@ -22,7 +22,6 @@ const selectedTab = ref(0);
 const isSelectOpened = ref(false)
 
 function updateValue(value) {
-    console.log("Receveid: ", value, "<--")
     const valueIndex = props.values.findIndex(item => item.value === value);
     if(valueIndex === -1) return;
     selectedTab.value = valueIndex;

@@ -12,7 +12,7 @@ const checkToken = (token) => {
         if(!!hasExpired) throw new Error("Token has expired");
         return decoded;
     } catch (e) {
-        console.log(e);
+        console.error(e.message);
         return null;
     }
 };

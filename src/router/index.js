@@ -143,7 +143,6 @@ const router = createRouter({
                 },
             ],
             beforeEnter: async (to, from, next) => {
-                console.log("here");
                 if (!checkUserLogged()) {
                     return next({ name: "login" });
                 }

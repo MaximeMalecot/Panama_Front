@@ -5,9 +5,14 @@ import { useRouter, useRoute } from "vue-router";
 import OffersFilter from "@/views/Offers/OffersFilter.vue";
 import OfferCard from "@/components/Offers/OfferCard.vue";
 import Pagination from "@/components/common/Pagination.vue";
+import useOffers from "../../hooks/use-offers";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const route = useRoute();
+// const OffersStore = useOffersStore();
+const offersStore = useOffers();
+const { offers } = storeToRefs(offersStore);
 
 const filters = reactive({
     technos: "",
@@ -16,8 +21,10 @@ const filters = reactive({
     title: "",
 });
 
-const OffersStore = useOffersStore();
-OffersStore.getOffers();
+onMounted(() => {
+    // OffersStore.getOffers();
+    offersStore.fetchOffers();
+});
 
 onMounted(() => {
     const { query } = route;
@@ -45,12 +52,12 @@ const filterOnSubmit = () => {
             <OffersFilter :filters="filters" :onClick="filterOnSubmit" />
         </section>
         <section class="header">
-            <h2>{{ OffersStore.count }} offres disponibles</h2>
+            <h2>{{ offersStore.count }} offres disponibles</h2>
         </section>
         <section class="results">
             <div class="results__list">
                 <OfferCard
-                    v-for="offer in OffersStore.offers"
+                    v-for="offer in offers"
                     :offerData="offer"
                     @click="router.push({ name: 'offer', params: { id: 1 } })"
                 ></OfferCard>

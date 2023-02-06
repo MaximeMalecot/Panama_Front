@@ -9,13 +9,13 @@ const technos = ref("");
 const priceRange = ref("");
 
 const handleClick = () => {
-    if (!technos.value && !priceRange.value) return;
+    const query = {};
+    if (technos.value) query.technos = technos.value;
+    if (priceRange.value) query.priceRange = priceRange.value;
+
     router.push({
         name: "offers",
-        query: {
-            technos: technos.value,
-            priceRange: priceRange.value,
-        },
+        query
     });
 };
 

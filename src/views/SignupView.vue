@@ -91,7 +91,7 @@ const onSubmit = async () => {
             throw new Error("Une erreur est survenue lors de l'inscription");
         }
     } catch (e) {
-        console.log(e.message);
+        console.error(e.message);
         displayMsg({ msg: e.message, type: "error" });
     }
     loading.value = false;
