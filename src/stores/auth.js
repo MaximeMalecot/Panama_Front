@@ -33,7 +33,11 @@ export const useAuthStore = defineStore("auth", () => {
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
         if (!token) return;
         const decoded = checkToken(token);
-        if( !decoded ) return;
+        if( !decoded ){
+            localStorage.removeItem(TOKEN_STORAGE_KEY);
+            userData.value = emptyUserData;
+            return;
+        }
         userData.value = { ...decoded, token };
     }
 
