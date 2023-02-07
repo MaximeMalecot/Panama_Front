@@ -27,7 +27,7 @@ class ProjectService {
         const { page, name, filters, minPrice, maxPrice, length } = queryParams;
         
         try{
-            const url = `${API_URL}/projects?`;
+            const url = `${API_URL}/projects?status=ACTIVE&`;
             const params = [];
             // if( filters && JSON.stringify(filters) != JSON.stringify({}) ){
             //     // url += `?${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join('&')}`;
