@@ -25,7 +25,7 @@ const handleSubscriptions = () => {
     <div @click="close" class="premium_modal">
         <div @click="(e) => e.stopPropagation()" class="modal_container">
             <section class="modal_header">
-                <h2>Ne rater pas une opportunité!</h2>
+                <h2>Ne ratez pas une opportunité!</h2>
                 <svg
                     @click="close"
                     width="22"
