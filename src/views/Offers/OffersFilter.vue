@@ -60,8 +60,16 @@ onMounted(async () => {
                     {{ choice.name }}
                 </option>
             </select>
-            <select v-model="filters.maxPrice" placeholder="💵 Prix">
+            <select v-model="filters.minPrice" placeholder="💵 Prix">
                 <option value="" disabled default="true">💵 Prix minimum</option>
+                <option 
+                    v-for="option in priceMaxOptions"
+                    :value="option.value">
+                    {{ option.name }}
+                </option>
+            </select>
+            <select v-model="filters.maxPrice" placeholder="💵 Prix">
+                <option value="" disabled default="true">💵 Prix maximum</option>
                 <option 
                     v-for="option in priceMaxOptions"
                     :value="option.value">
