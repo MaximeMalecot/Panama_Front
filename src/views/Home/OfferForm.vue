@@ -1,24 +1,38 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
 import SelectField from "@/components/common/SelectField.vue";
 import Btn from "@/components/common/Btn.vue";
 import { useRouter } from "vue-router";
+import FiltersService from "@/services/filters.service";
 
 const router = useRouter();
 const technos = ref("");
-const priceRange = ref("");
+const priceMax = ref(0);
+
+const technoChoices = ref([]);
 
 const handleClick = () => {
     const query = {};
     if (technos.value) query.technos = technos.value;
-    if (priceRange.value) query.priceRange = priceRange.value;
+    if (priceMax.value) query.priceMax = priceMax.value;
 
     router.push({
         name: "offers",
-        query
+        query,
     });
 };
 
+onMounted(async () => {
+    const res = await FiltersService.getFilters();
+    if (!res) return;
+    if (res["hydra:member"]?.length > 0) {
+        technoChoices.value = res["hydra:member"].filter(
+            (c) => c.type === "techno"
+        );
+    } else {
+        technoChoices.value = [];
+    }
+});
 </script>
 
 <template>
@@ -28,22 +42,21 @@ const handleClick = () => {
                 v-model="technos"
                 placeholder="🧑‍💻 Technologie"
                 :values="[
-                    { name: 'PHP', value: 'php' },
-                    { name: 'Javascript', value: 'javascript' },
-                    { name: 'HTML/CSS', value: 'html-css' },
-                    { name: 'C#', value: 'csharp' },
-                    { name: '.NET', value: 'dotnet' },
-                    { name: 'Shopify', value: 'shopify' },
-                    { name: 'Wordpress', value: 'wordpress' },
+                    ...technoChoices.map((c) => ({
+                        name: c.name,
+                        value: c.name,
+                    })),
                 ]"
             />
+
             <SelectField
-                v-model="priceRange"
-                placeholder="💵 Prix"
+                v-model="priceMax"
+                placeholder="💵 Prix maximum"
                 :values="[
-                    { name: '< 5.000€', value: 'lt5000' },
-                    { name: '> 5.000€ et < 10.000€', value: 'gt5000&&lt10000' },
-                    { name: '> 10.000€', value: 'gt10000' },
+                    { name: '5.000€', value: '5000' },
+                    { name: '10.000€', value: '10000' },
+                    { name: '100.000€', value: '100000' },
+
                 ]"
             />
         </div>

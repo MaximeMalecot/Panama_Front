@@ -66,6 +66,9 @@ const resetFilters = () => {
         <section v-if="offersLoading" class="results">
             <p>Loading...</p>
         </section>
+        <section v-else-if="offersCount == 0" class="results">
+            <p>Aucun résultat</p>
+        </section>
         <section v-else class="results">
             <div class="results__list">
                 <OfferCard
