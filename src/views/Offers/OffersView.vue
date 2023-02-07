@@ -7,10 +7,13 @@ import OfferCard from "@/components/Offers/OfferCard.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import useOffers from "../../hooks/use-offers";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../stores/auth";
+import { displayMsg } from "@/utils/toast";
+import { ROLES } from "@/constants/roles";
 
 const router = useRouter();
 const route = useRoute();
-// const OffersStore = useOffersStore();
+const authStore = useAuthStore();
 const offersStore = useOffers();
 const { offers, offersLoading, offersCount } = storeToRefs(offersStore);
 
@@ -21,25 +24,15 @@ const filters = reactive({
     title: "",
 });
 
-onMounted(() => {
-    const { query } = route;
-    const { technos, priceRange, timeRange, title } = query;
-    if (technos) filters.technos = technos;
-    if (priceRange) filters.priceRange = priceRange;
-    if (timeRange) filters.timeRange = timeRange;
-    if (title) filters.title = title;
-    offersStore.fetchOffers({filters: filters.technos});
-});
-
 const filterOnSubmit = () => {
     const val = filters;
     const params = Object.entries(val)
         .filter(([key, value]) => value.trim().length > 0)
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
     router.push({
-        query: params
+        query: params,
     });
-    offersStore.fetchOffers({filters: filters.technos});
+    offersStore.fetchOffers({ filters: filters.technos });
 };
 
 const resetFilters = () => {
@@ -48,17 +41,54 @@ const resetFilters = () => {
     filters.timeRange = "";
     filters.title = "";
     router.push({
-        query: {}
+        query: {},
     });
-    offersStore.fetchOffers({filters: filters.technos});
+    offersStore.fetchOffers({ filters: filters.technos });
 };
 
+const handleClick = (id) => {
+    try {
+        if (!authStore.isConnected) {
+            throw new Error(
+                "Vous devez être connecté pour accéder à cette page"
+            );
+            //router.push({ name: 'login' });
+        }
+        const { roles } = authStore.userData;
+        if (
+            !roles.includes(ROLES.FREELANCER_PREMIUM) &&
+            !roles.includes(ROLES.FREELANCER)
+        ) {
+            throw new Error(
+                "Seuls les freelancers sont en mesure de consulter les offres"
+            );
+        }
+
+        router.push({ name: "offer", params: { id } });
+    } catch (e) {
+        displayMsg({ msg: e.message, type: "info" });
+    }
+};
+
+onMounted(() => {
+    const { query } = route;
+    const { technos, priceRange, timeRange, title } = query;
+    if (technos) filters.technos = technos;
+    if (priceRange) filters.priceRange = priceRange;
+    if (timeRange) filters.timeRange = timeRange;
+    if (title) filters.title = title;
+    offersStore.fetchOffers({ filters: filters.technos });
+});
 </script>
 
 <template>
     <main class="offers">
         <section class="filters">
-            <OffersFilter :filters="filters" :onClick="filterOnSubmit" :reset="resetFilters" />
+            <OffersFilter
+                :filters="filters"
+                :onClick="filterOnSubmit"
+                :reset="resetFilters"
+            />
         </section>
         <section class="header">
             <h2>{{ offersCount }} offres disponibles</h2>
@@ -74,7 +104,7 @@ const resetFilters = () => {
                 <OfferCard
                     v-for="offer in offers"
                     :offerData="offer"
-                    @click="router.push({ name: 'offer', params: { id: offer.id } })"
+                    @click="() => handleClick(offer.id)"
                 ></OfferCard>
             </div>
             <div class="results__pagination">
