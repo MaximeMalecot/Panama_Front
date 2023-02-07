@@ -7,16 +7,16 @@ const useOffers = () => {
     const offersError = ref(null);
     const count = computed(() => offers.value.length);
 
-    const fetchOffers = async () => {
+    const fetchOffers = async (queryParams = {}) => {
         offersLoading.value = true;
         offersError.value = null;
         try {
-            const res = await ProjectService.getProjects();
+            const res = await ProjectService.getProjects(queryParams);
             if(!res) throw new Error('No offers found');
             offers.value = res["hydra:member"];
-        } catch (error) {
+        } catch (e) {
             console.error(e.message);
-            offersError.value = error;
+            offersError.value = e.message;
         }
         offersLoading.value = false;
     };
@@ -30,7 +30,7 @@ const useOffers = () => {
         offersLoading,
         offersError,
         fetchOffers,
-        count
+        offersCount: count
     };
 };
 

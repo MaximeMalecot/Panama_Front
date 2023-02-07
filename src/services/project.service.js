@@ -23,15 +23,24 @@ class ProjectService {
         }
     }
 
-    async getProjects({filters = {}} = {}){
+    async getProjects(queryParams = {}){
+        const { page, filters } = queryParams;
+        
         try{
-            const res = await fetch(`${API_URL}/projects?${new URLSearchParams(filters)}`, {
+            let url = `${API_URL}/projects`;
+            if( filters && JSON.stringify(filters) != JSON.stringify({}) ){
+                // url += `?${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join('&')}`;
+                url += `?filters.name=${filters}`;
+            }
+
+            const res = await fetch(`${url}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader()
                 }
             });
+            
             if(res.status === 200){
                 return await res.json();
             }else{

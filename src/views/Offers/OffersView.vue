@@ -12,7 +12,7 @@ const router = useRouter();
 const route = useRoute();
 // const OffersStore = useOffersStore();
 const offersStore = useOffers();
-const { offers } = storeToRefs(offersStore);
+const { offers, offersLoading, offersCount } = storeToRefs(offersStore);
 
 const filters = reactive({
     technos: "",
@@ -22,17 +22,13 @@ const filters = reactive({
 });
 
 onMounted(() => {
-    // OffersStore.getOffers();
-    offersStore.fetchOffers();
-});
-
-onMounted(() => {
     const { query } = route;
     const { technos, priceRange, timeRange, title } = query;
     if (technos) filters.technos = technos;
     if (priceRange) filters.priceRange = priceRange;
     if (timeRange) filters.timeRange = timeRange;
     if (title) filters.title = title;
+    offersStore.fetchOffers({filters: filters.technos});
 });
 
 const filterOnSubmit = () => {
@@ -43,18 +39,34 @@ const filterOnSubmit = () => {
     router.push({
         query: params
     });
+    offersStore.fetchOffers({filters: filters.technos});
 };
+
+const resetFilters = () => {
+    filters.technos = "";
+    filters.priceRange = "";
+    filters.timeRange = "";
+    filters.title = "";
+    router.push({
+        query: {}
+    });
+    offersStore.fetchOffers({filters: filters.technos});
+};
+
 </script>
 
 <template>
     <main class="offers">
         <section class="filters">
-            <OffersFilter :filters="filters" :onClick="filterOnSubmit" />
+            <OffersFilter :filters="filters" :onClick="filterOnSubmit" :reset="resetFilters" />
         </section>
         <section class="header">
-            <h2>{{ offersStore.count }} offres disponibles</h2>
+            <h2>{{ offersCount }} offres disponibles</h2>
         </section>
-        <section class="results">
+        <section v-if="offersLoading" class="results">
+            <p>Loading...</p>
+        </section>
+        <section v-else class="results">
             <div class="results__list">
                 <OfferCard
                     v-for="offer in offers"
@@ -63,7 +75,7 @@ const filterOnSubmit = () => {
                 ></OfferCard>
             </div>
             <div class="results__pagination">
-                <Pagination :currentPage="1" :totalItemCount="34" />
+                <Pagination :currentPage="1" :totalItemCount="offersCount" />
             </div>
         </section>
     </main>

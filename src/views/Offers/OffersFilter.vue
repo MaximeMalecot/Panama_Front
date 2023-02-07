@@ -1,8 +1,9 @@
 <script setup>
-import { ref, defineProps, reactive, watch, onMounted } from "vue";
+import { ref, defineProps, reactive, watch, computed, onMounted } from "vue";
 import SelectField from "@/components/common/SelectField.vue";
 import Btn from "@/components/common/Btn.vue";
 import InputField from "../../components/common/InputField.vue";
+import FiltersService from "@/services/filters.service";
 
 const props = defineProps({
     filters: {
@@ -13,7 +14,23 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+    reset: {
+        type: Function,
+        required: true,
+    }
 });
+
+const choices = ref([]);
+const clearable = computed(() => {
+    return props.filters.technos || props.filters.priceRange || props.filters.timeRange || props.filters.title;
+});
+
+onMounted(async () => {
+    const res = await FiltersService.getFilters();
+    if (!res) return;
+    choices.value = res["hydra:member"];
+});
+
 </script>
 
 <template>
@@ -25,13 +42,9 @@ const props = defineProps({
             />
             <select v-model="filters.technos" placeholder="🧑‍💻 Technologie">
                 <option value="" disabled default="true">🧑‍💻 Technologie</option>
-                <option value="php">PHP</option>
-                <option value="javascript">Javascript</option>
-                <option value="html-css">HTML/CSS</option>
-                <option value="csharp">C#</option>
-                <option value="dotnet">.NET</option>
-                <option value="shopify">Shopify</option>
-                <option value="wordpress">Wordpress</option>
+                <option v-for="choice in choices.filter(c => c.type === 'techno')" :value="choice.name">
+                    {{ choice.name }}
+                </option>
             </select>
             <select v-model="filters.priceRange" placeholder="💵 Prix">
                 <option value="" disabled default="true">💵 Prix</option>
@@ -52,6 +65,7 @@ const props = defineProps({
             </select>
         </div>
         <div class="offers-filter__footer">
+            <Btn v-if="clearable" :outline="true" @click="() => reset()">Reinitialiser</Btn>
             <Btn @click="() => onClick()">Chercher parmis nos offres</Btn>
         </div>
     </div>
@@ -82,13 +96,14 @@ select {
         font-size: 1rem;
     }
 
-    option:checked, option:active {
+    option:checked,
+    option:active {
         border: 1px solid red;
         color: var(--text-gray) !important;
         font-size: 1rem;
     }
 
-    &::after{
+    &::after {
         background-color: red;
     }
 }
