@@ -23,12 +23,12 @@ defineProps({
                     <span>{{data.minPrice}}€ - {{data.maxPrice}}€</span>
                 </template>
                 <span>|</span>
-                <span>{{ data.length }} mois</span>
+                <span v-if="data.length">{{ data.length }} mois</span>
             </div>
         </section>
         <section class="offer__content">
             <h2 class="offer__content__title">Description du projet</h2>
-            <p>{{ data.description }}</p>
+            <p>{{ data.description??"Aucune description disponible" }}</p>
         </section>
     </div>
 </template>

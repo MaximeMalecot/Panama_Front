@@ -4,6 +4,10 @@ import OfferApply from '@/components/Offers/OfferApply.vue';
 import Offer from '@/components/Offers/Offer.vue';
 import ProjectService from "@/services/project.service";
 import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '../../stores/auth';
+import {ROLES} from "@/constants/roles";
+
+const authStore = useAuthStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -29,6 +33,27 @@ onMounted(async () => {
 });
 
 const handleApplication = () => {
+    console.log(authStore.userData);
+    if(!authStore.isConnected){
+        console.log("you must be logged in");
+        router.push({ name: 'login' });
+        return;
+        //router.push({ name: 'login' });
+    }
+    const { roles, isVerified } = authStore.userData;
+    
+    if( !roles.includes(ROLES.FREELANCER_PREMIUM) ){
+        console.log("you must be premium")
+        return;
+        //router.push({ name: 'login' });
+    }
+
+    if( !isVerified ){
+        console.log("you must be verified")
+        return;
+        //router.push({ name: 'login' });
+    }
+    
     console.log('handleApplication');
 }
 
