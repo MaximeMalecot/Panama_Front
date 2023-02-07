@@ -40,7 +40,7 @@ class ProjectService {
                     ...authHeader()
                 }
             });
-            
+
             if(res.status === 200){
                 return await res.json();
             }else{
@@ -51,6 +51,28 @@ class ProjectService {
             return false;
         }
     }
+
+    async getProject(id){
+        try{
+            const res = await fetch(`${API_URL}/projects/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    };
+
 }
 
 export default new ProjectService();

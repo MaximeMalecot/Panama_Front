@@ -74,7 +74,7 @@ const resetFilters = () => {
                 <OfferCard
                     v-for="offer in offers"
                     :offerData="offer"
-                    @click="router.push({ name: 'offer', params: { id: 1 } })"
+                    @click="router.push({ name: 'offer', params: { id: offer.id } })"
                 ></OfferCard>
             </div>
             <div class="results__pagination">

@@ -1,7 +1,12 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import OfferApply from '@/components/Offers/OfferApply.vue';
 import Offer from '@/components/Offers/Offer.vue';
+import ProjectService from "@/services/project.service";
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 
 const data = reactive({
     "title": "Conception d'un site avec Shopify",
@@ -10,19 +15,39 @@ const data = reactive({
     "price": 800,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 });
+
+const project = ref({});
+const loading = ref(true);
+
+onMounted(async () => {
+    const res = await ProjectService.getProject(route.params.id);
+    if (!res){
+        router.push({ name: 'offers' });
+    }
+    project.value = res;
+    loading.value = false;
+});
+
+const handleApplication = () => {
+    console.log('handleApplication');
+}
+
 </script>
 
 <template>
-    <main class="offer">
+    <main v-if="loading"  class="container">
+        Loading...
+    </main>
+    <main v-else class="offer">
         <div class="container">
             <section class="offer__header">
                 <RouterLink :to="{ name: 'offers' }" class="offer__header__link">⬅️ revenir aux offres</RouterLink>
             </section>
             <section class="offer__content">
-                <Offer :data="data" />
+                <Offer :data="project" />
             </section>
             <section>
-                <OfferApply />
+                <OfferApply :handleClick="() => handleApplication()" />
             </section>
         </div>
     </main>
