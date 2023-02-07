@@ -4,17 +4,29 @@ import SelectField from "@/components/common/SelectField.vue";
 import Btn from "@/components/common/Btn.vue";
 import { useRouter } from "vue-router";
 import FiltersService from "@/services/filters.service";
+import { useAuthStore } from "../../stores/auth";
+import { ROLES } from "@/constants/roles";
 
+const authStore = useAuthStore();
 const router = useRouter();
 const technos = ref("");
-const priceMax = ref(0);
+const maxPrice = ref(0);
 
 const technoChoices = ref([]);
+
+const canPostOffer = computed(() => {
+    const { roles, isVerified } = authStore.userData;
+    return (
+        authStore.isConnected &&
+        roles.includes(ROLES.CLIENT) &&
+        isVerified
+    );
+});
 
 const handleClick = () => {
     const query = {};
     if (technos.value) query.technos = technos.value;
-    if (priceMax.value) query.priceMax = priceMax.value;
+    if (maxPrice.value) query.maxPrice = maxPrice.value;
 
     router.push({
         name: "offers",
@@ -50,18 +62,17 @@ onMounted(async () => {
             />
 
             <SelectField
-                v-model="priceMax"
+                v-model="maxPrice"
                 placeholder="💵 Prix maximum"
                 :values="[
                     { name: '5.000€', value: '5000' },
                     { name: '10.000€', value: '10000' },
                     { name: '100.000€', value: '100000' },
-
                 ]"
             />
         </div>
         <div class="offer-form__footer">
-            <RouterLink class="offer-form__footer__link" :to="{ name: 'home' }"
+            <RouterLink v-if="canPostOffer" class="offer-form__footer__link" :to="{ name: 'new_project' }"
                 >Déposer une offre</RouterLink
             >
             <Btn @click="handleClick">Chercher parmis nos offres</Btn>

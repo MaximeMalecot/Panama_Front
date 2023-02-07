@@ -20,8 +20,10 @@ const { offers, offersLoading, offersCount } = storeToRefs(offersStore);
 const filters = reactive({
     technos: "",
     priceRange: "",
-    timeRange: "",
-    title: "",
+    minPrice: "",
+    maxPrice: "",
+    length: "",
+    name: "",
 });
 
 const filterOnSubmit = () => {
@@ -32,14 +34,16 @@ const filterOnSubmit = () => {
     router.push({
         query: params,
     });
-    offersStore.fetchOffers({ filters: filters.technos });
+    const { technos, ...rest} = filters;
+    offersStore.fetchOffers({ filters: technos, ...rest });
 };
 
 const resetFilters = () => {
     filters.technos = "";
-    filters.priceRange = "";
+    filters.minPrice = "";
+    filters.maxPrice = "";
     filters.timeRange = "";
-    filters.title = "";
+    filters.name = "";
     router.push({
         query: {},
     });
@@ -72,12 +76,13 @@ const handleClick = (id) => {
 
 onMounted(() => {
     const { query } = route;
-    const { technos, priceRange, timeRange, title } = query;
+    const { technos, minPrice, maxPrice, timeRange, name, length } = query;
     if (technos) filters.technos = technos;
-    if (priceRange) filters.priceRange = priceRange;
+    if (minPrice) filters.minPrice = minPrice;
+    if (maxPrice) filters.maxPrice = maxPrice;
     if (timeRange) filters.timeRange = timeRange;
-    if (title) filters.title = title;
-    offersStore.fetchOffers({ filters: filters.technos });
+    if (name) filters.name = name;
+    offersStore.fetchOffers({ filters: technos, minPrice, maxPrice, name, length });
 });
 </script>
 

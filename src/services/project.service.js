@@ -24,16 +24,39 @@ class ProjectService {
     }
 
     async getProjects(queryParams = {}){
-        const { page, filters } = queryParams;
+        const { page, name, filters, minPrice, maxPrice, length } = queryParams;
         
         try{
-            let url = `${API_URL}/projects`;
-            if( filters && JSON.stringify(filters) != JSON.stringify({}) ){
-                // url += `?${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join('&')}`;
-                url += `?filters.name=${filters}`;
-            }
+            const url = `${API_URL}/projects?`;
+            const params = [];
+            // if( filters && JSON.stringify(filters) != JSON.stringify({}) ){
+            //     // url += `?${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join('&')}`;
+            //     params.push(`filters.name=${filters}`);
+            // }
 
-            const res = await fetch(`${url}`, {
+            // if( minPrice ){
+            //     params.push(`minPrice=${minPrice}`);
+            // }
+
+            // if( maxPrice ){
+            //     params.push(`maxPrice=${maxPrice}`);
+            // }
+
+            // if( length ){
+            //     params.push(`length=${length}`);
+            // }
+
+            // if( name ){
+            //     params.push(`name=${name}`);
+            // }
+
+            Object.entries(queryParams).forEach(([key, value]) => {
+                if(value){
+                    params.push(`${key}=${value}`);
+                }
+            });
+
+            const res = await fetch(`${url}${params.join('&')}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -17,12 +17,24 @@ const props = defineProps({
     reset: {
         type: Function,
         required: true,
-    }
+    },
 });
+
+const priceMaxOptions = [
+    { name: "5.000€", value: "5000" },
+    { name: "10.000€", value: "10000" },
+    { name: "100.000€", value: "100000" },
+];
 
 const choices = ref([]);
 const clearable = computed(() => {
-    return props.filters.technos || props.filters.priceRange || props.filters.timeRange || props.filters.title;
+    return (
+        props.filters.technos ||
+        props.filters.maxPrice ||
+        props.filters.minPrice ||
+        props.filters.length ||
+        props.filters.name
+    );
 });
 
 onMounted(async () => {
@@ -30,29 +42,33 @@ onMounted(async () => {
     if (!res) return;
     choices.value = res["hydra:member"];
 });
-
 </script>
 
 <template>
     <div class="offers-filter">
         <div class="offers-filter__fields">
             <InputField
-                v-model="filters.title"
+                v-model="filters.name"
                 placeholder="📋 Titre de l'offre"
             />
             <select v-model="filters.technos" placeholder="🧑‍💻 Technologie">
                 <option value="" disabled default="true">🧑‍💻 Technologie</option>
-                <option v-for="choice in choices.filter(c => c.type === 'techno')" :value="choice.name">
+                <option
+                    v-for="choice in choices.filter((c) => c.type === 'techno')"
+                    :value="choice.name"
+                >
                     {{ choice.name }}
                 </option>
             </select>
-            <select v-model="filters.priceRange" placeholder="💵 Prix">
-                <option value="" disabled default="true">💵 Prix</option>
-                <option value="lt5000">Moins de 5.000€</option>
-                <option value="gt5000&&lt10000">Entre 5.000€ et 10.000€</option>
-                <option value="gt10000">Plus de 10.000€</option>
+            <select v-model="filters.maxPrice" placeholder="💵 Prix">
+                <option value="" disabled default="true">💵 Prix minimum</option>
+                <option 
+                    v-for="option in priceMaxOptions"
+                    :value="option.value">
+                    {{ option.name }}
+                </option>
             </select>
-            <select v-model="filters.timeRange" placeholder="⌛ Durée">
+            <select v-model="filters.length" placeholder="⌛ Durée">
                 <option value="" disabled default="true">⌛ Durée</option>
                 <option value="lt1">Moins d'un mois</option>
                 <option value="1">1 mois</option>
@@ -65,7 +81,9 @@ onMounted(async () => {
             </select>
         </div>
         <div class="offers-filter__footer">
-            <Btn v-if="clearable" :outline="true" @click="() => reset()">Reinitialiser</Btn>
+            <Btn v-if="clearable" :outline="true" @click="() => reset()"
+                >Reinitialiser</Btn
+            >
             <Btn @click="() => onClick()">Chercher parmis nos offres</Btn>
         </div>
     </div>
