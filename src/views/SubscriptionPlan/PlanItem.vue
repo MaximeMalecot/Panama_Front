@@ -27,7 +27,7 @@ const props = defineProps({
         <span>{{ plan.price }}$</span>
         <Btn v-if="showBtn[0]" @click="() => onClick(plan.id)">COMMENCER</Btn>
         <div v-else>
-            <button >Action indisponible</button>
+            <Btn :outline="true" >Action indisponible</Btn>
             <span>{{ showBtn[1] }}</span>
         </div>
         <span> Offre soumise aux Conditions générales. </span>

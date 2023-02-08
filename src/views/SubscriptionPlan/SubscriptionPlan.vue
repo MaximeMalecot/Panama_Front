@@ -56,7 +56,6 @@ const handlePlanClick = async (planId) => {
     const res = await SubscriptionService.subscribe(planId);
     if(res && res.url) {
         window.location.replace(res.url);
-        // router.push({ name: "Home" });
     }else{
         displayMsg({msg: "Une erreur est survenue", type: "error"});
     }
