@@ -14,14 +14,11 @@ const authStore = useAuthStore();
 const loading = ref(true);
 const plans = ref([]);
 
-const canSubscribe = computed(() => {    
-    if (!authStore.isConnected)
-        return [
-            false,
-            "Authentification requise",
-        ];
+const canSubscribe = computed(() => {
+    if (!authStore.isConnected) return [false, "Authentification requise"];
     const { roles } = authStore.userData;
-    if (roles.includes(ROLES.FREELANCER_PREMIUM)) {
+
+    if (authStore.isSubscribed) {
         return [false, "Vous êtes déjà abonné à un forfait premium"];
     }
 
@@ -32,7 +29,7 @@ const canSubscribe = computed(() => {
         ];
     }
 
-    return [ true, ""];
+    return [true, ""];
 });
 
 onMounted(async () => {
@@ -46,20 +43,20 @@ onMounted(async () => {
 });
 
 const handlePlanClick = async (planId) => {
-    if(loading.value) return;
+    if (loading.value) return;
     const [can, msg] = canSubscribe.value;
     if (!can) {
-        displayMsg({msg, type: "error"});
+        displayMsg({ msg, type: "error" });
         return;
     }
     loading.value = true;
     const res = await SubscriptionService.subscribe(planId);
-    if(res && res.url) {
+    if (res && res.url) {
         window.location.replace(res.url);
-    }else{
-        displayMsg({msg: "Une erreur est survenue", type: "error"});
+    } else {
+        displayMsg({ msg: "Une erreur est survenue", type: "error" });
     }
-    
+
     loading.value = false;
 };
 </script>

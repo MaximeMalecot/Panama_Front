@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import jwt_decode from "jwt-decode";
 import { TOKEN_STORAGE_KEY } from "../constants/storage_keys";
+import { ROLES } from "../constants/roles";
 import AuthService from "../services/auth.service";
 
 const checkToken = (token) => {
@@ -28,6 +29,7 @@ const emptyUserData = {
 export const useAuthStore = defineStore("auth", () => {
     const userData = ref(emptyUserData);
     const isConnected = computed(() => !!userData.value.token);
+    const isSubscribed = computed(() => !!(userData.value?.roles).includes(ROLES.FREELANCER_PREMIUM));
 
     function tryLogin() {
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -77,5 +79,5 @@ export const useAuthStore = defineStore("auth", () => {
         userData.value = emptyUserData;
     }
 
-    return { userData, tryLogin, isConnected, login, signup, logout };
+    return { userData, tryLogin, isConnected, isSubscribed, login, signup, logout };
 });

@@ -52,7 +52,7 @@ const router = createRouter({
         {
             path: "/abonnements/plans",
             name: "plans",
-            component: () => import("../views/SubscriptionPlan/SubscriptionPlan.vue"),
+            component: () => import("../views/SubscriptionPlan/SubscriptionPlanView.vue"),
         },
         {
             path: "/dashboard",
