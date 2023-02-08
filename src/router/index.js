@@ -8,13 +8,19 @@ const userRole = ROLES.CLIENT;
 // const user = null;
 
 const checkUserRole = (role) => {
-    const authStore = useAuthStore();
-    if (!authStore.isConnected) {
-        return false;
-    }
-    if (authStore.userData.role.includes(role)) {
-        return true;
-    } else {
+    try{
+        const authStore = useAuthStore();
+        if (!authStore.isConnected) {
+            return false;
+        }
+
+        if ( (authStore.userData.roles).includes(role) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }catch(e){
+        console.error(e.message);
         return false;
     }
 };
@@ -56,13 +62,15 @@ const router = createRouter({
                         ),
                     beforeEnter: async (to, from, next) => {
                         // When accessing /dashboard/ it will redirect the user to the correct page
-                        if (userRole === ROLES.CLIENT) {
+                        if ( checkUserRole(ROLES.CLIENT) ) {
                             return next({ name: "dashboard-offers" });
                         }
-                        if (userRole === ROLES.FREELANCER) {
+
+                        if ( checkUserRole(ROLES.FREELANCER) ) {
                             return next({ name: "dashboard-propositions" });
                         }
-                        return next();
+
+                        return next({ name: "home"});
                     },
                 },
                 {
@@ -93,8 +101,7 @@ const router = createRouter({
                     beforeEnter: async (to, from, next) => {
                         // When accessing /dashboard/ it will redirect the user to the correct page
                         if (
-                            to.name === "dashboard-propositions" &&
-                            userRole !== ROLES.FREELANCER
+                            !checkUserRole(ROLES.FREELANCER)
                         ) {
                             return next({ name: "dashboard-home" });
                         }
@@ -118,7 +125,7 @@ const router = createRouter({
                         // When accessing /dashboard/ it will redirect the user to the correct page
                         if (
                             to.name === "new_project" &&
-                            userRole !== ROLES.CLIENT
+                            checkUserRole(ROLES.CLIENT)
                         ) {
                             return next({ name: "dashboard-home" });
                         }
