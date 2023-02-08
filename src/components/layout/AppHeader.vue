@@ -19,7 +19,7 @@ const authStore = useAuthStore();
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'offers' }">Offres</RouterLink>
                 </li>
                 <li class="header__nav__list__item">
-                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?
+                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'plans' }">Forfaits
                     </RouterLink>
                 </li>
                 <li class="header__nav__list__item">
