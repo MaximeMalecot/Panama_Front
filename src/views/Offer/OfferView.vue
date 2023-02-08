@@ -3,6 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import OfferApply from "@/components/Offers/OfferApply.vue";
 import Offer from "@/components/Offers/Offer.vue";
 import ProjectService from "@/services/project.service";
+import SubscriptionService from "@/services/subscription.service";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
 import { ROLES } from "@/constants/roles";
@@ -44,11 +45,11 @@ const handleApplication = () => {
         //router.push({ name: 'login' });
     }
 
-    if (!isVerified) {
-        console.log("you must be verified");
-        return;
-        //router.push({ name: 'login' });
-    }
+    // if (!isVerified) {
+    //     console.log("you must be verified");
+    //     return;
+    //     //router.push({ name: 'login' });
+    // }
 
     console.log("handleApplication");
 };
