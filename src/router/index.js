@@ -7,19 +7,20 @@ import { useAuthStore } from "@/stores/auth";
 const userRole = ROLES.CLIENT;
 // const user = null;
 
-const checkUserRole = (role) => {
-    try{
+const userHasRole = (role, checkAuth = true) => {
+    try {
         const authStore = useAuthStore();
-        if (!authStore.isConnected) {
+
+        if (checkAuth && !authStore.isConnected) {
             return false;
         }
 
-        if ( (authStore.userData.roles).includes(role) ) {
+        if (authStore.userData.roles.includes(role)) {
             return true;
         } else {
             return false;
         }
-    }catch(e){
+    } catch (e) {
         console.error(e.message);
         return false;
     }
@@ -62,15 +63,17 @@ const router = createRouter({
                         ),
                     beforeEnter: async (to, from, next) => {
                         // When accessing /dashboard/ it will redirect the user to the correct page
-                        if ( checkUserRole(ROLES.CLIENT) ) {
+                        if (userHasRole(ROLES.CLIENT, false)) {
                             return next({ name: "dashboard-offers" });
                         }
 
-                        if ( checkUserRole(ROLES.FREELANCER) ) {
+                        if (
+                            userHasRole(ROLES.FREELANCER, false) ||
+                            userHasRole(ROLES.FREELANCER_PREMIUM, false)
+                        ) {
                             return next({ name: "dashboard-propositions" });
                         }
-
-                        return next({ name: "home"});
+                        return next({ name: "home" });
                     },
                 },
                 {
@@ -84,7 +87,7 @@ const router = createRouter({
                         // When accessing /dashboard/ it will redirect the user to the correct page
                         if (
                             to.name === "dashboard-offers" &&
-                            userRole !== ROLES.CLIENT
+                            !userHasRole(ROLES.CLIENT, false)
                         ) {
                             return next({ name: "dashboard-home" });
                         }
@@ -101,7 +104,8 @@ const router = createRouter({
                     beforeEnter: async (to, from, next) => {
                         // When accessing /dashboard/ it will redirect the user to the correct page
                         if (
-                            !checkUserRole(ROLES.FREELANCER)
+                            !userHasRole(ROLES.FREELANCER, false) &&
+                            !userHasRole(ROLES.FREELANCER_PREMIUM, false)
                         ) {
                             return next({ name: "dashboard-home" });
                         }
@@ -125,7 +129,7 @@ const router = createRouter({
                         // When accessing /dashboard/ it will redirect the user to the correct page
                         if (
                             to.name === "new_project" &&
-                            checkUserRole(ROLES.CLIENT)
+                            !userHasRole(ROLES.CLIENT)
                         ) {
                             return next({ name: "dashboard-home" });
                         }
