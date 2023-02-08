@@ -23,7 +23,7 @@ const dashboardRoutes = [
     {
         name: 'dashboard-projects',
         title: 'Mes projets',
-        role: -1,
+        role: ROLES.FREELANCER_PREMIUM,
     },
     {
         name: 'dashboard-settings',

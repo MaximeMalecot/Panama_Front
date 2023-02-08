@@ -73,12 +73,11 @@ const router = createRouter({
                         }
 
                         if (
-                            userHasRole(ROLES.FREELANCER, false) ||
                             userHasRole(ROLES.FREELANCER_PREMIUM, false)
                         ) {
                             return next({ name: "dashboard-propositions" });
                         }
-                        return next({ name: "home" });
+                        return next({ name: "dashboard-settings" });
                     },
                 },
                 {
