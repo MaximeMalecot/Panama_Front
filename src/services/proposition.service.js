@@ -13,7 +13,7 @@ class SubscriptionService {
                 },
                 body: JSON.stringify({})
             });
-            if(res.status === 200){
+            if(res.status === 201){
                 return await res.json();
             }else{
                 return false;

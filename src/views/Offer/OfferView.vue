@@ -8,54 +8,59 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
 import { ROLES } from "@/constants/roles";
 import PremiumModal from "@/components/Premium/PremiumModal.vue";
+import { displayMsg } from "@/utils/toast";
 
 const authStore = useAuthStore();
 
 const route = useRoute();
 const router = useRouter();
 
-const data = reactive({
-    title: "Conception d'un site avec Shopify",
-    tags: ["python", "htmlcss"],
-    time: 1,
-    price: 800,
-    description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-});
-
 const project = ref({});
 const loading = ref(true);
+const applicationLoading = ref(false);
 const showModal = ref(false);
+const alreadyApplied = ref(false);
 
 const handleApplication = async () => {
-    console.log(authStore.userData);
-    if (!authStore.isConnected) {
-        console.log("you must be logged in");
-        router.push({ name: "login" });
-        return;
-        //router.push({ name: 'login' });
+    applicationLoading.value = true;
+    try {
+        if (!authStore.isConnected) {
+            //router.push({ name: "login" });
+            throw new Error("Vous devez être authentifié");
+        }
+
+        const { roles, isVerified } = authStore.userData;
+
+        if (!authStore.isSubscribed) {
+            showModal.value = true;
+            throw new Error();
+        }
+
+        if (!isVerified) {
+            throw new Error("Vous devez être vérifié");
+        }
+
+        const res = await PropositionService.createProposition(
+            project.value.id
+        );
+        if (res) {
+            alreadyApplied.value = true;
+            displayMsg({
+                msg: "Positionnement sur l'offre effectué",
+                type: "success",
+            });
+        } else {
+            throw new Error("Une erreur est survenue");
+        }
+    } catch (e) {
+        if(e.message && e.message !== ""){
+            console.error(e.message);
+            displayMsg({ msg: e.message, type: "error" });
+        }
+    }finally{
+        applicationLoading.value = false;
     }
-
-    const { roles, isVerified } = authStore.userData;
-
-    if (!authStore.isSubscribed) {
-        showModal.value = true;
-        return;
-    }
-
-    if (!isVerified) {
-        console.error("you must be verified");
-        return;
-        //router.push({ name: 'login' });
-    }
-
-    const res = await PropositionService.createProposition(project.value.id);
-    console.log(res);
-    // if (res) {
-    //     router.push({ name: "propositions" });
-    // }
-
-    console.log("handleApplication");
+    applicationLoading.value = false;
 };
 
 onMounted(async () => {
@@ -63,6 +68,14 @@ onMounted(async () => {
     if (!res) {
         router.push({ name: "offers" });
     }
+
+    if (authStore.isSubscribed) {
+        const application = await PropositionService.getSelfPropositionOfProject(route.params.id);
+        if (application && application?.proposition?.id) {
+            alreadyApplied.value = true;
+        }
+    }
+
     project.value = res;
     loading.value = false;
 });
@@ -81,7 +94,14 @@ onMounted(async () => {
                 <Offer :data="project" />
             </section>
             <section>
-                <OfferApply :handleClick="() => handleApplication()" />
+                <span v-if="applicationLoading"> ... </span>
+                <OfferApply
+                    v-else-if="!alreadyApplied"
+                    :handleClick="() => handleApplication()"
+                />
+                <span v-else
+                    >Vous vous êtes déjà postionné sur cette offre</span
+                >
             </section>
         </div>
         <PremiumModal :close="() => (showModal = false)" v-show="showModal" />
@@ -92,7 +112,7 @@ onMounted(async () => {
 .offer {
     &__header {
         padding: 2rem 0;
-        
+
         &__link {
             color: var(--text-gray);
             text-decoration: none;
