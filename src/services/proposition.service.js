@@ -44,7 +44,7 @@ class SubscriptionService {
         }
     }
 
-    async getSelfPropositionOfProject(projectId, {projectStatus = null, propositionStatus = null}){
+    async getSelfPropositionOfProject(projectId, projectStatus = null, propositionStatus = null){
         try{
             let url = `${API_URL}/projects/${projectId}/propositions?`;
             const params = [];
