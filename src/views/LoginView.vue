@@ -5,7 +5,9 @@ import { reactive, ref } from "vue";
 import { displayMsg } from "@/utils/toast";
 import Btn from '@/components/common/Btn.vue';
 import Input from '@/components/common/InputField.vue';
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const store = useAuthStore();
 const formData = reactive({
     email: '',
@@ -23,14 +25,17 @@ const onSubmit = async () => {
         const res = await store.login(formData.email, formData.password);
         if (res === true) {
             displayMsg({ msg: "Connexion réussie", type: "success" });
+            setTimeout(() => {
+                router.push({ name: 'home' });
+            }, 1000);
         } else {
             throw new Error("Une erreur est survenue")
         }
     } catch (e) {
         console.error(e);
         displayMsg({ msg: e.message, type: "error" });
+        loading.value = false;
     }
-    loading.value = false;
 }
 
 </script>

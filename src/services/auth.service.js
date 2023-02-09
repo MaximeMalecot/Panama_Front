@@ -16,7 +16,7 @@ class AuthService {
                 return false;
             }
         }catch(e){
-            console.log(e);
+            console.error(e.message);
             return false;
         }
     }
@@ -36,7 +36,7 @@ class AuthService {
                 return false;
             }
         }catch(e){
-            console.log(e);
+            console.error(e.message);
             return false;
         }
     }

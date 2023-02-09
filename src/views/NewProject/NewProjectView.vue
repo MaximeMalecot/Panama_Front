@@ -57,7 +57,6 @@ const steps = [
 
 const createPost = async () => {
     loading.value = true;
-    console.log("create post");
     const { title: name, description, ...rest } = formData;
     const { minPrice, maxPrice } = rest.price_range;
     const { value, unit } = rest.duration;

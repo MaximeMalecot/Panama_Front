@@ -17,7 +17,6 @@ const handledRoles = {
 const route = useRoute();
 const router = useRouter();
 
-
 const role = computed(() => {
     if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
         return null;
@@ -92,9 +91,8 @@ const onSubmit = async () => {
             throw new Error("Une erreur est survenue lors de l'inscription");
         }
     } catch (e) {
-        console.log(e.message);
+        console.error(e.message);
         displayMsg({ msg: e.message, type: "error" });
-
     }
     loading.value = false;
 }
@@ -109,7 +107,6 @@ const onSubmit = async () => {
 // });
 
 watch(role, val => {
-    console.log(val)
     if(val){
         document.title = `Panama Agency - Inscription en tant que ${val === ROLES.CLIENT ? 'client' : 'freelancer'}`;
     }else{
@@ -118,7 +115,6 @@ watch(role, val => {
 });
 
 onMounted(() => {
-    console.log(role)
     if(role.value){
         document.title = `Panama Agency - Inscription en tant que ${role.value === ROLES.CLIENT ? 'client' : 'freelancer'}`;
     }else{

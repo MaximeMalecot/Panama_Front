@@ -30,7 +30,6 @@ watch(enablePriceRange, (val) => {
 });
 
 watch(duration, (newVal) => {
-    console.log("CALLED")
     const { value, unit } = newVal;
     props.formData.duration = { value, unit };
 });

@@ -19,7 +19,7 @@ const authStore = useAuthStore();
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'offers' }">Offres</RouterLink>
                 </li>
                 <li class="header__nav__list__item">
-                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?
+                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'plans' }">Forfaits
                     </RouterLink>
                 </li>
                 <li class="header__nav__list__item">
@@ -31,8 +31,11 @@ const authStore = useAuthStore();
             <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>Je suis client</Btn>
             <Btn type="link" :to="{ name: 'signup', query: { role: 'freelancer'} }">Je suis freelance</Btn>
         </div>
-        <div v-else>
-            <button @click="authStore.logout">Logout</button>
+        <div v-else class="header__account">
+            <p>{{ authStore.userData.email }}</p>
+            <span>|</span>
+            <RouterLink class="header__nav__list__item__link" :to="{ name: 'dashboard-home' }">Dashboard</RouterLink>
+            <Btn type="button" @click="authStore.logout">Déconnexion</Btn>
         </div>
     </header>
 </template>
@@ -84,6 +87,12 @@ const authStore = useAuthStore();
 .header__login {
     display: inline-flex;
     justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header__account{
+    display: flex;
     align-items: center;
     gap: 1rem;
 }

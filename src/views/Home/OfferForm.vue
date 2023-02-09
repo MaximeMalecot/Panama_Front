@@ -1,33 +1,81 @@
 <script setup>
-import { ref } from 'vue';
-import SelectField from '@/components/common/SelectField.vue';
-import Btn from '@/components/common/Btn.vue';
+import { ref, onMounted, computed } from "vue";
+import SelectField from "@/components/common/SelectField.vue";
+import Btn from "@/components/common/Btn.vue";
+import { useRouter } from "vue-router";
+import FiltersService from "@/services/filters.service";
+import { useAuthStore } from "../../stores/auth";
+import { ROLES } from "@/constants/roles";
 
-const technos = ref('')
-const priceRange = ref('')
+const authStore = useAuthStore();
+const router = useRouter();
+const technos = ref("");
+const maxPrice = ref(0);
+
+const technoChoices = ref([]);
+
+const canPostOffer = computed(() => {
+    const { roles, isVerified } = authStore.userData;
+    return (
+        authStore.isConnected &&
+        roles.includes(ROLES.CLIENT) &&
+        isVerified
+    );
+});
+
+const handleClick = () => {
+    const query = {};
+    if (technos.value) query.technos = technos.value;
+    if (maxPrice.value) query.maxPrice = maxPrice.value;
+
+    router.push({
+        name: "offers",
+        query,
+    });
+};
+
+onMounted(async () => {
+    const res = await FiltersService.getFilters();
+    if (!res) return;
+    if (res["hydra:member"]?.length > 0) {
+        technoChoices.value = res["hydra:member"].filter(
+            (c) => c.type === "techno"
+        );
+    } else {
+        technoChoices.value = [];
+    }
+});
 </script>
 
 <template>
     <div class="offer-form">
         <div class="offer-form__fields">
-            <SelectField v-model="technos" placeholder="🧑‍💻 Technologie" :values="[
-                { name: 'PHP', value: 'php' },
-                { name: 'Javascript', value: 'javascript' },
-                { name: 'HTML/CSS', value: 'html-css' },
-                { name: 'C#', value: 'csharp' },
-                { name: '.NET', value: 'dotnet' },
-                { name: 'Shopify', value: 'shopify' },
-                { name: 'Wordpress', value: 'wordpress' },
-            ]" />
-            <SelectField v-model="priceRange" placeholder="💵 Prix" :values="[
-                { name: '< 5.000€', value: 'lt5000' },
-                { name: '> 5.000€ et < 10.000€', value: 'gt5000&&lt10000' },
-                { name: '> 10.000€', value: 'gt10000' },
-            ]" />
+            <SelectField
+                v-model="technos"
+                placeholder="🧑‍💻 Technologie"
+                :values="[
+                    ...technoChoices.map((c) => ({
+                        name: c.name,
+                        value: c.name,
+                    })),
+                ]"
+            />
+
+            <SelectField
+                v-model="maxPrice"
+                placeholder="💵 Prix maximum"
+                :values="[
+                    { name: '5.000€', value: '5000' },
+                    { name: '10.000€', value: '10000' },
+                    { name: '100.000€', value: '100000' },
+                ]"
+            />
         </div>
         <div class="offer-form__footer">
-            <RouterLink class="offer-form__footer__link" :to="{ name: 'home' }">Déposer une offre</RouterLink>
-            <Btn>Chercher parmis nos offres</Btn>
+            <RouterLink v-if="canPostOffer" class="offer-form__footer__link" :to="{ name: 'new_project' }"
+                >Déposer une offre</RouterLink
+            >
+            <Btn @click="handleClick">Chercher parmis nos offres</Btn>
         </div>
     </div>
 </template>
