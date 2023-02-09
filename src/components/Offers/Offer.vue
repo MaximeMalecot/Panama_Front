@@ -16,7 +16,7 @@ defineProps({
         <section class="offer__header">
             <h1 class="offer__header__title">{{ data.name }}</h1>
             <div class="offer__header__tags">
-                <Tag v-for="techno in data.filters" :color="TECHNOS[techno].color">{{ TECHNOS[techno].name }}</Tag>
+                <Tag v-for="filter in data.filters">{{ filter.name??"unset" }}</Tag>
             </div>
             <div class="offer__header__info">
                 <template v-if="data.minPrice && data.maxPrice">

@@ -33,7 +33,8 @@ const props = defineProps({
 const backgroundColor = computed(() => {
     if (!props?.offersData || !props.offersData?.filters.length === 0)
         return "#d9d9d9";
-    return TECHNOS[props.offerData.filters[0]].color;
+    //return TECHNOS[props.offerData.filters[0]].color;
+    return 'gray';
 });
 
 function displayPriceRange(price) {
@@ -72,8 +73,8 @@ function displayPriceRange(price) {
             <div class="card__content__technos">
                 <Tag
                     v-for="techno in offerData.filters"
-                    :color="TECHNOS[techno].color"
-                    >{{ TECHNOS[techno].name }}</Tag
+                    :color="'gray'"
+                    >{{ techno.name }}</Tag
                 >
             </div>
             <div class="card__content__footer">
