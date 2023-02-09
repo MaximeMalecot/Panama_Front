@@ -14,12 +14,7 @@ const loading = ref(false);
 const formData = reactive({
     title: "",
     description: "",
-    filters: [
-        {
-            id: "1",
-            name: "TAG1",
-        },
-    ],
+    filters: [],
     price_range: { minPrice: 0, maxPrice: 0 },
     duration: { value: null, unit: null },
 });
@@ -61,12 +56,15 @@ const createPost = async () => {
     const { minPrice, maxPrice } = rest.price_range;
     const { value, unit } = rest.duration;
 
+    const filters = formData.filters.map((filter) => filter.id);
+
     const payload = {
         name,
         description,
         minPrice,
         maxPrice,
         length: value,
+        filters
     };
     const res = await projectService.createProject(payload);
     if (res === false && !res?.url) {

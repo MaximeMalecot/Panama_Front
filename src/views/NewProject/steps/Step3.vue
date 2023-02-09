@@ -16,7 +16,7 @@ let duration = reactive({
     value: props.formData.duration.value,
     unit: props.formData.duration.unit
 });
-const UNITS = ["jour(s)", "semaine(s)", "mois"];
+const UNITS = ["mois"];
 
 watch(priceRange, (newVal) => {
     const [minPrice, maxPrice] = newVal;

@@ -1,23 +1,9 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import TagItem from '../FilterItem.vue';
 import Btn from '@/components/common/Btn.vue';
 import Input from '@/components/common/InputField.vue';
-
-const MOCK_SUGGESTIONS = [
-    {
-        id: Math.random().toString(36).substr(2, 9),
-        name: Math.random().toString(36).substring(2, 8)
-    },
-    {
-        id: Math.random().toString(36).substr(2, 9),
-        name: Math.random().toString(36).substring(2, 8)
-    },
-    {
-        id: Math.random().toString(36).substr(2, 9),
-        name: Math.random().toString(36).substring(2, 8)
-    }
-];
+import FilterService from '@/services/filters.service.js';
 
 const props = defineProps({
     formData: Object
@@ -39,13 +25,15 @@ const addFilter = (tagToAdd) => {
 }
 
 const searchFilters = async () => {
+    console.log("called")
     if (searchTagInput.value === "") {
         tagsSuggestions.value = [];
         return;
     }
-    //const response = await FilterService.search(searchTagInput.value);
-    const response = MOCK_SUGGESTIONS;
-    tagsSuggestions.value = response;
+    const res = await FilterService.search(searchTagInput.value);
+    if( res ){
+        tagsSuggestions.value = res["hydra:member"];
+    }
 }
 
 watch(searchTagInput, searchFilters);
@@ -55,7 +43,7 @@ watch(searchTagInput, searchFilters);
 <template>
     <div class="step_2">
         <div class="header">
-            <h3>Tags</h3>
+            <h3>Filtres</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit obcaecati accusamus vero fugiat, animi
                 facere
                 odio, sequi dignissimos earum, dicta incidunt nostrum deserunt atque mollitia! Quia neque consequuntur
@@ -63,8 +51,9 @@ watch(searchTagInput, searchFilters);
         </div>
         <div class="content">
             <div class="tags">
-                <TagItem v-for="(tag, index) in formData.filters" :key="index" :data="tag" :id="index"
+                <TagItem v-if="formData.filters.length > 0" v-for="(tag, index) in formData.filters" :key="index" :data="tag" :id="index"
                     :onClick="removeFilter" />
+                <span v-else>Vous n'avez pas encore selectionné de filtre</span>
             </div>
             <div class="search_tags">
                 <Input type="text" placeholder="Rechercher un tag" v-model="searchTagInput" />

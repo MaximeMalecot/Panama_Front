@@ -26,6 +26,11 @@ const dashboardRoutes = [
         role: ROLES.FREELANCER_PREMIUM,
     },
     {
+        name: 'new_project',
+        title: 'Publier une offre',
+        role: ROLES.CLIENT,
+    },
+    {
         name: 'dashboard-settings',
         title: 'Paramètres',
         role: -1,
