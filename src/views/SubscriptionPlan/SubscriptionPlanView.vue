@@ -55,9 +55,9 @@ const handlePlanClick = async (planId) => {
         window.location.replace(res.url);
     } else {
         displayMsg({ msg: "Une erreur est survenue", type: "error" });
+        loading.value = false;
     }
 
-    loading.value = false;
 };
 </script>
 

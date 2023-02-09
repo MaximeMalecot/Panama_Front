@@ -3,9 +3,9 @@ import authHeader from './auth.header';
 
 class SubscriptionService {
 
-    async createProposition(propositionId){
+    async createProposition(projectId){
         try{
-            const res = await fetch(`${API_URL}/projects/${propositionId}/propositions`, {
+            const res = await fetch(`${API_URL}/projects/${projectId}/propositions`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -24,16 +24,54 @@ class SubscriptionService {
         }
     }
 
-
-    async subscribe(subscriptionPlanId){
+    async getSelfPropositions(userId){
         try{
-            const res = await fetch(`${API_URL}/payment/create_subscription`, {
-                method: "POST",
+            const res = await fetch(`${API_URL}/users/${userId}/propositions`, {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader()
-                },
-                body: JSON.stringify({subscriptionPlan: subscriptionPlanId})
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async getSelfPropositionOfProject(projectId){
+        try{
+            const res = await fetch(`${API_URL}/projects/${projectId}/own`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async getProjectPropositions(projectId){
+        try{
+            const res = await fetch(`${API_URL}/projects/${projectId}/propositions`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
             });
             if(res.status === 200){
                 return await res.json();

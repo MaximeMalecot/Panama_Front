@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 const handleBecomePremium = () => {
-    router.push({ name: "become-premium" });
+    router.push({ name: "plans" });
 };
 
 const handleSubscriptions = () => {
@@ -60,8 +60,7 @@ const handleSubscriptions = () => {
                 <h3>Seulement 9.99€/mois.</h3>
             </section>
             <section class="modal_actions">
-                <Btn @click="handleBecomePremium">Devenir Premium</Btn>
-                <Btn @click="handleSubscriptions" :outline="true">Voir les abonnements</Btn>
+                <Btn @click="handleBecomePremium">voir les abonnements</Btn>
             </section>
         </div>
     </div>
