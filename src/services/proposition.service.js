@@ -3,10 +3,10 @@ import authHeader from './auth.header';
 
 class SubscriptionService {
 
-    async getPlans(){
+    async createProposition(propositionId){
         try{
-            const res = await fetch(`${API_URL}/subscription_plans`, {
-                method: "GET",
+            const res = await fetch(`${API_URL}/projects/${propositionId}/propositions`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader()

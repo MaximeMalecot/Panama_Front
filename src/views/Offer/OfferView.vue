@@ -3,7 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import OfferApply from "@/components/Offers/OfferApply.vue";
 import Offer from "@/components/Offers/Offer.vue";
 import ProjectService from "@/services/project.service";
-import SubscriptionService from "@/services/subscription.service";
+import PropositionService from "@/services/proposition.service";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
 import { ROLES } from "@/constants/roles";
@@ -27,7 +27,7 @@ const project = ref({});
 const loading = ref(true);
 const showModal = ref(false);
 
-const handleApplication = () => {
+const handleApplication = async () => {
     console.log(authStore.userData);
     if (!authStore.isConnected) {
         console.log("you must be logged in");
@@ -38,17 +38,21 @@ const handleApplication = () => {
 
     const { roles, isVerified } = authStore.userData;
 
-    if (!roles.includes(ROLES.FREELANCER_PREMIUM)) {
+    if (!authStore.isSubscribed) {
         showModal.value = true;
-        console.log("you must be premium");
+        return;
+    }
+
+    if (!isVerified) {
+        console.error("you must be verified");
         return;
         //router.push({ name: 'login' });
     }
 
-    // if (!isVerified) {
-    //     console.log("you must be verified");
-    //     return;
-    //     //router.push({ name: 'login' });
+    const res = await PropositionService.createProposition(project.value.id);
+    console.log(res);
+    // if (res) {
+    //     router.push({ name: "propositions" });
     // }
 
     console.log("handleApplication");
