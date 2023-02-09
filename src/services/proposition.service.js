@@ -10,7 +10,8 @@ class SubscriptionService {
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader()
-                }
+                },
+                body: JSON.stringify({})
             });
             if(res.status === 200){
                 return await res.json();
