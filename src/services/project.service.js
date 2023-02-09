@@ -29,27 +29,6 @@ class ProjectService {
         try{
             const url = `${API_URL}/projects?status=ACTIVE&`;
             const params = [];
-            // if( filters && JSON.stringify(filters) != JSON.stringify({}) ){
-            //     // url += `?${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join('&')}`;
-            //     params.push(`filters.name=${filters}`);
-            // }
-
-            // if( minPrice ){
-            //     params.push(`minPrice=${minPrice}`);
-            // }
-
-            // if( maxPrice ){
-            //     params.push(`maxPrice=${maxPrice}`);
-            // }
-
-            // if( length ){
-            //     params.push(`length=${length}`);
-            // }
-
-            // if( name ){
-            //     params.push(`name=${name}`);
-            // }
-
             Object.entries(queryParams).forEach(([key, value]) => {
                 if(value){
                     params.push(`${key}=${value}`);
@@ -95,6 +74,26 @@ class ProjectService {
             return false;
         }
     };
+
+    async getFreelancerProjects(userId){
+        try{
+            const res = await fetch(`${API_URL}/projects/${userId}/own`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
 
 }
 
