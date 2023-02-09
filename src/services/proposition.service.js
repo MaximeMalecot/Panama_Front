@@ -44,9 +44,15 @@ class SubscriptionService {
         }
     }
 
-    async getSelfPropositionOfProject(projectId){
+    async getSelfPropositionOfProject(projectId, {projectStatus = null, propositionStatus = null}){
         try{
-            const res = await fetch(`${API_URL}/projects/${projectId}/own`, {
+            let url = `${API_URL}/projects/${projectId}/propositions?`;
+            const params = [];
+            if(projectStatus) params.push(`status=${projectStatus}`);
+            if(propositionStatus) params.push(`propositionStatus=${propositionStatus}`);
+            url += params.join('&');
+
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
