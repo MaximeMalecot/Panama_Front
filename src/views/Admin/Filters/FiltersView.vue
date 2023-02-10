@@ -22,12 +22,12 @@ const deleteFilter = async (id) => {
 
 <template>
     <div class="container" v-for="filter in filters" :key="filter.id">
-        <div class="filter__content">
+        <div class="content">
             <h3>{{ filter.name }}</h3>
             <p>{{ filter.type }}</p>
         </div>
         <div class="filter__btn">
-            <Btn :type="link" :to="{ name: 'admin-filter-edit', params: { id: filter.id } }">Modifier</Btn>
+            <Btn :type="'link'" :to="{ name: 'admin-filter-edit', params: { id: filter.id } }">Modifier</Btn>
             <Btn :outline="true" type="button" @click="deleteFilter(filter.id)">Supprimer</Btn>
         </div>
     </div>

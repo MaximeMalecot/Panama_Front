@@ -1,13 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import Btn from '../../../components/common/Btn.vue';
 
 </script>
 
 <template>
     <div class="container">
-        <Btn :type="'link'" :to="{ name: 'admin-subscription-plan-create'}">Create a new one</Btn>
-        <div class="content"></div>
+        SUBSCRIPTION PLAN EDIT VIEW
     </div>
 </template>
 

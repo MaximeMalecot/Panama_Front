@@ -5,7 +5,7 @@ import { ref, onMounted } from 'vue'
 
 <template>
     <div class="container">
-        REVIEWS
+        SUBSCRIPTION PLAN VIEW
     </div>
 </template>
 

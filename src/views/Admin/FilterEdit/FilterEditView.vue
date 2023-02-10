@@ -21,5 +21,19 @@ const deleteFilter = async (id) => {
 </script>
 
 <template>
-    FAIS UN FORMULAIRE BATARD
+    <div class="container">
+        FAIS UN FORMULAIRE BATARD
+    </div>
 </template>
+
+<style scoped>
+.container {
+    margin: auto;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+</style>

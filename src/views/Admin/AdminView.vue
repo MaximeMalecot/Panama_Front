@@ -3,7 +3,6 @@
         <RouterLink class="subNavbar__link" :to="{ name: 'admin-index' }">Accueil</RouterLink>
         <RouterLink class="subNavbar__link" :to="{ name: 'admin-filters' }">Filters</RouterLink>
         <RouterLink class="subNavbar__link" :to="{ name: 'admin-projects' }">Projects</RouterLink>
-        <RouterLink class="subNavbar__link" :to="{ name: 'admin-reviews' }">Reviews</RouterLink>
         <RouterLink class="subNavbar__link" :to="{ name: 'admin-subscription-plans' }">Subscription plans</RouterLink>
         <RouterLink class="subNavbar__link" :to="{ name: 'admin-users' }">Users</RouterLink>
     </div>
