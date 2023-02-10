@@ -95,6 +95,25 @@ class ProjectService {
         }
     }
 
+    async getUserProjects(userId){
+        try{
+            const res = await fetch(`${API_URL}/users/${userId}/projects`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
 }
 
 export default new ProjectService();
