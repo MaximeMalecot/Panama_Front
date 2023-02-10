@@ -26,7 +26,7 @@ const deleteFilter = async (id) => {
             <h3>{{ filter.name }}</h3>
             <p>{{ filter.type }}</p>
         </div>
-        <div class="filter__btn">
+        <div class="actions">
             <Btn :type="'link'" :to="{ name: 'admin-filter-edit', params: { id: filter.id } }">Modifier</Btn>
             <Btn :outline="true" type="button" @click="deleteFilter(filter.id)">Supprimer</Btn>
         </div>
@@ -43,7 +43,7 @@ const deleteFilter = async (id) => {
     justify-content: space-between;
     gap: 1rem;
 }
-.filter__btn {
+.actions {
     margin-left: auto;
     display: flex;
     flex-direction: row;

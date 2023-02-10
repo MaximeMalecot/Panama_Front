@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import projectService from '../../../services/project.service';
+import Btn from '@/components/common/Btn.vue';
+import projectService from '@/services/project.service';
 
 const projects = ref([]);
 
@@ -24,8 +25,8 @@ onMounted(async () => {
             <p>{{ project.length }}</p>
         </div>
         <div class="actions">
-            <RouterLink :to="{ name: 'admin-project', params: { id: project.id } }">See specific</RouterLink>
-            <RouterLink :to="{ name: 'admin-project-edit', params: { id: project.id } }">Edit</RouterLink>
+            <Btn :type="'link'" :to="{ name: 'admin-project', params: { id: project.id } }">See specific</Btn>
+            <Btn :type="'link'" :to="{ name: 'admin-project-edit', params: { id: project.id } }">Edit</Btn>
         </div>
     </div>
 </template>
@@ -45,6 +46,12 @@ onMounted(async () => {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 1rem;
+}
+.actions {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
     gap: 1rem;
 }
 </style>
