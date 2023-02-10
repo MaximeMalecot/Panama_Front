@@ -21,7 +21,7 @@ const deleteFilter = async (id) => {
 </script>
 
 <template>
-    <div class="filters" v-for="filter in filters" :key="filter.id">
+    <div class="container" v-for="filter in filters" :key="filter.id">
         <div class="filter__content">
             <h3>{{ filter.name }}</h3>
             <p>{{ filter.type }}</p>
@@ -34,7 +34,7 @@ const deleteFilter = async (id) => {
 </template>
 
 <style scoped>
-.filters {
+.container {
     margin: auto;
     width: 50%;
     display: flex;
