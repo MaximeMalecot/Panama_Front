@@ -21,12 +21,32 @@ const deleteFilter = async (id) => {
 </script>
 
 <template>
-    <main class="filters">
-        <div v-for="filter in filters" :key="filter.id">
-            <h1>{{ filter.name }}</h1>
+    <div class="filters" v-for="filter in filters" :key="filter.id">
+        <div class="filter__content">
+            <h3>{{ filter.name }}</h3>
             <p>{{ filter.type }}</p>
+        </div>
+        <div class="filter__btn">
             <Btn :type="link" :to="{ name: 'admin-filter-edit', params: { id: filter.id } }">Modifier</Btn>
             <Btn :outline="true" type="button" @click="deleteFilter(filter.id)">Supprimer</Btn>
         </div>
-    </main>
+    </div>
 </template>
+
+<style scoped>
+.filters {
+    margin: auto;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.filter__btn {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+</style>

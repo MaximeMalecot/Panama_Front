@@ -1,7 +1,20 @@
 <template>
-    <main class="subNavbar">
-        <h1 class="admin__title">Administration</h1>
-        <h2 class="admin__subtitle">Filtres</h2>
+    <div class="subNavbar">
+        <RouterLink class="subNavbar__link" :to="{ name: 'admin-index' }">Accueil</RouterLink>
+        <RouterLink class="subNavbar__link" :to="{ name: 'admin-filters' }">Filters</RouterLink>
+    </div>
+    <main>
+        <RouterView />
     </main>
-    <RouterView />
 </template>
+
+<style scoped>
+    .subNavbar {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
