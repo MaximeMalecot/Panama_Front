@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/Home/HomeView.vue";
 import { ROLES } from "@/constants/roles";
 import { useAuthStore } from "@/stores/auth";
+import adminRoutes from "./admin-router";
 
 // @todo change this to the store data
 const userRole = ROLES.CLIENT;
@@ -186,6 +187,18 @@ const router = createRouter({
                 return next();
             },
         },
+        {
+            path: "/admin",
+            name: "admin-index",
+            component: () => import("../views/Admin/AdminView.vue"),
+            beforeEnter: async (to, from, next) => {
+                if (!userHasRole(ROLES.ADMIN, true)) {
+                    return next({ name: "dashboard-home" });
+                }
+                return next();
+            },
+            children: adminRoutes
+        }
     ],
 });
 

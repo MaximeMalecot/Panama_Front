@@ -23,6 +23,26 @@ class FiltersService {
         }
     }
 
+    async deleteFilter(id){
+        try{
+            const res = await fetch(`${API_URL}/filters/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 204){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async search(name){
         try{
             const res = await fetch(`${API_URL}/filters?name=${name}`, {
