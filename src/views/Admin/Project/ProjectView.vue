@@ -20,8 +20,8 @@ onMounted(async () => {
     const res = await projectService.getAdminProject(id);
     if(res){
         project.value = res;
-        loading.value = false;
     }
+    loading.value = false;
 });
 
 const removeFilter = (payload) => {
@@ -127,8 +127,6 @@ const deleteProject = async (id) => {
 </template>
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;

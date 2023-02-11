@@ -126,8 +126,6 @@ const updateInfosWrapper = () => {
 
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
