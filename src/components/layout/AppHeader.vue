@@ -2,8 +2,28 @@
 import Btn from '@/components/common/Btn.vue';
 import { useAuthStore } from '../../stores/auth';
 import { ROUTES } from '../../constants/routes';
+import { ROLES } from '../../constants/roles';
 
 const authStore = useAuthStore();
+
+const userHasRole = (role, checkAuth = true) => {
+    try {
+        const authStore = useAuthStore();
+
+        if (checkAuth && !authStore.isConnected) {
+            return false;
+        }
+
+        if (authStore.userData.roles.includes(role)) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.error(e.message);
+        return false;
+    }
+};
 
 </script>
 
@@ -27,14 +47,15 @@ const authStore = useAuthStore();
                 </li>
             </ul>
         </nav>
-        <div v-if="!authStore.isConnected" class="header__login">
-            <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>Je suis client</Btn>
-            <Btn type="link" :to="{ name: 'signup', query: { role: 'freelancer'} }">Je suis freelance</Btn>
+        <div v-if="!authStore.isConnected" class="auth_header">
+            <Btn type="link" :to="{ name: 'login' }" outline>Connexion</Btn>
+            <RouterLink :to="{ name: 'auth-portal'}">Pas de compte ? S'inscrire</RouterLink>
         </div>
         <div v-else class="header__account">
             <p>{{ authStore.userData.email }}</p>
             <span>|</span>
-            <RouterLink class="header__nav__list__item__link" :to="{ name: 'dashboard-home' }">Dashboard</RouterLink>
+            <RouterLink v-if="userHasRole(ROLES.ADMIN, false)" class="header__nav__list__item__link" :to="{ name: 'admin-index' }">Dashboard admin</RouterLink>
+            <RouterLink v-else class="header__nav__list__item__link" :to="{ name: 'dashboard-home' }">Dashboard</RouterLink>
             <Btn type="button" @click="authStore.logout">Déconnexion</Btn>
         </div>
     </header>
@@ -89,6 +110,14 @@ const authStore = useAuthStore();
     justify-content: flex-start;
     align-items: center;
     gap: 1rem;
+}
+
+.auth_header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
 }
 
 .header__account{

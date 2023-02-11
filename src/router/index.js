@@ -166,6 +166,17 @@ const router = createRouter({
             },
         },
         {
+            path: "/auth",
+            name: "auth-portal",
+            component: () => import("../views/AuthPortalView.vue"),
+            beforeEnter: async (to, from, next) => {
+                if (checkUserLogged()) {
+                    return next({ name: "home" });
+                }
+                return next();
+            },
+        },
+        {
             path: "/login",
             name: "login",
             component: () => import("../views/LoginView.vue"),
