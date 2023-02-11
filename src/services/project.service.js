@@ -190,6 +190,28 @@ class ProjectService {
             return false;
         }
     }
+
+    async closeProject(id) {
+        try {
+            const res = await fetch(`${API_URL}/projects/${id}/close`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader(),
+                },
+                body: JSON.stringify({}),
+            });
+            if (res.status === 200) {
+                return await res.json();
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error(e.message);
+            return false;
+        }
+    }
+
 }
 
 export default new ProjectService();

@@ -9,4 +9,5 @@ export const PROJECT_STATUS = {
     'ACTIVE': 'ACTIVE',
     'CANCELED': 'CANCELED',
     'IN_PROGRESS': 'IN_PROGRESS',
+    'ENDED': 'ENDED',
 }

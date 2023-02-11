@@ -5,9 +5,10 @@ import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
 
 import Btn from "../../../components/common/Btn.vue";
-import { PROPOSITION_STATUS } from "@/constants/status.js";
+import { PROJECT_STATUS } from "@/constants/status.js";
 import ProjectPart from "./ProjectPart.vue";
 import PropositionsPart from "./PropositionsPart.vue";
+import CloseAndReview from "./CloseAndReview.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -44,6 +45,8 @@ const handleAction = (id, status) => {
         </section>
         <section v-if="loading || !project.id">Loading...</section>
         <section v-else>
+            <CloseAndReview v-if="project.status == PROJECT_STATUS.IN_PROGRESS" :project="project" />
+            <p v-else-if="project.status == PROJECT_STATUS.ENDED">Le projet est terminé</p>
             <ProjectPart :project="project" :updateProject="(id, payload) => ProjectStore.updateProject(id, payload)"/>
             <PropositionsPart
                 :propositions="propositions"
