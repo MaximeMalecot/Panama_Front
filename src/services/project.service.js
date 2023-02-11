@@ -131,9 +131,13 @@ class ProjectService {
         }
     }
 
-    async getFreelancerActiveProjects(userId) {
+    async getFreelancerActiveProjects(userId, status = null) {
         try {
-            const res = await fetch(`${API_URL}/users/${userId}/freelancer/projects`, {
+            let url = `${API_URL}/projects`;
+            if (status) {
+                url = `${url}?status=${status}`;
+            }
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

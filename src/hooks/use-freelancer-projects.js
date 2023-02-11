@@ -10,12 +10,12 @@ const useFreelancerProjects = () => {
     const error = ref(null);
     const count = computed(() => propositions.value.length);
 
-    const fetchAllProjects = async () => {
+    const fetchAllProjects = async (status) => {
         loading.value = true;
         error.value = null;
         try {
             const userId = authStore.userData.userId;
-            const res = await ProjectService.getFreelancerActiveProjects(userId);
+            const res = await ProjectService.getFreelancerActiveProjects(userId, status);
             if(!res) throw new Error('An error occured');
             projects.value = res["hydra:member"]
         } catch (e) {
