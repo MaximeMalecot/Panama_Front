@@ -107,7 +107,7 @@ onMounted(() => {
                         v-model="reviewForm.comment"
                     />
                 </InputWithCounter> -->
-                <InputWithCounter :type="'input'" :maxLength="MAX_COMMENT_LENGTH" v-model="reviewForm.comment"/>
+                <InputWithCounter :type="'textarea'" :maxLength="MAX_COMMENT_LENGTH" v-model="reviewForm.comment"/>
                 <Btn :type="'submit'" value="Envoyer">Envoyer</Btn>
         </form>
     </section>

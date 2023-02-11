@@ -28,6 +28,7 @@ const emit = defineEmits(["update:modelValue"]);
             :value="modelValue"
             :placeholder="placeholder"
             @input="emit('update:modelValue', $event.target.value)"
+            :maxlength="maxLength"
             v-on:keydown.enter.prevent
         />
         <textarea
@@ -37,8 +38,8 @@ const emit = defineEmits(["update:modelValue"]);
             multiline="true"
             rows="4"
             cols="50"
+            :maxlength="maxLength"
             @input="emit('update:modelValue', $event.target.value)"
-            v-on:keydown.enter.prevent
         />
         <span>{{ modelValue.length }}/{{ maxLength }}</span>
     </div>
@@ -61,11 +62,17 @@ const emit = defineEmits(["update:modelValue"]);
         resize: none !important;
         border-color: transparent;
         outline: none;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        font-family: inherit;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
-    span{
+    span {
         margin-left: auto;
-        font-size: .7rem;
+        font-size: 0.7rem;
     }
 }
 </style>
