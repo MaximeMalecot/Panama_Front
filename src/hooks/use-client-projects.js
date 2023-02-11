@@ -83,6 +83,21 @@ const useClientProjects = () => {
         return true;
     }
 
+    const updateProject = async (id, data) => {
+        loading.value = true;
+        error.value = null;
+        try {
+            const res = await ProjectService.updateProject(id, data);
+            if(!res) throw new Error('An error occured');
+        } catch (e) {
+            console.error(e.message);
+            error.value = e.message;
+            return false;
+        }
+        loading.value = false;
+        return true;
+    }
+
     return {
         projects,
         project,
@@ -93,7 +108,8 @@ const useClientProjects = () => {
         fetchProject,
         fetchProjectPropositions,
         propositions,
-        repondToProposition
+        repondToProposition,
+        updateProject
     }
 };
 

@@ -3,11 +3,15 @@ import FilterItem from "@/components/common/FilterItem.vue";
 import SearchFilters from "./SearchFilters.vue";
 import Input from "@/components/common/InputField.vue";
 import Btn from "@/components/common/Btn.vue";
-import { storeToRefs } from "pinia";
+import { watch, ref } from "vue";
 
 const props = defineProps({
     project: {
         type: Object,
+        required: true,
+    },
+    updateProject: {
+        type: Function,
         required: true,
     }
 });
@@ -23,6 +27,14 @@ const addFilter = (tagToAdd) => {
     if (props.project.value.filters.find((t) => t["@id"] === tagToAdd["@id"])) return;
     const tags = props.project.value.filters;
     props.project.value.filters = [...tags, tagToAdd];
+};
+
+const updateProjectWrapper = () => {
+    console.log(props.project);
+    let { name, description, filters } = props.project;
+    filters = filters.map((f) => f["@id"]);
+    const toSend = { name, description, filters}
+    props.updateProject(props.project.id, toSend);
 };
 
 </script>
@@ -49,7 +61,7 @@ const addFilter = (tagToAdd) => {
             <p v-else>No filter</p>
             <SearchFilters :addFilter="addFilter" />
         </div>
-        <Btn @click="ProjectStore.updateProject(project)">Update</Btn>
+        <Btn @click="updateProjectWrapper">Update</Btn>
     </section>
 </template>
 

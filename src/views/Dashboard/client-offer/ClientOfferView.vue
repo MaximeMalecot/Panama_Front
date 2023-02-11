@@ -30,6 +30,7 @@ const handleAction = (id, status) => {
         ProjectStore.fetchProjectPropositions(route.params.id);
     });
 };
+
 </script>
 
 <template>
@@ -43,7 +44,7 @@ const handleAction = (id, status) => {
         </section>
         <section v-if="loading || !project.id">Loading...</section>
         <section v-else>
-            <ProjectPart :project="project" />
+            <ProjectPart :project="project" :updateProject="(id, payload) => ProjectStore.updateProject(id, payload)"/>
             <PropositionsPart
                 :propositions="propositions"
                 :handleAction="handleAction"

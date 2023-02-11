@@ -23,6 +23,27 @@ class ProjectService {
         }
     }
 
+    async updateProject(id, payload){
+        try{
+            const res = await fetch(`${API_URL}/projects/${id}`, {
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                method: "PATCH",
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async getProjects(queryParams = {}){
         const { page, name, filters, minPrice, maxPrice, length } = queryParams;
         
