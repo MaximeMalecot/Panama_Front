@@ -47,14 +47,16 @@ const useClientProjects = () => {
         return true;
     };
 
-    const fetchProjectPropositions = async (id) => {
+    const fetchProjectWithPropositions = async (id) => {
         loading.value = true;
         error.value = null;
         try {
             const res = await propositionService.getProjectPropositions(id);
-            if(!res) throw new Error('An error occured');
-            if(!res?.propositions) throw new Error('No propositions found');
-            propositions.value = res.propositions;
+            if(!res || !res.id) throw new Error('An error occured');
+            //if(!res?.propositions) throw new Error('No propositions found');
+            const { propositions:tmpProps, ...rest } = res;
+            propositions.value = tmpProps;
+            project.value = rest;
         } catch (e) {
             console.error(e.message);
             error.value = e.message;
@@ -106,7 +108,7 @@ const useClientProjects = () => {
         count,
         fetchAllProjects,
         fetchProject,
-        fetchProjectPropositions,
+        fetchProjectWithPropositions,
         propositions,
         repondToProposition,
         updateProject

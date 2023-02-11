@@ -4,6 +4,7 @@ import SearchFilters from "./SearchFilters.vue";
 import Input from "@/components/common/InputField.vue";
 import Btn from "@/components/common/Btn.vue";
 import { watch, ref } from "vue";
+import { PROJECT_STATUS } from "@/constants/status.js";
 
 const props = defineProps({
     project: {
@@ -18,19 +19,18 @@ const props = defineProps({
 
 const removeFilter = (payload) => {
     const id = payload["@id"];
-    const tags = props.project.value.filters;
+    const tags = props.project.filters;
     const newTags = tags.filter((t) => t["@id"] !== id);
-    props.project.value.filters = newTags;
+    props.project.filters = newTags;
 };
 
 const addFilter = (tagToAdd) => {
-    if (props.project.value.filters.find((t) => t["@id"] === tagToAdd["@id"])) return;
-    const tags = props.project.value.filters;
-    props.project.value.filters = [...tags, tagToAdd];
+    if (props.project.filters.find((t) => t["@id"] === tagToAdd["@id"])) return;
+    const tags = props.project.filters;
+    props.project.filters = [...tags, tagToAdd];
 };
 
 const updateProjectWrapper = () => {
-    console.log(props.project);
     let { name, description, filters } = props.project;
     filters = filters.map((f) => f["@id"]);
     const toSend = { name, description, filters}
@@ -42,26 +42,44 @@ const updateProjectWrapper = () => {
 <template>
     <section class="offer_content">
         <h2>Informations concernant l'offre</h2>
-        <Input
-            type="text"
-            placeholder="Titre du projet"
-            v-model="project.name"
-        />
-        <textarea>{{ project.description }}</textarea>
-        <div class="filters">
-            <div v-if="(project?.filters).length > 0" class="filters_items">
-                <FilterItem
-                    v-for="(tag, index) in project.filters"
-                    :key="index"
-                    :data="tag"
-                    :id="index"
-                    :onClick="removeFilter"
-                />
+        <div v-if="project.status === PROJECT_STATUS.ACTIVE" class="offer_edit_form">
+            <Input
+                type="text"
+                placeholder="Titre du projet"
+                v-model="project.name"
+            />
+            <textarea v-model="project.description">{{ project.description }}</textarea>
+            <div class="filters">
+                <div v-if="(project?.filters).length > 0" class="filters_items">
+                    <FilterItem
+                        v-for="(tag, index) in project.filters"
+                        :key="index"
+                        :data="tag"
+                        :id="index"
+                        :onClick="removeFilter"
+                    />
+                </div>
+                <p v-else>No filter</p>
+                <SearchFilters :addFilter="addFilter" />
             </div>
-            <p v-else>No filter</p>
-            <SearchFilters :addFilter="addFilter" />
+            <Btn @click="updateProjectWrapper">Update</Btn>
         </div>
-        <Btn @click="updateProjectWrapper">Update</Btn>
+        <div v-else>
+            <p>{{ project.name }}</p>
+            <p>{{ project.description }}</p>
+            <div class="filters">
+                <div v-if="(project?.filters).length > 0" class="filters_items">
+                    <FilterItem
+                        v-for="(tag, index) in project.filters"
+                        :key="index"
+                        :data="tag"
+                        :id="index"
+                        @click="null"
+                    />
+                </div>
+                <p v-else>No filter</p>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -75,23 +93,10 @@ const updateProjectWrapper = () => {
         border-bottom: 1px solid #a9a9a9;
         gap: 10px;
 
-        .filters {
+        .offer_edit_form{
             display: flex;
             flex-direction: column;
-
-            .filters_items {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 1rem;
-                .filter_item {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    padding: 1rem;
-                    border: 1px solid #000;
-                    border-radius: 5px;
-                }
-            }
+            gap: 1rem;
         }
     }
 </style>

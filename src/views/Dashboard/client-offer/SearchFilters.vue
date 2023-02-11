@@ -51,3 +51,18 @@ watch(searchTagInput, searchFilters);
         </div>
     </div>
 </template>
+
+<style scoped lang="scss">
+    .search_tags{
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+
+        .suggestions{
+            padding: 3px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    }
+</style>

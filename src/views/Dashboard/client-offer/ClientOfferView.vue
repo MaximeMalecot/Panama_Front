@@ -15,19 +15,19 @@ const ProjectStore = useClientProjects();
 const { project, loading, propositions } = storeToRefs(ProjectStore);
 
 onMounted(async () => {
+    // if (!route.params.id) {
+    //     router.push({ name: "dashboard-offers" });
+    // }
+    // const res = await ProjectStore.fetchProject(route.params.id);
     if (!route.params.id) {
         router.push({ name: "dashboard-offers" });
     }
-    const res = await ProjectStore.fetchProject(route.params.id);
-    if (!res) {
-        router.push({ name: "dashboard-offers" });
-    }
-    ProjectStore.fetchProjectPropositions(route.params.id);
+    ProjectStore.fetchProjectWithPropositions(route.params.id);
 });
 
 const handleAction = (id, status) => {
     ProjectStore.repondToProposition(id, status).then(() => {
-        ProjectStore.fetchProjectPropositions(route.params.id);
+        ProjectStore.fetchProjectWithPropositions(route.params.id);
     });
 };
 
