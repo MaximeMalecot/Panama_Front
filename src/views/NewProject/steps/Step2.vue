@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
-import TagItem from '../FilterItem.vue';
+import TagItem from '@/components/common/FilterItem.vue';
 import Btn from '@/components/common/Btn.vue';
 import Input from '@/components/common/InputField.vue';
 import FilterService from '@/services/filters.service.js';

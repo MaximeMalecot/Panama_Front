@@ -53,7 +53,8 @@ const router = createRouter({
         {
             path: "/abonnements/plans",
             name: "plans",
-            component: () => import("../views/SubscriptionPlan/SubscriptionPlanView.vue"),
+            component: () =>
+                import("../views/SubscriptionPlan/SubscriptionPlanView.vue"),
         },
         {
             path: "/dashboard",
@@ -73,9 +74,7 @@ const router = createRouter({
                             return next({ name: "dashboard-offers" });
                         }
 
-                        if (
-                            userHasRole(ROLES.FREELANCER_PREMIUM, false)
-                        ) {
+                        if (userHasRole(ROLES.FREELANCER_PREMIUM, false)) {
                             return next({ name: "dashboard-propositions" });
                         }
                         return next({ name: "dashboard-settings" });
@@ -98,6 +97,12 @@ const router = createRouter({
                         }
                         return next();
                     },
+                },
+                {
+                    path: "offers/:id",
+                    name: "client-offer",
+                    component: () =>
+                        import("../views/Dashboard/client-offer/ClientOfferView.vue"),
                 },
                 {
                     path: "propositions",

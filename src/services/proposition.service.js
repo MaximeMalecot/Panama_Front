@@ -90,6 +90,27 @@ class SubscriptionService {
         }
     }
 
+    async respondToProposition(propositionId, status){
+        try{
+            const res = await fetch(`${API_URL}/propositions/${propositionId}/accept-or-refuse`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                body: JSON.stringify({status})
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 
 }
 
