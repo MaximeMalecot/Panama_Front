@@ -17,19 +17,23 @@ const authStore = useAuthStore();
 const offersStore = useOffers();
 const { offers, offersLoading, offersCount } = storeToRefs(offersStore);
 
-const filters = reactive({
+const defaultFilters = {
     technos: "",
-    priceRange: "",
     minPrice: "",
     maxPrice: "",
     length: "",
     name: "",
-});
+}
+
+let filters = reactive(defaultFilters);
 
 const filterOnSubmit = () => {
     const val = filters;
     const params = Object.entries(val)
-        .filter(([key, value]) => value.trim().length > 0)
+        .filter(([key, value]) => {
+            if(typeof value === "number") return value >= 0;
+            if(typeof value === "string") return value.trim().length > 0;
+        })
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
     router.push({
         query: params,
@@ -40,8 +44,8 @@ const filterOnSubmit = () => {
 
 const resetFilters = () => {
     filters.technos = "";
-    filters.minPrice = "";
-    filters.maxPrice = "";
+    minPrice = "",
+    maxPrice = "",
     filters.timeRange = "";
     filters.name = "";
     router.push({
