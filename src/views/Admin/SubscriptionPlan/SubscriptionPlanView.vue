@@ -18,9 +18,9 @@ onMounted(async () => {
     loading.value = false;
 });
 
-const updatePlan = async () => {
+const updatePlan = async (id, payolad) => {
     loading.value = true;
-    const res = await subscriptionService.updatePlan(id, subscriptionPlan.value);
+    const res = await subscriptionService.updatePlan(id, payolad);
     if(res){
         subscriptionPlan.value = res;
     }
@@ -34,7 +34,7 @@ const updatePlanWrapper = () => {
     }
     const toSend = { name, description, color}
     console.log(toSend)
-    // updatePlan(subscriptionPlan.value.id, toSend);
+    updatePlan(subscriptionPlan.value.id, toSend);
 }
 </script>
 
@@ -49,14 +49,15 @@ const updatePlanWrapper = () => {
                 <Input type="text" v-model="subscriptionPlan.color"/>
                 <p>{{ subscriptionPlan.price }}€</p>
                 <p>{{ subscriptionPlan.stripeId }}</p>
+                <Btn @click="updatePlanWrapper">Update</Btn>
             </div>
+            <hr style="width: 100%;"/>
             <div class="subscriptions">
                 <h3>Subscriptions</h3>
                 <div v-for="subscription in subscriptionPlan.subscriptions">
                     <p>{{ subscription.freelancer.name }} {{ subscription.freelancer.surname }} on {{ subscription.freelancer.createdAt }}</p>
                 </div>
             </div>
-            <Btn @click="updatePlanWrapper">Update</Btn>
         </template>
     </div>
 </template>

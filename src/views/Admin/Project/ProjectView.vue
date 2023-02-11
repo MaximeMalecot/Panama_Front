@@ -60,7 +60,7 @@ const updateProjectWrapper = () => {
     <div class="container">
         <section v-if="loading || !project.id">Loading...</section>
         <template v-else>
-            <div class="header">
+            <div class="subContainer">
                 <template v-if="project.status === PROJECT_STATUS.ACTIVE">
                     <!-- patch : name, description, filters -->
                     <h3>Project {{ project.id }}</h3> 
@@ -107,7 +107,8 @@ const updateProjectWrapper = () => {
                     </div>
                 </template>
             </div>
-            <div class="propositions" v-if="propositions">
+            <hr style="width: 100%;"/>
+            <div class="subContainer" v-if="propositions">
                 <h3>Propositions</h3>
                 <div class="proposition" v-for="proposition in propositions" :key="proposition.id">
                     <p>Proposition by : {{ proposition.freelancer.name }} {{ proposition.freelancer.surname }}</p>
@@ -117,3 +118,23 @@ const updateProjectWrapper = () => {
         </template>
     </div>
 </template>
+<style scoped>
+.container {
+    margin: auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.subContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+</style>
