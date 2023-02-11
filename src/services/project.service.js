@@ -131,11 +131,11 @@ class ProjectService {
         }
     }
 
-    async getFreelancerActiveProjects(userId, status = null) {
+    async getFreelancerActiveProjects(userId, status = []) {
         try {
             let url = `${API_URL}/projects`;
-            if (status) {
-                url = `${url}?status=${status}`;
+            if (status.length > 0) {
+                url = `${url}?status[]=${status.join("&status=")}`;
             }
             const res = await fetch(url, {
                 method: "GET",

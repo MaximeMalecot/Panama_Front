@@ -9,7 +9,7 @@ import { PROJECT_STATUS } from '@/constants/status.js';
 
 const router = useRouter();
 const FreelancerProjectsStore = useFreelancerProjects();
-const { projects: offers } = storeToRefs(FreelancerProjectsStore);
+const { projects: offers, loading } = storeToRefs(FreelancerProjectsStore);
 const selectedStatus = ref(null);
 
 const STATUS = [
@@ -28,16 +28,16 @@ const STATUS = [
 ];
 
 onMounted(()=>{
-    FreelancerProjectsStore.fetchAllProjects();
+    FreelancerProjectsStore.fetchAllProjects([PROJECT_STATUS.IN_PROGRESS, PROJECT_STATUS.ENDED]);
     console.log(offers.value)
 });
 
 watch(selectedStatus, (value) => {
     if(value === null) {
-        FreelancerProjectsStore.fetchAllProjects();
+        FreelancerProjectsStore.fetchAllProjects([PROJECT_STATUS.IN_PROGRESS, PROJECT_STATUS.ENDED]);
         return;
     }else{
-        FreelancerProjectsStore.fetchAllProjects(value);
+        FreelancerProjectsStore.fetchAllProjects([value]);
     }
 });
 </script>
@@ -52,7 +52,10 @@ watch(selectedStatus, (value) => {
         </select>
 
         <h2 class="projets__subtitle">Projets</h2>
-        <div v-if="offers.length > 0" class="projets__list">
+        <div v-if="loading" class="projets__list">
+            <p>Loading...</p>
+        </div>
+        <div v-else-if="offers.length > 0" class="projets__list">
             <OfferCard v-for="offer in offers" :offerData="offer" status="inprogress" hasLink
                 @click="router.push({ name: 'dashboard-project', params: { id: 1 } })"></OfferCard>
         </div>
