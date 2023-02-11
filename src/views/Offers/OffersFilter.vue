@@ -73,14 +73,14 @@ onMounted(async () => {
             </select>
             <select v-model="filters.length" placeholder="⌛ Durée">
                 <option value="" disabled default="true">⌛ Durée</option>
-                <option value="lt1">Moins d'un mois</option>
+                <!-- <option value="lt1">Moins d'un mois</option> -->
                 <option value="1">1 mois</option>
                 <option value="2">2 mois</option>
                 <option value="3">3 mois</option>
                 <option value="4">4 mois</option>
                 <option value="5">5 mois</option>
                 <option value="6">6 mois</option>
-                <option value="gt6">Plus de 6 mois</option>
+                <!-- <option value="gt6">Plus de 6 mois</option> -->
             </select>
         </div>
         <div class="offers-filter__footer">
