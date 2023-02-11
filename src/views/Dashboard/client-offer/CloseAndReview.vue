@@ -5,7 +5,7 @@ import ProjectService from "@/services/project.service.js";
 import ReviewService from "@/services/review.service.js";
 import { PROJECT_STATUS } from "@/constants/status.js";
 import InputWithCounter from "../../../components/common/InputWithCounter.vue";
-
+import ReviewModal from "@/components/ReviewModal/ReviewModal.vue";
 const MAX_COMMENT_LENGTH = 255;
 
 const props = defineProps({
@@ -20,10 +20,7 @@ const props = defineProps({
 });
 
 const loading = ref(false);
-const reviewForm = ref({
-    rating: 0,
-    comment: "",
-});
+const showModal = ref(true);
 
 const closeProject = async () => {
     loading.value = true;
@@ -32,32 +29,6 @@ const closeProject = async () => {
     if (res) {
         props.project.status = PROJECT_STATUS.ENDED;
     }
-    loading.value = false;
-};
-
-const publishReview = async () => {
-    loading.value = true;
-    console.log(reviewForm.value);
-    if (reviewForm.value.rating < 0 || reviewForm.value.rating > 5) {
-        alert("La note doit être comprise entre 0 et 5");
-        return;
-    }
-
-    if (reviewForm.value.comment.length > MAX_COMMENT_LENGTH) {
-        alert(
-            `Le commentaire ne doit pas dépasser ${MAX_COMMENT_LENGTH} caractères`
-        );
-        return;
-    }
-
-    const res = await ReviewService.publishReview(props.freelancer.id, {
-        mark: reviewForm.value.rating,
-        content: reviewForm.value.comment,
-    });
-    console.log(res)
-    // if (res) {
-    //     props.project.status = PROJECT_STATUS.REVIEWED;
-    // }
     loading.value = false;
 };
 
@@ -79,37 +50,7 @@ onMounted(() => {
         <Btn v-if="!loading" @click="closeProject">Cloturer le projet</Btn>
         <Btn v-else disabled>...</Btn>
     </section>
-    <section class="review_part">
-        <h2>Laisser un avis concernant votre prestataire</h2>
-        <p>
-            Laissez une note et un commentaire concernant
-            <b>{{ freelancer?.surname }}</b
-            >. Comment avez-vous vécu votre expérience avec lui ?
-        </p>
-        <div class="freelancer_part">
-            <div class="freelancer_part__img">
-                <img :src="freelancer?.avatar" alt="freelancer avatar" />
-            </div>
-            <span>{{ freelancer?.surname }} {{ freelancer?.name }}</span>
-        </div>
-        <form class="review_form" @submit.prevent="publishReview">
-            <input
-                type="number"
-                id="rating"
-                name="rating"
-                min="0"
-                max="5"
-                placeholder="Note sur 5"
-                v-model="reviewForm.rating"
-            />
-            <InputWithCounter
-                :type="'textarea'"
-                :maxLength="MAX_COMMENT_LENGTH"
-                v-model="reviewForm.comment"
-            />
-            <Btn :type="'submit'" value="Envoyer">Envoyer</Btn>
-        </form>
-    </section>
+    <ReviewModal v-if="showModal" :freelancer="freelancer" :project="project" :close="() => showModal = false"/>
 </template>
 
 <style lang="scss" scoped>
