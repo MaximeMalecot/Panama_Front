@@ -7,6 +7,7 @@ import { ROLES } from '../../../constants/roles';
 
 const route = useRoute();
 const id = route.params.id;
+const loading = ref(true);
 
 const user = ref({});
 const infos = computed(() => {
@@ -33,28 +34,20 @@ onMounted(async () => {
         }else if(res.roles.includes(ROLES.FREELANCER) || res.roles.includes(ROLES.FREELANCER_PREMIUM)){
             infos.value = res.freelancerInfo;
         }
-        if(res.subscription){
-            subscription.value = res.subscription;
-        }
-        if(res.invoices){
-            invoices.value = res.invoices;
-        }
-        if(res.propositions){
-            propositions.value = res.propositions;
-        }
     }
+    loading.value = false;
 });
 </script>
 
 <template>
-    <div class="container">
+    <section v-if="loading">Loading...</section>
+    <div class="container" v-else>
         <div class="header">
             <h3>User {{ user.name }} {{ user.surname }}</h3>
             <div>
                 <p>{{ user.email }}</p>
                 <p>{{ user.roles }}</p>
                 <p>isVerified : {{ user.isVerified }}</p>
-                <Btn :type="'link'" :to="{ name: 'admin-user-edit', params: { id: id } }">Modifier</Btn>
             </div>
         </div>
         <div class="infos" v-if="infos">
