@@ -54,12 +54,10 @@ const emit = defineEmits(["update:modelValue"]);
     background-color: white;
     border: 1px solid #e0e0e0;
     padding: 1rem;
-    min-height: 100px;
     input,
     textarea {
         margin: 0;
         padding: 0;
-        resize: none !important;
         border-color: transparent;
         outline: none;
         -ms-overflow-style: none; /* IE and Edge */
@@ -68,6 +66,11 @@ const emit = defineEmits(["update:modelValue"]);
         &::-webkit-scrollbar {
             display: none;
         }
+    }
+
+    textarea{
+        resize: none !important;
+        min-height: 100px;
     }
 
     span {

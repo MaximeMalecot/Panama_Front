@@ -1,22 +1,124 @@
+<script setup>
+import { ref, reactive, computed, onMounted } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import Input from "@/components/common/InputField.vue";
+import Btn from "@/components/common/Btn.vue";
+import { ROLES } from "@/constants/roles";
+import userService from "@/services/user.service";
+import InputWithCounter from "@/components/common/InputWithCounter.vue";
+import KYCVerification from "./KYCVerification.vue";
+
+const loading = ref(true);
+
+const authStore = useAuthStore();
+const user = ref({});
+const id = authStore.userData.userId;
+
+const showKYC = computed(()=>{
+    if(!authStore) return false;
+    const userData=(authStore).userData;
+    if( !userData.roles) return false;
+    if( !userData.roles.includes(ROLES.FREELANCER)) return false;
+    if( userData.isInfoVerified) return false;
+    return true;
+});
+
+const infos = computed(() => {
+    if (user.value.roles) {
+        if (user.value.roles.includes(ROLES.CLIENT)) {
+            return user.value.clientInfo;
+        } else if (
+            user.value.roles.includes(ROLES.FREELANCER) ||
+            user.value.roles.includes(ROLES.FREELANCER_PREMIUM)
+        ) {
+            return user.value.freelancerInfo;
+        }
+    }
+    return null;
+});
+
+onMounted(async () => {
+    const res = await userService.getSelfUser(id);
+    if (res) {
+        user.value = res;
+        if (res.roles.includes(ROLES.CLIENT)) {
+            infos.value = res.clientInfo;
+        } else if (
+            res.roles.includes(ROLES.FREELANCER) ||
+            res.roles.includes(ROLES.FREELANCER_PREMIUM)
+        ) {
+            infos.value = res.freelancerInfo;
+        }
+    }
+    loading.value = false;
+});
+</script>
+
 <template>
     <main class="settings">
-        <h1 class="settings__title">Paramètres</h1>
-        <h2 class="settings__subtitle">Avatar</h2>
-        <p>Nous utilisons Gravatar comme service d'image de proil. Vous pouvez changer votre avatar en allant sur gravatar.com :</p>
-        <a href="https://fr.gravatar.com/" target="_blank">https://fr.gravatar.com/</a>
+        <div>
+            <h1 class="settings__title">Paramètres</h1>
+            <h2 class="settings__subtitle">Avatar</h2>
+            <p>
+                Nous utilisons Gravatar comme service d'image de proil. Vous
+                pouvez changer votre avatar en allant sur gravatar.com :
+            </p>
+            <a href="https://fr.gravatar.com/" target="_blank"
+                >https://fr.gravatar.com/</a
+            >
+        </div>
+        <template v-if="infos">
+            <div class="infos_part">
+                <hr style="width: 100%" />
+                <h3>User informations</h3>
+                <div class="content">
+                    Description :
+                    <textarea v-model="infos.description">{{
+                        infos.description
+                    }}</textarea>
+                    Phone number :
+                    <Input type="text" v-model="infos.phoneNb" /> Address :
+                    <Input type="text" v-model="infos.address" /> City :
+                    <Input type="text" v-model="infos.city" />
+                    <p v-if="infos['@type'] === 'FreelancerInfo'">
+                        infos vérifiées : {{ infos.isVerified }}
+                    </p>
+                    <Btn @click="updateInfosWrapper">Update</Btn>
+                </div>
+            </div>
+            <KYCVerification v-if="showKYC" />
+        </template>
     </main>
 </template>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .settings {
-    &__title {
-        font-size: 2rem;
-        margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .infos_part {
+        display: flex;
+        flex-direction: column;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid gray;
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
     }
-    &__subtitle {
-        font-size: 1.5rem;
-        margin: 2rem 0 1rem 0;
-        font-weight: 600;
+
+    .kyc_part {
+        display: flex;
+        flex-direction: column;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid gray;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
     }
 }
 </style>
