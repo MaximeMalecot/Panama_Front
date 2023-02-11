@@ -4,6 +4,7 @@ import SelectField from "@/components/common/SelectField.vue";
 import Btn from "@/components/common/Btn.vue";
 import InputField from "../../components/common/InputField.vue";
 import FiltersService from "@/services/filters.service";
+import PRICES from "@/constants/price_range";
 
 const props = defineProps({
     filters: {
@@ -19,12 +20,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-const priceMaxOptions = [
-    { name: "5.000€", value: "5000" },
-    { name: "10.000€", value: "10000" },
-    { name: "100.000€", value: "100000" },
-];
 
 const choices = ref([]);
 const clearable = computed(() => {
@@ -63,7 +58,7 @@ onMounted(async () => {
             <select v-model="filters.minPrice" placeholder="💵 Prix">
                 <option value="" disabled default="true">💵 Prix minimum</option>
                 <option 
-                    v-for="option in priceMaxOptions"
+                    v-for="option in PRICES"
                     :value="option.value">
                     {{ option.name }}
                 </option>
@@ -71,7 +66,7 @@ onMounted(async () => {
             <select v-model="filters.maxPrice" placeholder="💵 Prix">
                 <option value="" disabled default="true">💵 Prix maximum</option>
                 <option 
-                    v-for="option in priceMaxOptions"
+                    v-for="option in PRICES"
                     :value="option.value">
                     {{ option.name }}
                 </option>
