@@ -7,11 +7,12 @@ import FilterItem from "@/components/common/FilterItem.vue";
 import SearchFilters from "./SearchFilters.vue";
 import Input from '@/components/common/InputField.vue';
 import Btn from "../../../components/common/Btn.vue";
+import { PROPOSITION_STATUS } from "@/constants/status.js";
 
 const router = useRouter();
 const route = useRoute();
 const ProjectStore = useClientProjects();
-const { project, loading } = storeToRefs(ProjectStore);
+const { project, loading, propositions } = storeToRefs(ProjectStore);
 
 onMounted(async () => {
     if (!route.params.id) {
@@ -21,17 +22,13 @@ onMounted(async () => {
     if (!res) {
         router.push({ name: "dashboard-offers" });
     }
+    ProjectStore.fetchProjectPropositions(route.params.id);
 });
-
-// watch(() => {
-//     Object.assign(localProject, project)
-// });
 
 const removeFilter = (payload) => {
     const id = payload["@id"];
     const tags = project.value.filters;
     const newTags = tags.filter((t) => t["@id"] !== id);
-    console.log(newTags);
     project.value.filters = newTags;
 };
 
@@ -40,6 +37,7 @@ const addFilter = (tagToAdd) => {
     const tags = project.value.filters;
     project.value.filters = [...tags, tagToAdd];
 };
+
 </script>
 
 <template>
@@ -53,6 +51,7 @@ const addFilter = (tagToAdd) => {
         </section>
         <section v-if="loading || !project.id">Loading...</section>
         <section v-else class="offer_content">
+            <h2>Informations concernant l'offre</h2>
             <Input
                 type="text"
                 placeholder="Titre du projet"
@@ -74,6 +73,26 @@ const addFilter = (tagToAdd) => {
             </div>
             <Btn @click="ProjectStore.updateProject(project)">Update</Btn>
         </section>
+        <section class="offer_propositions">
+            <h2>Propositions reçues</h2>
+            <div class="propositions_list" v-if="propositions.length > 0">
+                <div class="propositions_item" v-for="(proposition, index) in propositions" :key="index">
+                    <p>From {{ proposition.freelancer?.surname }} {{ proposition.freelancer?.name }}</p>
+                    <div class="actions" v-if="proposition.status === PROPOSITION_STATUS.AWAITING">
+                        <Btn :outline="true" @click="ProjectStore.acceptProposition(proposition)">Accept</Btn>
+                        <Btn @click="ProjectStore.refuseProposition(proposition)">Refuse</Btn>
+                    </div>
+                    <div class="actions" v-else-if="proposition.status === PROPOSITION_STATUS.ACCEPTED">
+                        <Btn>PROPOSITION ACCEPTEE</Btn>
+                    </div>
+                    <div class="actions" v-else-if="proposition.status === PROPOSITION_STATUS.REFUSED">
+                        <Btn>PROPOSITION REFUSEE</Btn>
+                    </div>
+                </div>
+
+            </div>
+            <p v-else>No proposition</p>
+        </section>
     </div>
 </template>
 
@@ -89,7 +108,7 @@ const addFilter = (tagToAdd) => {
         margin-bottom: 1rem;
         border-bottom: 1px solid #a9a9a9;
         gap: 10px;
-        
+
         .filters {
             display: flex;
             flex-direction: column;
@@ -105,6 +124,32 @@ const addFilter = (tagToAdd) => {
                     padding: 1rem;
                     border: 1px solid #000;
                     border-radius: 5px;
+                }
+            }
+        }
+    }
+
+    .offer_propositions{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        .propositions_list{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            .propositions_item{
+                border: 1px solid var(--text-gray);
+                border-radius: 8px;
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+
+                .actions{
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
                 }
             }
         }
