@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import AppHeader from './components/layout/AppHeader.vue';
+import UnverifiedBanner from './components/layout/UnverifiedBanner.vue';
 
 const store = useAuthStore();
 
@@ -15,5 +16,6 @@ onMounted(() => {
 
 <template>
   <AppHeader/>
+  <UnverifiedBanner/>
   <RouterView />
 </template>

@@ -22,7 +22,7 @@ const emptyUserData = {
     id: null,
     username: null,
     email: null,
-    roles: null,
+    roles: [],
     token: null,
 };
 
