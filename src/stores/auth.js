@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import { TOKEN_STORAGE_KEY } from "../constants/storage_keys";
 import { ROLES } from "../constants/roles";
 import AuthService from "../services/auth.service";
+import { useRouter } from "vue-router";
 
 const checkToken = (token) => {
     try {
@@ -27,6 +28,7 @@ const emptyUserData = {
 };
 
 export const useAuthStore = defineStore("auth", () => {
+    const router = useRouter();
     const userData = ref(emptyUserData);
     const isConnected = computed(() => !!userData.value.token);
     const isSubscribed = computed(() => !!(userData.value?.roles).includes(ROLES.FREELANCER_PREMIUM));
@@ -75,6 +77,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     function logout() {
+        router.push({ name: "home" });
         localStorage.removeItem(TOKEN_STORAGE_KEY);
         userData.value = emptyUserData;
     }
