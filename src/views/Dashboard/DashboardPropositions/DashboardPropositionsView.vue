@@ -27,8 +27,7 @@ onMounted(() => {
             lesquelles vous vous êtes positionné.</p>
         <h2 class="propositions__subtitle">Propositions en cours</h2>
         <div v-if="offers.length > 0" class="propositions__list">
-            <OfferCard v-for="offer in offers" :offerData="offer" status="inprogress" hasLink customLinkText="Voir l'offre"
-                @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
+            <OfferCard v-for="offer in offers" :offerData="offer" status="inprogress"></OfferCard>
         </div>
         <div v-else class="propositions__no-results">
             <NoResults>Vous ne vous êtes positionné sur aucune offre dernièrement.</NoResults>
