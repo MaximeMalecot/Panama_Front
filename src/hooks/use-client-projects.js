@@ -64,6 +64,25 @@ const useClientProjects = () => {
         return true;
     }
 
+    const repondToProposition = async (propositionId, status) => {
+        const validStatus = [PROPOSITION_STATUS.ACCEPTED, PROPOSITION_STATUS.REFUSED];
+        if(!validStatus.includes(status)) return;
+        loading.value = true;
+        error.value = null;
+        try {
+            const res = await propositionService.respondToProposition(propositionId, status);
+            if(!res) throw new Error('An error occured');
+            if(!res?.propositions) throw new Error('No propositions found');
+            propositions.value = res.propositions;
+        } catch (e) {
+            console.error(e.message);
+            error.value = e.message;
+            return false;
+        }
+        loading.value = false;
+        return true;
+    }
+
     return {
         projects,
         project,
@@ -73,7 +92,8 @@ const useClientProjects = () => {
         fetchAllProjects,
         fetchProject,
         fetchProjectPropositions,
-        propositions
+        propositions,
+        repondToProposition
     }
 };
 
