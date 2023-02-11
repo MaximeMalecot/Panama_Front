@@ -2,7 +2,7 @@
     <main class="settings">
         <h1 class="settings__title">Paramètres</h1>
         <h2 class="settings__subtitle">Avatar</h2>
-        <p>Nous utilisons Gravater comme service d'image de proil. Vous pouvez changer votre avatar en allant sur gravatar.com :</p>
+        <p>Nous utilisons Gravatar comme service d'image de proil. Vous pouvez changer votre avatar en allant sur gravatar.com :</p>
         <a href="https://fr.gravatar.com/" target="_blank">https://fr.gravatar.com/</a>
     </main>
 </template>

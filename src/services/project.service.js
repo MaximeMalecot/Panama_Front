@@ -135,6 +135,47 @@ class ProjectService {
             return false;
         }
     }
+    
+    async getAdminProjects(){
+        try{
+            const res = await fetch(`${API_URL}/projects`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async getAdminProject(id){
+        try{
+            const res = await fetch(`${API_URL}/projects/${id}/propositions`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 }
 
 export default new ProjectService();
