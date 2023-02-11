@@ -5,8 +5,11 @@ import Input from "@/components/common/InputField.vue";
 import Btn from "@/components/common/Btn.vue";
 import { ROLES } from "@/constants/roles";
 import userService from "@/services/user.service";
+import clientInfoService from "@/services/client-info.service";
+import freelancerInfoService from "@/services/freelancer-info.service";
 import InputWithCounter from "@/components/common/InputWithCounter.vue";
 import KYCVerification from "./KYCVerification.vue";
+import { displayMsg } from "@/utils/toast";
 
 const loading = ref(true);
 
@@ -52,6 +55,28 @@ onMounted(async () => {
     }
     loading.value = false;
 });
+
+const updateInfos = async (id, data, type) => {
+    loading.value = true;
+    const res =
+        type === "ClientInfo"
+            ? await clientInfoService.updateInfo(id, data)
+            : await freelancerInfoService.updateInfo(id, data);
+    if (res) {
+        infos.value = res;
+        displayMsg({ msg: "User informations updated", type: "success" });
+    }
+    loading.value = false;
+};
+
+const updateInfosWrapper = () => {
+    let { description, phoneNb, address, city } = infos.value;
+    updateInfos(
+        infos.value.id,
+        { description, phoneNb, address, city },
+        infos.value["@type"]
+    );
+};
 </script>
 
 <template>
