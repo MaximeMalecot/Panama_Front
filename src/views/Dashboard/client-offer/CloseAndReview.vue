@@ -2,6 +2,7 @@
 import Btn from "@/components/common/Btn.vue";
 import { watch, ref, computed, onMounted } from "vue";
 import ProjectService from "@/services/project.service.js";
+import ReviewService from "@/services/review.service.js";
 import { PROJECT_STATUS } from "@/constants/status.js";
 import InputWithCounter from "../../../components/common/InputWithCounter.vue";
 
@@ -49,8 +50,11 @@ const publishReview = async () => {
         return;
     }
 
-
-    // const res = await ProjectService.publishReview(props.project.id);
+    const res = await ReviewService.publishReview(props.freelancer.id, {
+        mark: reviewForm.value.rating,
+        content: reviewForm.value.comment,
+    });
+    console.log(res)
     // if (res) {
     //     props.project.status = PROJECT_STATUS.REVIEWED;
     // }
@@ -79,8 +83,8 @@ onMounted(() => {
         <h2>Laisser un avis concernant votre prestataire</h2>
         <p>
             Laissez une note et un commentaire concernant
-            <b>{{ freelancer?.surname }}</b>.
-            Comment avez-vous vécu votre expérience avec lui ?
+            <b>{{ freelancer?.surname }}</b
+            >. Comment avez-vous vécu votre expérience avec lui ?
         </p>
         <div class="freelancer_part">
             <div class="freelancer_part__img">
@@ -89,26 +93,21 @@ onMounted(() => {
             <span>{{ freelancer?.surname }} {{ freelancer?.name }}</span>
         </div>
         <form class="review_form" @submit.prevent="publishReview">
-                <input
-                    type="number"
-                    id="rating"
-                    name="rating"
-                    min="0"
-                    max="5"
-                    placeholder="Note sur 5"
-                    v-model="reviewForm.rating"
-                />
-                <!-- <InputWithCounter :max-length="MAX_COMMENT_LENGTH" :value="reviewForm.comment">
-                    <textarea
-                        id="comment"
-                        name="comment"
-                        placeholder="Laissez un commentaire concernant le freelancer"
-                        :maxlength="MAX_COMMENT_LENGTH"
-                        v-model="reviewForm.comment"
-                    />
-                </InputWithCounter> -->
-                <InputWithCounter :type="'textarea'" :maxLength="MAX_COMMENT_LENGTH" v-model="reviewForm.comment"/>
-                <Btn :type="'submit'" value="Envoyer">Envoyer</Btn>
+            <input
+                type="number"
+                id="rating"
+                name="rating"
+                min="0"
+                max="5"
+                placeholder="Note sur 5"
+                v-model="reviewForm.rating"
+            />
+            <InputWithCounter
+                :type="'textarea'"
+                :maxLength="MAX_COMMENT_LENGTH"
+                v-model="reviewForm.comment"
+            />
+            <Btn :type="'submit'" value="Envoyer">Envoyer</Btn>
         </form>
     </section>
 </template>
@@ -160,10 +159,10 @@ onMounted(() => {
         }
     }
 
-    .review_form{
+    .review_form {
         display: flex;
         flex-direction: column;
-        gap: .5rem;
+        gap: 0.5rem;
         padding: 1rem 0;
     }
 }
