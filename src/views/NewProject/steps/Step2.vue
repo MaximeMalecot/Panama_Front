@@ -25,7 +25,6 @@ const addFilter = (tagToAdd) => {
 }
 
 const searchFilters = async () => {
-    console.log("called")
     if (searchTagInput.value === "") {
         tagsSuggestions.value = [];
         return;

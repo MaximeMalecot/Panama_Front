@@ -10,7 +10,6 @@ onMounted(async () => {
     if(res){
         projects.value = res['hydra:member'];
     }
-    console.log(projects.value)
 });
 
 </script>

@@ -8,7 +8,6 @@ const users = ref([])
 onMounted(async () => {
     const res = await userServices.getUsers()
     if(res){
-        console.log(res['hydra:member'])
         users.value = res['hydra:member']
     }
 })

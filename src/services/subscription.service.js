@@ -23,6 +23,26 @@ class SubscriptionService {
         }
     }
 
+    async getPlan(id){
+        try{
+            const res = await fetch(`${API_URL}/subscription_plans/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 
     async subscribe(subscriptionPlanId){
         try{
