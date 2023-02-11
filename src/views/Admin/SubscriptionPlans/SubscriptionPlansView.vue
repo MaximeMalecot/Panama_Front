@@ -27,8 +27,6 @@ onMounted(async () => {
 
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: row;
     align-items: center;

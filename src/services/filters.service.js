@@ -26,6 +26,47 @@ class FiltersService {
         }
     }
 
+    async getFilter(id){
+        try{
+            const res = await fetch(`${API_URL}/filters/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                },
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async createFilter(payload){
+        try{
+            const res = await fetch(`${API_URL}/filters`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 201){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async deleteFilter(id){
         try{
             const res = await fetch(`${API_URL}/filters/${id}`, {
@@ -37,6 +78,27 @@ class FiltersService {
             });
             if(res.status === 204){
                 return true;
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async updateFilter(id, payload){
+        try{
+            const res = await fetch(`${API_URL}/filters/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 200){
+                return await res.json();
             }else{
                 return false;
             }

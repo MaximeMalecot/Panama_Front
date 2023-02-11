@@ -1,11 +1,11 @@
 import { API_URL } from '../constants/urls';
 import authHeader from './auth.header';
 
-class UserService {
+class FreelancerInfoService {
 
-    async getUsers(){
+    async getInfo(id){
         try{
-            const res = await fetch(`${API_URL}/users`, {
+            const res = await fetch(`${API_URL}/freelancer_infos/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -23,32 +23,12 @@ class UserService {
         }
     }
 
-    async getUserAdmin(id){
+    async updateInfo(id, payload){
         try{
-            const res = await fetch(`${API_URL}/users/${id}/admin`, {
-                method: "GET",
+            const res = await fetch(`${API_URL}/freelancer_infos/${id}`, {
+                method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json",
-                    ...authHeader()
-                }
-            });
-            if(res.status === 200){
-                return await res.json();
-            }else{
-                return false;
-            }
-        }catch(e){
-            console.error(e.message);
-            return false;
-        }
-    }
-
-    async updateUser(id, payload){
-        try{
-            const res = await fetch(`${API_URL}/users/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/merge-patch+json",
                     ...authHeader()
                 },
                 body: JSON.stringify(payload)
@@ -65,4 +45,4 @@ class UserService {
     }
 }
 
-export default new UserService();
+export default new FreelancerInfoService();

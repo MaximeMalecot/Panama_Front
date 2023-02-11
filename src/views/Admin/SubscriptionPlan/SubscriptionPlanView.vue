@@ -2,7 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
 import subscriptionService from '@/services/subscription.service.js';
-import Btn from '@/components/common/Btn.vue'
+import Btn from '@/components/common/Btn.vue';
+import { displayMsg } from "@/utils/toast";
 import Input from "@/components/common/InputField.vue";
 
 const route = useRoute();
@@ -18,11 +19,12 @@ onMounted(async () => {
     loading.value = false;
 });
 
-const updatePlan = async () => {
+const updatePlan = async (id, payolad) => {
     loading.value = true;
-    const res = await subscriptionService.updatePlan(id, subscriptionPlan.value);
+    const res = await subscriptionService.updatePlan(id, payolad);
     if(res){
         subscriptionPlan.value = res;
+        displayMsg({ msg: "Subscription plan updated", type: "success" });
     }
     loading.value = false;
 }
@@ -30,11 +32,11 @@ const updatePlan = async () => {
 const updatePlanWrapper = () => {
     let { name, description, color } = subscriptionPlan.value;
     if(!/^#[0-9a-f]{6}$/i.test(color)){
-        color = "#000000";
+        displayMsg({ msg: "Color isn't and hexadecimal value", type: "error" });
+        return;
     }
     const toSend = { name, description, color}
-    console.log(toSend)
-    // updatePlan(subscriptionPlan.value.id, toSend);
+    updatePlan(subscriptionPlan.value.id, toSend);
 }
 </script>
 
@@ -49,22 +51,21 @@ const updatePlanWrapper = () => {
                 <Input type="text" v-model="subscriptionPlan.color"/>
                 <p>{{ subscriptionPlan.price }}€</p>
                 <p>{{ subscriptionPlan.stripeId }}</p>
+                <Btn @click="updatePlanWrapper">Update</Btn>
             </div>
+            <hr style="width: 100%;"/>
             <div class="subscriptions">
                 <h3>Subscriptions</h3>
                 <div v-for="subscription in subscriptionPlan.subscriptions">
                     <p>{{ subscription.freelancer.name }} {{ subscription.freelancer.surname }} on {{ subscription.freelancer.createdAt }}</p>
                 </div>
             </div>
-            <Btn @click="updatePlanWrapper">Update</Btn>
         </template>
     </div>
 </template>
 
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;

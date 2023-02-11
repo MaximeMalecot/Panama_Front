@@ -18,7 +18,6 @@ onMounted(async () => {
         <h3>{{ user.name }} {{ user.surname }}</h3>
         <p>{{ user.email }}</p>
         <p>{{ user.roles }}</p>
-        <p>{{ user.isVerified }}</p>
         <div class="actions">
             <Btn :type="'link'" :to="{ name: 'admin-user', params: { id: user.id } }">See or edit</Btn>
         </div>
@@ -27,8 +26,6 @@ onMounted(async () => {
 
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: row;
     align-items: center;

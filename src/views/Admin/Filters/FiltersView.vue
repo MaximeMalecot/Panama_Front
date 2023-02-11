@@ -25,6 +25,7 @@ const deleteFilter = async (id) => {
 </script>
 
 <template>
+    <Btn :type="'link'" :to="{ name: 'admin-filter-create' }">Create a filter</Btn>
     <section v-if="loading" class="container">Loading...</section>
     <div v-else class="container" v-for="filter in filters" :key="filter.id">
         <div class="content">
@@ -40,8 +41,6 @@ const deleteFilter = async (id) => {
 
 <style scoped>
 .container {
-    margin: auto;
-    width: 50%;
     display: flex;
     flex-direction: row;
     align-items: center;

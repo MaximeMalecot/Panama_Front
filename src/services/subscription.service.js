@@ -43,6 +43,27 @@ class SubscriptionService {
         }
     }
 
+    async updatePlan(id, payload){
+        try{
+            const res = await fetch(`${API_URL}/subscription_plans/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 
     async subscribe(subscriptionPlanId){
         try{
@@ -59,6 +80,23 @@ class SubscriptionService {
             }else{
                 return false;
             }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async createPlan(payload){
+        try{
+            const res = await fetch(`${API_URL}/subscription_plans`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            return res;
         }catch(e){
             console.error(e.message);
             return false;

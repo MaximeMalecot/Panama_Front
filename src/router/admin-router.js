@@ -10,6 +10,11 @@ const routes = [
         component: () => import("../views/Admin/Filter/FilterView.vue"),
     },
     {
+        path: "filters/create",
+        name: "admin-filter-create",
+        component: () => import("../views/Admin/FilterCreate/FilterCreateView.vue"),
+    },
+    {
         path: "projects",
         name: "admin-projects",
         component: () => import("../views/Admin/Projects/ProjectsView.vue"),
