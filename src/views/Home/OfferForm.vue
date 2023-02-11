@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import FiltersService from "@/services/filters.service";
 import { useAuthStore } from "../../stores/auth";
 import { ROLES } from "@/constants/roles";
+import PRICES from "@/constants/price_range";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -64,11 +65,7 @@ onMounted(async () => {
             <SelectField
                 v-model="maxPrice"
                 placeholder="💵 Prix maximum"
-                :values="[
-                    { name: '5.000€', value: '5000' },
-                    { name: '10.000€', value: '10000' },
-                    { name: '100.000€', value: '100000' },
-                ]"
+                :values="PRICES"
             />
         </div>
         <div class="offer-form__footer">

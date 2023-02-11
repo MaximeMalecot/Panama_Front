@@ -1,181 +1,195 @@
-import { API_URL } from '../constants/urls';
-import authHeader from './auth.header';
+import { API_URL } from "../constants/urls";
+import authHeader from "./auth.header";
 
 class ProjectService {
-    async createProject(payload){
-        try{
+    async createProject(payload) {
+        try {
             const res = await fetch(`${API_URL}/payment/create_checkout`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
+                    ...authHeader(),
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
 
-    async updateProject(id, payload){
-        try{
+    async updateProject(id, payload) {
+        try {
             const res = await fetch(`${API_URL}/projects/${id}`, {
                 headers: {
                     "Content-Type": "application/merge-patch+json",
-                    ...authHeader()
+                    ...authHeader(),
                 },
                 method: "PATCH",
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
 
-    async getProjects(queryParams = {}){
+    async getProjects(queryParams = {}) {
         const { page, name, filters, minPrice, maxPrice, length } = queryParams;
-        
-        try{
-            const url = `${API_URL}/projects?status=ACTIVE&`;
-            const params = [];
-            Object.entries(queryParams).forEach(([key, value]) => {
-                if(value){
-                    params.push(`${key}=${value}`);
-                }
-            });
+        const keyValuesParams = { page, name, length };
 
-            const res = await fetch(`${url}${params.join('&')}`, {
+        const params = [];
+        Object.entries(keyValuesParams).forEach(([key, value]) => {
+            if (value) {
+                params.push(`${key}=${value}`);
+            }
+        });
+
+        if (minPrice) {
+            params.push(`minPrice[gte]=${minPrice}`);
+        }
+        if (maxPrice) {
+            params.push(`maxPrice[lte]=${maxPrice}`);
+        }
+        if(filters && filters.length > 0){
+            // filters.forEach((filter) => {
+            //     params.push(`filters[]=${filter.id}`);
+            // });
+            params.push(`filters[]=${filters}`);
+        }
+
+        try {
+            const url = `${API_URL}/projects?status=ACTIVE&`;
+
+            const res = await fetch(`${url}${params.join("&")}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
 
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
 
-    async getProject(id){
-        try{
+    async getProject(id) {
+        try {
             const res = await fetch(`${API_URL}/projects/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
 
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
-    };
+    }
 
-    async getFreelancerProjects(userId){
-        try{
+    async getFreelancerProjects(userId) {
+        try {
             const res = await fetch(`${API_URL}/projects/${userId}/own`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
 
-    async getUserProjects(userId){
-        try{
+    async getUserProjects(userId) {
+        try {
             const res = await fetch(`${API_URL}/users/${userId}/projects`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
-    
-    async getAdminProjects(){
-        try{
+
+    async getAdminProjects() {
+        try {
             const res = await fetch(`${API_URL}/projects`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
 
-    async getAdminProject(id){
-        try{
+    async getAdminProject(id) {
+        try {
             const res = await fetch(`${API_URL}/projects/${id}/propositions`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    ...authHeader()
-                }
+                    ...authHeader(),
+                },
             });
-            if(res.status === 200){
+            if (res.status === 200) {
                 return await res.json();
-            }else{
+            } else {
                 return false;
             }
-        }catch(e){
+        } catch (e) {
             console.error(e.message);
             return false;
         }
     }
-
 }
 
 export default new ProjectService();
