@@ -190,6 +190,26 @@ class ProjectService {
             return false;
         }
     }
+
+    async deleteProject(id) {
+        try {
+            const res = await fetch(`${API_URL}/projects/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader(),
+                },
+            });
+            if (res.status === 204) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error(e.message);
+            return false;
+        }
+    }
 }
 
 export default new ProjectService();

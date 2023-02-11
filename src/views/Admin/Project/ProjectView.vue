@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import projectService from '@/services/project.service';
 import Btn from '../../../components/common/Btn.vue';
 import Input from "@/components/common/InputField.vue";
@@ -9,6 +9,7 @@ import SearchFilters from '@/views/Dashboard/client-offer/SearchFilters.vue';
 import FilterItem from '@/components/common/FilterItem.vue';
 
 const route = useRoute();
+const router = useRouter();
 const id = route.params.id;
 
 const project = ref({});
@@ -53,6 +54,13 @@ const updateProjectWrapper = () => {
     const toSend = { name, description, filters}
     updateProject(project.value.id, toSend);
 };
+
+const deleteProject = async (id) => {
+    const res = await projectService.deleteProject(id);
+    if(res){
+        router.push({ name: 'admin-projects' });
+    }
+}
 
 </script>
 
@@ -105,6 +113,7 @@ const updateProjectWrapper = () => {
                             :id="index"
                         />
                     </div>
+                    <Btn v-if="project.status === PROJECT_STATUS.ACTIVE || project.status === PROJECT_STATUS.CREATED" :outline="true" type="button" @click="deleteProject(project.id)">Supprimer</Btn>
                 </template>
             </div>
             <hr style="width: 100%;"/>
