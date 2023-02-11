@@ -44,8 +44,8 @@ const filterOnSubmit = () => {
 
 const resetFilters = () => {
     filters.technos = "";
-    minPrice = "",
-    maxPrice = "",
+    filters.minPrice = "",
+    filters.maxPrice = "",
     filters.timeRange = "";
     filters.name = "";
     router.push({

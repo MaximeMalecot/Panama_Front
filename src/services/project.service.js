@@ -65,7 +65,7 @@ class ProjectService {
             // filters.forEach((filter) => {
             //     params.push(`filters[]=${filter.id}`);
             // });
-            params.push(`filters[]=${filters}`);
+            params.push(`filters.name[]=${filters}`);
         }
 
         try {

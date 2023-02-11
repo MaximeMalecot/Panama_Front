@@ -33,7 +33,7 @@ const clearable = computed(() => {
 });
 
 onMounted(async () => {
-    const res = await FiltersService.getFilters("techno");
+    const res = await FiltersService.getFilters();
     if (!res) return;
     choices.value = res["hydra:member"];
 });
