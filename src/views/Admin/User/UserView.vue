@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router';
 import userService from '@/services/user.service';
 import Btn from '@/components/common/Btn.vue'
@@ -9,10 +9,19 @@ const route = useRoute();
 const id = route.params.id;
 
 const user = ref({});
-const infos = ref({});
-const subscription = ref({});
-const invoices = ref([]);
-const propositions = ref([]);
+const infos = computed(() => {
+    if(user.value.roles){
+        if(user.value.roles.includes(ROLES.CLIENT)){
+            return user.value.clientInfo;
+        }else if(user.value.roles.includes(ROLES.FREELANCER) || user.value.roles.includes(ROLES.FREELANCER_PREMIUM)){
+            return user.value.freelancerInfo;
+        }
+    }
+    return null;
+});
+const subscription = computed(() => user.value.subscription ? user.value.subscription : null );
+const invoices = computed(() => user.value.invoices ? user.value.invoices : []);
+const propositions = computed(() => user.value.propositions ? user.value.propositions : []);
 
 onMounted(async () => {
     const res = await userService.getUserAdmin(id);
@@ -48,9 +57,9 @@ onMounted(async () => {
                 <Btn :type="'link'" :to="{ name: 'admin-user-edit', params: { id: id } }">Modifier</Btn>
             </div>
         </div>
-        <div class="infos">
+        <div class="infos" v-if="infos">
             <h3>User informations</h3>
-            <div v-if="infos['@id']">
+            <div>
                 <p>{{ infos.descriptions }}</p>
                 <p>Phone : {{ infos.phoneNb }}</p>
                 <p>Address : {{ infos.address }}</p>
@@ -58,7 +67,7 @@ onMounted(async () => {
                 <p v-if="infos['@type'] === 'FreelancerInfo'">infos vérifiées : {{ infos.isVerified }}</p>
             </div>
         </div>
-        <div class="subscription" v-if="subscription['@id']">
+        <div class="subscription" v-if="subscription">
             <h3>Subscription</h3>
             <div>
                 <p>Subscripted to subscription {{ subscription.plan.name }}</p>
