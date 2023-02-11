@@ -2,15 +2,18 @@ import { API_URL } from '../constants/urls';
 import authHeader from './auth.header';
 
 class FiltersService {
-    async getFilters(payload){
+    async getFilters(type){
+        let url = `${API_URL}/filters`;
+        if(type){
+            url += `?type=${type}`;
+        }
         try{
-            const res = await fetch(`${API_URL}/filters`, {
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader()
                 },
-                body: JSON.stringify(payload)
             });
             if(res.status === 200){
                 return await res.json();
