@@ -43,6 +43,26 @@ class ReviewService {
         }
     }
 
+    async clientAndFreelancerHaveReview(freelancerId, clientId){
+        try{
+            const res = await fetch(`${API_URL}/reviews?client.id=${clientId}&freelancer.id=${freelancerId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                }
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 
 }
 

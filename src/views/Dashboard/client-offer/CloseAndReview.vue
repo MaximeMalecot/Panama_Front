@@ -4,9 +4,10 @@ import { watch, ref, computed, onMounted } from "vue";
 import ProjectService from "@/services/project.service.js";
 import ReviewService from "@/services/review.service.js";
 import { PROJECT_STATUS } from "@/constants/status.js";
-import InputWithCounter from "../../../components/common/InputWithCounter.vue";
 import ReviewModal from "@/components/ReviewModal/ReviewModal.vue";
-const MAX_COMMENT_LENGTH = 255;
+import { useAuthStore } from "@/stores/auth";
+
+const store = useAuthStore();
 
 const props = defineProps({
     project: {
@@ -20,7 +21,7 @@ const props = defineProps({
 });
 
 const loading = ref(false);
-const showModal = ref(true);
+const showModal = ref(false);
 
 const closeProject = async () => {
     loading.value = true;
@@ -32,15 +33,30 @@ const closeProject = async () => {
     loading.value = false;
 };
 
+const checkHasAlreadyReviewed = async () => {
+    if (!(props.project.status === PROJECT_STATUS.ENDED)) return;
+    const hasAlreadyReviewed = await ReviewService.clientAndFreelancerHaveReview(
+        props.freelancer.id,
+        store.userData.userId
+    );
+    if (hasAlreadyReviewed && hasAlreadyReviewed["hydra:member"].length == 0) {
+        showModal.value = true;
+        // props.project.status = PROJECT_STATUS.ENDED;
+    }
+};
+
 onMounted(() => {
     console.log(props.freelancer);
+    if(! (props.project.status === PROJECT_STATUS.ENDED)) return;
+    checkHasAlreadyReviewed();
 });
+
 </script>
 
 <template>
     <section
         class="close_project"
-        v-if="project.status === PROJECT_STATUS.IN_PROGRES"
+        v-if="project.status === PROJECT_STATUS.IN_PROGRESS"
     >
         <h2>Projet terminé?</h2>
         <p>
