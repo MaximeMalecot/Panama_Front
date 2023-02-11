@@ -2,7 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
 import subscriptionService from '@/services/subscription.service.js';
-import Btn from '@/components/common/Btn.vue'
+import Btn from '@/components/common/Btn.vue';
+import { displayMsg } from "@/utils/toast";
 import Input from "@/components/common/InputField.vue";
 
 const route = useRoute();
@@ -30,7 +31,8 @@ const updatePlan = async (id, payolad) => {
 const updatePlanWrapper = () => {
     let { name, description, color } = subscriptionPlan.value;
     if(!/^#[0-9a-f]{6}$/i.test(color)){
-        color = "#000000";
+        displayMsg({ msg: "Color isn't and hexadecimal value", type: "error" });
+        return;
     }
     const toSend = { name, description, color}
     updatePlan(subscriptionPlan.value.id, toSend);

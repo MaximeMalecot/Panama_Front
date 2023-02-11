@@ -86,6 +86,23 @@ class SubscriptionService {
         }
     }
 
+    async createPlan(payload){
+        try{
+            const res = await fetch(`${API_URL}/subscription_plans`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            return res;
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 
 }
 
