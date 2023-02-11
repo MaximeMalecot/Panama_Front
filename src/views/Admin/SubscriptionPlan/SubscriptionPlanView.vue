@@ -33,7 +33,6 @@ const updatePlanWrapper = () => {
         color = "#000000";
     }
     const toSend = { name, description, color}
-    console.log(toSend)
     updatePlan(subscriptionPlan.value.id, toSend);
 }
 </script>

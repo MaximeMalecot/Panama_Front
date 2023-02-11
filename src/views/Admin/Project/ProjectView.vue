@@ -19,7 +19,6 @@ const propositions = computed(() => project.value.propositions ? project.value.p
 onMounted(async () => {
     const res = await projectService.getAdminProject(id);
     if(res){
-        console.log(res);
         project.value = res;
         loading.value = false;
     }
@@ -42,7 +41,6 @@ const updateProject = async (id, data) => {
     loading.value = true;
     const res = await projectService.updateProject(id, data);
     if(res){
-        console.log(res);
         project.value = res;
     }
     loading.value = false;
