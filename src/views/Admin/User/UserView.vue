@@ -7,6 +7,7 @@ import freelancerInfoService from '@/services/freelancer-info.service';
 import Btn from '@/components/common/Btn.vue';
 import Input from "@/components/common/InputField.vue";
 import { ROLES } from '../../../constants/roles';
+import { displayMsg } from "@/utils/toast";
 
 const route = useRoute();
 const id = route.params.id;
@@ -47,6 +48,7 @@ const updateUser = async (id, data) => {
         user.value = res;
     }
     loading.value = false;
+    displayMsg({ msg: "User updated", type: "success" });
 }
 
 const updateInfos = async (id, data, type) => {
@@ -54,6 +56,7 @@ const updateInfos = async (id, data, type) => {
     const res = type === 'ClientInfo' ? await clientInfoService.updateInfo(id, data) : await freelancerInfoService.updateInfo(id, data);
     if(res){
         infos.value = res;
+        displayMsg({ msg: "User informations updated", type: "success" });
     }
     loading.value = false;
 }

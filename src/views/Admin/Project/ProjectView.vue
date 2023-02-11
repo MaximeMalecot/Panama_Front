@@ -7,6 +7,7 @@ import Input from "@/components/common/InputField.vue";
 import { PROJECT_STATUS } from "@/constants/status.js";
 import SearchFilters from '@/views/Dashboard/client-offer/SearchFilters.vue';
 import FilterItem from '@/components/common/FilterItem.vue';
+import { displayMsg } from "@/utils/toast";
 
 const route = useRoute();
 const router = useRouter();
@@ -42,6 +43,7 @@ const updateProject = async (id, data) => {
     const res = await projectService.updateProject(id, data);
     if(res){
         project.value = res;
+        displayMsg({ msg: "Project updated", type: "success" });
     }
     loading.value = false;
 }

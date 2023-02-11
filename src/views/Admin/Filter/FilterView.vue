@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import FiltersService from '@/services/filters.service.js'
 import Btn from '@/components/common/Btn.vue'
 import Input from '@/components/common/InputField.vue'
+import { displayMsg } from "@/utils/toast";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +27,7 @@ const updateFilter = async (id, payload) => {
     const res = await FiltersService.updateFilter(id, payload)
     if(res){
         filter.value = res
+        displayMsg({ msg: "Filter updated", type: "success" });
     }
     loading.value = false
 }

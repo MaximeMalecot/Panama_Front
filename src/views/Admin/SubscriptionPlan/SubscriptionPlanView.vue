@@ -24,6 +24,7 @@ const updatePlan = async (id, payolad) => {
     const res = await subscriptionService.updatePlan(id, payolad);
     if(res){
         subscriptionPlan.value = res;
+        displayMsg({ msg: "Subscription plan updated", type: "success" });
     }
     loading.value = false;
 }
