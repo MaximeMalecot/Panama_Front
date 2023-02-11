@@ -20,8 +20,7 @@ onMounted(async () => {
         <p>{{ user.roles }}</p>
         <p>{{ user.isVerified }}</p>
         <div class="actions">
-            <Btn :type="'link'" :to="{ name: 'admin-user', params: { id: user.id } }">See specific</Btn>
-            <Btn :type="'link'" :to="{ name: 'admin-user-edit', params: { id: user.id } }">Edit</Btn>
+            <Btn :type="'link'" :to="{ name: 'admin-user', params: { id: user.id } }">See or edit</Btn>
         </div>
     </div>
 </template>

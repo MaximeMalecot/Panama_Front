@@ -63,7 +63,8 @@ const updateProjectWrapper = () => {
             <div class="header">
                 <template v-if="project.status === PROJECT_STATUS.ACTIVE">
                     <!-- patch : name, description, filters -->
-                    <h3>Project <Input type="text" v-model="project.name"/></h3> 
+                    <h3>Project {{ project.id }}</h3> 
+                    <Input type="text" v-model="project.name"/>
                     <div>
                         <textarea v-model="project.description">{{ project.description }}</textarea>
                         <p>status : {{ project.status }}</p>

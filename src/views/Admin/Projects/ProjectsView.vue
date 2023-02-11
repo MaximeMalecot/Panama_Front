@@ -24,8 +24,7 @@ onMounted(async () => {
             <p>{{ project.length }}</p>
         </div>
         <div class="actions">
-            <Btn :type="'link'" :to="{ name: 'admin-project', params: { id: project.id } }">See specific</Btn>
-            <Btn :type="'link'" :to="{ name: 'admin-project-edit', params: { id: project.id } }">Edit</Btn>
+            <Btn :type="'link'" :to="{ name: 'admin-project', params: { id: project.id } }">See or edit</Btn>
         </div>
     </div>
 </template>

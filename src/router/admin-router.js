@@ -6,8 +6,8 @@ const routes = [
     },
     {
         path: "filters/:id",
-        name: "admin-filter-edit",
-        component: () => import("../views/Admin/FilterEdit/FilterEditView.vue"),
+        name: "admin-filter",
+        component: () => import("../views/Admin/Filter/FilterView.vue"),
     },
     {
         path: "projects",
@@ -18,11 +18,6 @@ const routes = [
         path: "projects/:id",
         name: "admin-project",
         component: () => import("../views/Admin/Project/ProjectView.vue"),
-    },
-    {
-        path: "projects/:id/edit",
-        name: "admin-project-edit",
-        component: () => import("../views/Admin/ProjectEdit/ProjectEditView.vue"),
     },
     {
         path: "subscription-plans",
@@ -40,11 +35,6 @@ const routes = [
         component: () => import("../views/Admin/SubscriptionPlan/SubscriptionPlanView.vue"),
     },
     {
-        path: "subscription-plans/:id/edit",
-        name: "admin-subscription-plan-edit",
-        component: () => import("../views/Admin/SubscriptionPlanEdit/SubscriptionPlanEditView.vue"),
-    },
-    {
         path: "users",
         name: "admin-users",
         component: () => import("../views/Admin/Users/UsersView.vue"),
@@ -53,11 +43,6 @@ const routes = [
         path: "users/:id",
         name: "admin-user",
         component: () => import("../views/Admin/User/UserView.vue"),
-    },
-    {
-        path: "users/:id/edit",
-        name: "admin-user-edit",
-        component: () => import("../views/Admin/UserEdit/UserEditView.vue"),
     },
 ]
 

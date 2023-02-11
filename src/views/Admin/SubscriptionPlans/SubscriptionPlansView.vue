@@ -20,8 +20,7 @@ onMounted(async () => {
         <p>{{ sub.color }}</p>
         <p>{{ sub.price }}€</p>
         <div class="actions">
-            <Btn :type="'link'" :to="{ name: 'admin-subscription-plan', params: { id: sub.id } }">See specific</Btn>
-            <Btn :type="'link'" :to="{ name: 'admin-subscription-plan-edit', params: { id: sub.id } }">Modifier</Btn>
+            <Btn :type="'link'" :to="{ name: 'admin-subscription-plan', params: { id: sub.id } }">See or edit</Btn>
         </div>
     </div>
 </template>
