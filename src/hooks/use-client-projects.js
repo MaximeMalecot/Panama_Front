@@ -1,4 +1,4 @@
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import ProjectService from '@/services/project.service';
 import { useAuthStore } from '@/stores/auth';
 import { PROPOSITION_STATUS } from '@/constants/status';
@@ -6,6 +6,7 @@ import { PROPOSITION_STATUS } from '@/constants/status';
 const useClientProjects = () => {
     const authStore = useAuthStore();
     const projects = ref([]);
+    const project = ref({});
     const loading = ref(false);
     const error = ref(null);
     const count = computed(() => propositions.value.length);
@@ -22,10 +23,27 @@ const useClientProjects = () => {
         } catch (e) {
             console.error(e.message);
             error.value = e.message;
+            return false;
         }
         loading.value = false;
     };
 
+    const fetchProject = async (id) => {
+        loading.value = true;
+        error.value = null;
+        try {
+            const res = await ProjectService.getProject(id);
+            if(!res) throw new Error('An error occured');
+            if(!res?.id) throw new Error('No propositions found');
+            project.value = res;
+        } catch (e) {
+            console.error(e.message);
+            error.value = e.message;
+            return false;
+        }
+        loading.value = false;
+        return true;
+    };
 
     watch(projects, (val) => {
         console.log(val);
@@ -33,10 +51,12 @@ const useClientProjects = () => {
 
     return {
         projects,
+        project,
         loading,
         error,
         count,
-        fetchAllProjects
+        fetchAllProjects,
+        fetchProject
     }
 };
 

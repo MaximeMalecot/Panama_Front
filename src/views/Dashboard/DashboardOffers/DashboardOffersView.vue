@@ -23,7 +23,7 @@ onMounted(() => {
         <p>Vous retrouverez ici toutes les offres que vous avez posté.</p>
         <div v-if="projects.length > 0" class="offers__list">
             <OfferCard v-for="project in projects" :offerData="project" status="inprogress" hasLink
-                customLinkText="Voir l'offre" @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
+                customLinkText="Voir l'offre" @click="router.push({ name: 'client-offer', params: { id: project.id } })"></OfferCard>
         </div>
         <div v-else class="offers__no-results">
             <NoResults>Vous n'avez publié aucune offre dernièrement.</NoResults>

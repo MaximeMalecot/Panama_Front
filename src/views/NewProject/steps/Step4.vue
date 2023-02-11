@@ -1,5 +1,5 @@
 <script setup>
-import TagItem from '../FilterItem.vue';
+import TagItem from '@/components/common/FilterItem.vue';
 
 const props = defineProps({
     formData: Object
