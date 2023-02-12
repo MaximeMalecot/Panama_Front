@@ -31,6 +31,7 @@ const closeProject = async () => {
         props.project.status = PROJECT_STATUS.ENDED;
     }
     loading.value = false;
+    checkHasAlreadyReviewed();
 };
 
 const checkHasAlreadyReviewed = async () => {
