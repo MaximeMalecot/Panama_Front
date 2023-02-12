@@ -12,7 +12,7 @@ class ProjectService {
                 },
                 body: JSON.stringify(payload),
             });
-            if (res.status === 200) {
+            if (res.status === 200 || res.status === 400) {
                 return await res.json();
             } else {
                 return false;

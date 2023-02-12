@@ -64,17 +64,25 @@ const createPost = async () => {
         minPrice,
         maxPrice,
         length: value,
-        filters
+        filters,
     };
     const res = await projectService.createProject(payload);
-    if (res === false && !res?.url) {
+    if (res === false) {
         displayMsg({
             msg: "An error occured with your project",
             type: "error",
         });
-    } else {
+    }
+
+    if(res.error) {
+        displayMsg({
+            msg: res.error,
+            type: "error",
+        });
+    }else if(res.url) {
         window.location.replace(res.url);
     }
+
     loading.value = false;
 };
 </script>
