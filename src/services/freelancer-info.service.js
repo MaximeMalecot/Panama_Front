@@ -33,7 +33,7 @@ class FreelancerInfoService {
                 },
                 body: JSON.stringify(payload)
             });
-            if(res.status === 200){
+            if(res.status === 200 || res.status === 422){
                 return await res.json();
             }else{
                 return false;
