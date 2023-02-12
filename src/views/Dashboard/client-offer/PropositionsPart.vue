@@ -38,6 +38,7 @@ const selectFreelancer = (id) => {
                     {{ proposition.freelancer?.name }}
                 </p>
                 <button
+                v-if="!(proposition.status === PROPOSITION_STATUS.REFUSED)"
                     @click="() => selectFreelancer(proposition.freelancer.id)"
                 >
                     Voir le profil
