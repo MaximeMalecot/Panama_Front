@@ -1,37 +1,51 @@
 <script setup>
-import { onMounted, computed } from 'vue';
-import { useOffersStore } from '@/stores/offers'
-import { useRouter } from 'vue-router';
-import OfferCard from '@/components/Offers/OfferCard.vue';
-import NoResults from '@/components/NoResults.vue';
-import { useAuthStore } from '../../../stores/auth';
-import PropositionService from '@/services/proposition.service';
+import { onMounted, computed } from "vue";
+import { useOffersStore } from "@/stores/offers";
+import { useRouter } from "vue-router";
+import PropositionCard from "@/components/Offers/PropositionCard.vue";
+import NoResults from "@/components/NoResults.vue";
+import { useAuthStore } from "../../../stores/auth";
+import PropositionService from "@/services/proposition.service";
 import useFreelancerPropositions from "@/hooks/use-freelancer-propositions";
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const PropositionStore = useFreelancerPropositions();
 const { propositions } = storeToRefs(PropositionStore);
-const offers = computed(() => (propositions.value).map( p => p.project));
+const offers = computed(() =>
+    propositions.value.map((p) => {
+        return { ...p.project, status: p.status };
+    })
+);
 
 onMounted(() => {
     PropositionStore.fetchAllPropositions();
 });
-
 </script>
 
 <template>
     <main class="propositions">
         <h1 class="propositions__title">Propositions ({{ offers.length }})</h1>
-        <p>Vous retrouverez ici toutes les propositions que vous avez faite. C'est à dire toutes les offres sur
-            lesquelles vous vous êtes positionné.</p>
+        <p>
+            Vous retrouverez ici toutes les propositions que vous avez faite.
+            C'est à dire toutes les offres sur lesquelles vous vous êtes
+            positionné.
+        </p>
         <h2 class="propositions__subtitle">Propositions en cours</h2>
         <div v-if="offers.length > 0" class="propositions__list">
-            <OfferCard v-for="offer in offers" :offerData="offer" status="inprogress" hasLink customLinkText="Voir l'offre"
-                @click="router.push({ name: 'offer', params: { id: 1 } })"></OfferCard>
+            <PropositionCard
+                v-for="offer in offers"
+                :data="offer"
+                hasLink
+                customLinkText="Voir l'offre"
+                @click="router.push({ name: 'offer', params: { id: offer.id } })"
+            ></PropositionCard>
         </div>
         <div v-else class="propositions__no-results">
-            <NoResults>Vous ne vous êtes positionné sur aucune offre dernièrement.</NoResults>
+            <NoResults
+                >Vous ne vous êtes positionné sur aucune offre
+                dernièrement.</NoResults
+            >
         </div>
     </main>
 </template>

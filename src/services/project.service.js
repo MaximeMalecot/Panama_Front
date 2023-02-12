@@ -111,9 +111,54 @@ class ProjectService {
         }
     }
 
+    async getFullProject(id) {
+        try {
+            const res = await fetch(`${API_URL}/projects/${id}/full`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader(),
+                },
+            });
+
+            if (res.status === 200) {
+                return await res.json();
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async getFreelancerProjects(userId) {
         try {
             const res = await fetch(`${API_URL}/projects/${userId}/own`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader(),
+                },
+            });
+            if (res.status === 200) {
+                return await res.json();
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error(e.message);
+            return false;
+        }
+    }
+
+    async getFreelancerActiveProjects(userId, status = []) {
+        try {
+            let url = `${API_URL}/projects`;
+            if (status.length > 0) {
+                url = `${url}?status[]=${status.join("&status=")}`;
+            }
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

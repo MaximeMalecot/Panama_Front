@@ -1,7 +1,7 @@
 import { ref, watch, computed } from 'vue';
 import PropositionService from '@/services/proposition.service';
 import { useAuthStore } from '@/stores/auth';
-import { PROPOSITION_STATUS } from '@/constants/status';
+import { PROJECT_STATUS, PROPOSITION_STATUS } from '@/constants/status';
 
 const useFreelancerPropositions = () => {
     const authStore = useAuthStore();
@@ -15,7 +15,7 @@ const useFreelancerPropositions = () => {
         error.value = null;
         try {
             const userId = authStore.userData.userId;
-            const res = await PropositionService.getSelfPropositions(userId);
+            const res = await PropositionService.getSelfPropositions(userId, PROJECT_STATUS.ACTIVE);
             if(!res) throw new Error('An error occured');
             if(!res?.propositions || res.propositions.length == 0) throw new Error('No propositions found');
             propositions.value = res.propositions
@@ -31,7 +31,7 @@ const useFreelancerPropositions = () => {
         error.value = null;
         try {
             const userId = authStore.userData.userId;
-            const res = await PropositionService.getSelfPropositions(userId);
+            const res = await PropositionService.getSelfPropositionsWithProjectStatus(userId, status);
             if(!res) throw new Error('An error occured');
             if(!res?.propositions || res.propositions.length == 0) throw new Error('No propositions found');
             propositions.value = res.propositions

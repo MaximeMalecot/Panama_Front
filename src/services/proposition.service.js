@@ -24,9 +24,11 @@ class SubscriptionService {
         }
     }
 
-    async getSelfPropositions(userId){
+    async getSelfPropositions(userId, status){
         try{
-            const res = await fetch(`${API_URL}/users/${userId}/propositions`, {
+            let url = `${API_URL}/users/${userId}/propositions?order[propositions.createdAt]=desc`;
+            if(status) url += `&propositions.project.status=${status}`;
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -43,6 +45,7 @@ class SubscriptionService {
             return false;
         }
     }
+    
 
     async getSelfPropositionOfProject(projectId, projectStatus = null, propositionStatus = null){
         try{
