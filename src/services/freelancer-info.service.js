@@ -46,7 +46,7 @@ class FreelancerInfoService {
 
     async getFreelancerInfo(id){
         try{
-            const res = await fetch(`${API_URL}/freelancer_infos/${id}`, {
+            const res = await fetch(`${API_URL}/users/freelancer/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
