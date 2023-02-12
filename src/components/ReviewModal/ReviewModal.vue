@@ -31,8 +31,8 @@ const reviewForm = ref({
 
 const publishReview = async () => {
     loading.value = true;
-    if (reviewForm.value.rating < 0 || reviewForm.value.rating > 5) {
-        alert("La note doit être comprise entre 0 et 5");
+    if (reviewForm.value.rating < 0 || reviewForm.value.rating > 10) {
+        alert("La note doit être comprise entre 0 et 10");
         return;
     }
 
@@ -102,8 +102,9 @@ const publishReview = async () => {
                     id="rating"
                     name="rating"
                     min="0"
-                    max="5"
+                    max="10"
                     placeholder="Note sur 5"
+                    step="any"
                     v-model="reviewForm.rating"
                 />
                 <InputWithCounter
