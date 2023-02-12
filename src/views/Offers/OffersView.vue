@@ -32,7 +32,7 @@ const filterOnSubmit = () => {
     const params = Object.entries(val)
         .filter(([key, value]) => {
             if(typeof value === "number") return value >= 0;
-            if(typeof value === "string") return value.trim().length > 0;
+            if(typeof value === "string") return (value.trim()).length > 0;
         })
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
     router.push({

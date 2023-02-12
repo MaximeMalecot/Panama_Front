@@ -49,7 +49,7 @@ onMounted(async () => {
             <select v-model="filters.technos" placeholder="🧑‍💻 Technologie">
                 <option value="" disabled default="true">🧑‍💻 Technologie</option>
                 <option
-                    v-for="choice in choices.filter((c) => c.type === 'techno')"
+                    v-if="!!choices" v-for="choice in choices.filter((c) => c.type === 'techno')"
                     :value="choice.name"
                 >
                     {{ choice.name }}
