@@ -75,8 +75,14 @@ const updateInfos = async (id, data, type) => {
             ? await clientInfoService.updateInfo(id, data)
             : await freelancerInfoService.updateInfo(id, data);
     if (res) {
-        infos.value = res;
-        displayMsg({ msg: "User informations updated", type: "success" });
+        if(res['hydra:description']) {
+            displayMsg({ msg: res['hydra:description'], type: "error" });
+        }else{
+            infos.value = res;
+            displayMsg({ msg: "User informations updated", type: "success" });
+        }
+    } else {
+        displayMsg({ msg: "Error while updating user informations", type: "error" });
     }
     loading.value = false;
 };
@@ -86,9 +92,11 @@ const updateUser = async (id, data) => {
     const res = await userService.updateUser(id, data);
     if (res) {
         user.value = res;
+        displayMsg({ msg: "User updated", type: "success" });
+    }else{
+        displayMsg({ msg: "Error while updating user", type: "error" });
     }
     loading.value = false;
-    displayMsg({ msg: "User updated", type: "success" });
 };
 
 const updateInfosWrapper = () => {

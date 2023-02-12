@@ -4,7 +4,7 @@ import Btn from '../components/common/Btn.vue';
 
 <template>
     <div class="container">
-        <h2>Bienvenu sur le site Panama</h2>
+        <h2>Bienvenue sur le site Panama</h2>
         <p>Sur ce site vous pourrez agir, soit en tant que client, soit en tant que freelancer, alors inscrivez-vous avez le bon rôle</p>
         <div class="actions">
             <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>S'inscrire en tant que client</Btn>
