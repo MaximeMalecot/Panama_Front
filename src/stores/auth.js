@@ -76,8 +76,10 @@ export const useAuthStore = defineStore("auth", () => {
         return res;
     }
 
-    function logout() {
-        router.push({ name: "home" });
+    function logout(redirect = true) {
+        if(redirect){
+            router.push({ name: "home" });
+        }
         localStorage.removeItem(TOKEN_STORAGE_KEY);
         userData.value = emptyUserData;
     }
