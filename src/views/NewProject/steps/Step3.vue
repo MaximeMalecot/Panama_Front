@@ -8,15 +8,15 @@ const props = defineProps({
     formData: Object
 });
 
-const enablePriceRange = ref(false);
+const enablePriceRange = ref(true);
 const priceRange = ref([props.formData.price_range.minPrice, props.formData.price_range.maxPrice]);
 
-const enableDuration = ref(false);
+const enableDuration = ref(true);
 let duration = reactive({
     value: props.formData.duration.value,
     unit: props.formData.duration.unit
 });
-const UNITS = ["jour(s)", "semaine(s)", "mois"];
+const UNITS = ["mois"];
 
 watch(priceRange, (newVal) => {
     const [minPrice, maxPrice] = newVal;
@@ -25,13 +25,13 @@ watch(priceRange, (newVal) => {
 
 watch(enablePriceRange, (val) => {
     if (!val) {
-        props.formData.price_range = { minPrice: 0, maxPrice: 0 };
+        props.formData.price_range = { minPrice: 0, maxPrice: 100 };
     }
 });
 
 watch(duration, (newVal) => {
-    console.log("CALLED")
     const { value, unit } = newVal;
+    if(value <=  0) return;
     props.formData.duration = { value, unit };
 });
 
@@ -67,8 +67,8 @@ onMounted(() => {
         <div class="content">
             <div class="selector">
                 <div class="toggle">
-                    <div class="checkbox" @click="enablePriceRange = !enablePriceRange">
-                        <input :checked="enablePriceRange" type="checkbox" />
+                    <div class="checkbox">
+                        <!-- <input disabled :checked="enablePriceRange" type="checkbox" /> -->
                         <p>Specifier une gamme de prix</p>
                     </div>
                     <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia
@@ -83,8 +83,8 @@ onMounted(() => {
             </div>
             <div class="selector">
                 <div class="toggle">
-                    <div class="checkbox" @click="enableDuration = !enableDuration">
-                        <input :checked="enableDuration" type="checkbox" />
+                    <div class="checkbox">
+                        <!-- <input :checked="enableDuration" type="checkbox" /> -->
                         <p>Specifier une durée pour la mission</p>
                     </div>
                     <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam est mollitia

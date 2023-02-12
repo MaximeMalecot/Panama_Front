@@ -1,0 +1,13 @@
+export const PROPOSITION_STATUS = {
+    'AWAITING': 'AWAITING',
+    'ACCEPTED': 'ACCEPTED',
+    'REFUSED': 'REFUSED',
+}
+
+export const PROJECT_STATUS = {
+    'CREATED': 'CREATED',
+    'ACTIVE': 'ACTIVE',
+    'CANCELED': 'CANCELED',
+    'IN_PROGRESS': 'IN_PROGRESS',
+    'ENDED': 'ENDED',
+}

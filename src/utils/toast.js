@@ -17,7 +17,6 @@ const options = {
 };
 
 export const displayMsg = ({msg, type = "default"}) => {
-    console.log(msg)
     switch (type) {
         case "success":
             toast.success(msg, options);

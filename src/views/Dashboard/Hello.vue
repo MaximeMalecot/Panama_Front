@@ -1,9 +1,15 @@
+<script setup>
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+</script>
+
 <template>
     <div class="hello">
         <div class="hello__picture">
             <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d51" alt="pp">
         </div>
-        <p class="hello__title">Bonjour user !</p>
+        <p class="hello__title">Bonjour {{authStore.userData.email??"None"}} !</p>
     </div>
 </template>
 

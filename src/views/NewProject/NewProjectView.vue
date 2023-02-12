@@ -1,24 +1,22 @@
 <script setup>
-import { reactive, provide, ref, watch, computed } from 'vue';
-import Btn from '@/components/common/Btn.vue';
+import { reactive, provide, ref, watch, computed } from "vue";
+import Btn from "@/components/common/Btn.vue";
 import Timeline from "./Timeline.vue";
 import Step1 from "./steps/Step1.vue";
 import Step2 from "./steps/Step2.vue";
 import Step3 from "./steps/Step3.vue";
 import Step4 from "./steps/Step4.vue";
+import projectService from "../../services/project.service";
+import { displayMsg } from "@/utils/toast";
 
 const currentStep = ref(0);
+const loading = ref(false);
 const formData = reactive({
     title: "",
     description: "",
-    filters: [
-        {
-            id: "1",
-            name: "TAG1",
-        }
-    ],
-    price_range: { minPrice: 0, maxPrice: 0 },
-    duration: { value: null, unit: null },
+    filters: [],
+    price_range: { minPrice: 0, maxPrice: 100 },
+    duration: { value: 1, unit: "mois" },
 });
 
 const nextStep = () => {
@@ -36,26 +34,57 @@ const prevStep = () => {
 const steps = [
     {
         title: "Presentation",
-        component: Step1
+        component: Step1,
     },
     {
         title: "Tags",
-        component: Step2
+        component: Step2,
     },
     {
         title: "Détails",
-        component: Step3
+        component: Step3,
     },
     {
         title: "Aperçu",
-        component: Step4
-    }
+        component: Step4,
+    },
 ];
 
 const createPost = async () => {
-    console.log("create post");
-};
+    loading.value = true;
+    const { title: name, description, ...rest } = formData;
+    const { minPrice, maxPrice } = rest.price_range;
+    const { value, unit } = rest.duration;
 
+    const filters = formData.filters.map((filter) => filter.id);
+
+    const payload = {
+        name,
+        description,
+        minPrice,
+        maxPrice,
+        length: value,
+        filters,
+    };
+    const res = await projectService.createProject(payload);
+    if (res === false) {
+        displayMsg({
+            msg: "An error occured with your project",
+            type: "error",
+        });
+    }
+
+    if(res.error) {
+        displayMsg({
+            msg: res.error,
+            type: "error",
+        });
+    }else if(res.url) {
+        window.location.replace(res.url);
+    }
+
+    loading.value = false;
+};
 </script>
 
 <template>
@@ -66,9 +95,18 @@ const createPost = async () => {
         <component :is="steps[currentStep].component" :formData="formData">
             <slot>
                 <div class="change_step">
-                    <Btn v-if="currentStep > 0" @click="prevStep" outline>Previous</Btn>
-                    <Btn v-if="currentStep < (steps.length - 1)" @click="nextStep">Next</Btn>
-                    <Btn v-else @click="createPost">Valider et procéder au paiement</Btn>
+                    <Btn v-if="currentStep > 0" @click="prevStep" outline
+                        >Previous</Btn
+                    >
+                    <Btn v-if="currentStep < steps.length - 1" @click="nextStep"
+                        >Next</Btn
+                    >
+                    <template v-else>
+                        <Btn v-if="!loading" @click="createPost"
+                            >Valider et procéder au paiement</Btn
+                        >
+                        <Btn v-else>...</Btn>
+                    </template>
                 </div>
             </slot>
         </component>

@@ -1,12 +1,19 @@
 <script setup>
 import Btn from '@/components/common/Btn.vue';
+const props = defineProps({
+    handleClick: {
+        type: Function,
+        required: true,
+    }
+});
+
 </script>
 
 <template>
     <div class="offer-apply">
         <p class="offer-apply__title">Vous souhaitez travailler pour ce projet ?</p>
         <div class="offer-apply__cta">
-            <Btn class="offer-apply__cta__btn">Je me positionne sur l'offre</Btn>
+            <Btn @click="handleClick" class="offer-apply__cta__btn">Je me positionne sur l'offre</Btn>
         </div>
     </div>
 </template>

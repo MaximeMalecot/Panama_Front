@@ -2,8 +2,28 @@
 import Btn from '@/components/common/Btn.vue';
 import { useAuthStore } from '../../stores/auth';
 import { ROUTES } from '../../constants/routes';
+import { ROLES } from '../../constants/roles';
 
 const authStore = useAuthStore();
+
+const userHasRole = (role, checkAuth = true) => {
+    try {
+        const authStore = useAuthStore();
+
+        if (checkAuth && !authStore.isConnected) {
+            return false;
+        }
+
+        if (authStore.userData.roles.includes(role)) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.error(e.message);
+        return false;
+    }
+};
 
 </script>
 
@@ -19,7 +39,7 @@ const authStore = useAuthStore();
                     <RouterLink class="header__nav__list__item__link" :to="{ name: 'offers' }">Offres</RouterLink>
                 </li>
                 <li class="header__nav__list__item">
-                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'home' }">Comment ça marche ?
+                    <RouterLink class="header__nav__list__item__link" :to="{ name: 'plans' }">Forfaits
                     </RouterLink>
                 </li>
                 <li class="header__nav__list__item">
@@ -27,12 +47,16 @@ const authStore = useAuthStore();
                 </li>
             </ul>
         </nav>
-        <div v-if="!authStore.isConnected" class="header__login">
-            <Btn type="link" :to="{ name: 'signup', query: { role: 'client' } }" outline>Je suis client</Btn>
-            <Btn type="link" :to="{ name: 'signup', query: { role: 'freelancer'} }">Je suis freelance</Btn>
+        <div v-if="!authStore.isConnected" class="auth_header">
+            <Btn type="link" :to="{ name: 'login' }" outline>Connexion</Btn>
+            <RouterLink :to="{ name: 'auth-portal'}">Pas de compte ? S'inscrire</RouterLink>
         </div>
-        <div v-else>
-            <button @click="authStore.logout">Logout</button>
+        <div v-else class="header__account">
+            <p>{{ authStore.userData.email }}</p>
+            <span>|</span>
+            <RouterLink v-if="userHasRole(ROLES.ADMIN, false)" class="header__nav__list__item__link" :to="{ name: 'admin-index' }">Dashboard admin</RouterLink>
+            <RouterLink v-else class="header__nav__list__item__link" :to="{ name: 'dashboard-home' }">Dashboard</RouterLink>
+            <Btn type="button" @click="authStore.logout">Déconnexion</Btn>
         </div>
     </header>
 </template>
@@ -84,6 +108,20 @@ const authStore = useAuthStore();
 .header__login {
     display: inline-flex;
     justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.auth_header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+.header__account{
+    display: flex;
     align-items: center;
     gap: 1rem;
 }

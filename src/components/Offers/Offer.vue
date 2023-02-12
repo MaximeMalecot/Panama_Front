@@ -14,19 +14,21 @@ defineProps({
 <template>
     <div class="offer">
         <section class="offer__header">
-            <h1 class="offer__header__title">{{ data.title }}</h1>
+            <h1 class="offer__header__title">{{ data.name }}</h1>
             <div class="offer__header__tags">
-                <Tag v-for="techno in data.tags" :color="TECHNOS[techno].color">{{ TECHNOS[techno].name }}</Tag>
+                <Tag v-for="filter in data.filters">{{ filter.name??"unset" }}</Tag>
             </div>
             <div class="offer__header__info">
-                <span>2000€ - 5000€</span>
+                <template v-if="data.minPrice && data.maxPrice">
+                    <span>{{data.minPrice}}€ - {{data.maxPrice}}€</span>
+                </template>
                 <span>|</span>
-                <span>{{ data.time }} mois</span>
+                <span v-if="data.length">{{ data.length }} mois</span>
             </div>
         </section>
         <section class="offer__content">
             <h2 class="offer__content__title">Description du projet</h2>
-            <p>{{ data.description }}</p>
+            <p>{{ data.description??"Aucune description disponible" }}</p>
         </section>
     </div>
 </template>

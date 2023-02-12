@@ -1,19 +1,21 @@
 <script setup>
-import Tag from '@/components/common/Tag.vue';
-import { TECHNOS } from '@/constants/technos';
+import Tag from "@/components/common/Tag.vue";
+import { TECHNOS } from "@/constants/technos";
+import { computed, onMounted } from "vue";
+import { PROJECT_STATUS } from "@/constants/status.js";
 
-defineProps({
+const props = defineProps({
     offerData: {
         type: Object,
         required: true,
     },
     status: {
         type: String,
-        validator: (value) => ['inprogress', 'issued'].includes(value),
+        validator: (value) => ["inprogress", "issued"].includes(value),
     },
     type: {
         type: String,
-        validator: (value) => ['project', 'offer'].includes(value),
+        validator: (value) => ["project", "offer"].includes(value),
     },
     editable: {
         type: Boolean,
@@ -25,37 +27,59 @@ defineProps({
     },
     customLinkText: {
         type: String,
-        default: 'Voir le projet',
+        default: "Voir le projet",
     },
-})
+});
 
-function displayPriceRange(price) {
-    const prices = [1000, 2000, 5000, 10000, 20000];
-    if (price > prices[prices.length - 1]) {
-        return `> ${prices[prices.length - 1]}`;
-    }
-    if (price < prices[0]) {
-        return `< ${prices[0]}`;
-    }
-    const index = prices.findIndex((p) => price < p);
-    return `${prices[index - 1]} - ${prices[index]}`;
-}
+const backgroundColor = computed(() => {
+    if (!props?.offerData || !props.offerData?.filters.length === 0)
+        return "#d9d9d9";
+    //return TECHNOS[props.offerData.filters[0]].color;
+    return "#d9d9d9";
+});
 
+const labelsAssociations = {
+    [PROJECT_STATUS.CREATED]: { label: "Crée", color: "var(--warning)" },
+    [PROJECT_STATUS.IN_PROGRESS]: { label: "En cours", color: "#d9d9d9" },
+    [PROJECT_STATUS.ENDED]: { label: "Terminé", color: "gray" },
+    [PROJECT_STATUS.CANCELED]: { label: "Annulé", color: "var(--error)" },
+    [PROJECT_STATUS.ACTIVE]: { label: "Actif", color: "var(--success)" },
+};
+
+const labelToShow = computed(() => {
+    console.log( props.offerData );
+    if (!props?.offerData) return "";
+    console.log("STILL HERE")
+    if (labelsAssociations[props.offerData.status] === undefined) return "";
+    return labelsAssociations[props.offerData.status];
+});
 </script>
 
 <template>
     <article class="card">
-        <Tag v-if="status === 'inprogress'" class="card__status-tag" color="var(--warning)">En cours</Tag>
-        <Tag v-if="status === 'issued'" class="card__status-tag" color="var(--success)">Terminé</Tag>
-        <div class="card__thumbnail" :style="{ background: TECHNOS[offerData.tags[0]].color }"></div>
+        <Tag
+            class="card__status-tag"
+            :color="labelToShow.color"
+            >{{ labelToShow.label }}</Tag
+        >
+        <div
+            class="card__thumbnail"
+            :style="{ background: backgroundColor }"
+        ></div>
         <div class="card__content">
-            <p class="card__content__title">{{ offerData.title }}</p>
+            <p class="card__content__title">{{ offerData.name }}</p>
             <div class="card__content__technos">
-                <Tag v-for="techno in offerData.tags" :color="TECHNOS[techno].color">{{ TECHNOS[techno].name }}</Tag>
+                <Tag v-for="techno in offerData.filters" :color="'gray'">{{
+                    techno.name
+                }}</Tag>
             </div>
             <div class="card__content__footer">
-                <span class="card__content__footer__price"> {{ displayPriceRange(offerData.price) }} €</span>
-                <span class="card__content__footer__time">{{ offerData.time }} mois</span>
+                <span class="card__content__footer__price">
+                    {{ offerData.minPrice }} - {{ offerData.maxPrice }} €</span
+                >
+                <span class="card__content__footer__time"
+                    >{{ offerData.length }} mois</span
+                >
             </div>
         </div>
         <div v-if="hasLink" class="card__link">{{ customLinkText }}</div>
@@ -73,8 +97,8 @@ function displayPriceRange(price) {
 
     &__status-tag {
         position: absolute;
-        left: .5rem;
-        top: .5rem;
+        left: 0.5rem;
+        top: 0.5rem;
     }
 
     &__thumbnail {
@@ -101,7 +125,7 @@ function displayPriceRange(price) {
             display: flex;
             justify-content: flex-start;
             align-items: flex-start;
-            gap: .5rem;
+            gap: 0.5rem;
             margin-bottom: 1rem;
         }
 
@@ -112,13 +136,11 @@ function displayPriceRange(price) {
         }
     }
 
-
     &__link {
         border-top: 1px solid var(--border);
         text-align: center;
         padding: 0.5rem 0;
         background: var(--background);
     }
-
 }
 </style>

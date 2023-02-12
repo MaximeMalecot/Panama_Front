@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
-import { reactive, onMounted, computed, ref } from "vue";
+import { reactive, onMounted, watch, computed, ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import { ROLES } from "@/constants/roles";
 import { checkMail } from "@/utils";
@@ -16,12 +16,6 @@ const handledRoles = {
 
 const route = useRoute();
 const router = useRouter();
-
-onMounted(() => {
-    if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
-        //todo redirect to home
-    }
-});
 
 const role = computed(() => {
     if (!route.query.role || !Object.values(handledRoles).includes(route.query.role)) {
@@ -60,49 +54,73 @@ const loading = ref(false);
 
 const onSubmit = async () => {
     loading.value = true;
-    const { surname, name, email, password, passwordConfirmation, tosAgreed } = formData;
-    if (!role.value) {
-        console.error("Invalid signin type");
-        displayMsg({ msg: "Une erreur est survenue avec le type d'inscription", type: "error" });
-        return;
-    }
+    try {
+        const { surname, name, email, password, passwordConfirmation, tosAgreed } = formData;
+        if (!role.value) {
+            throw new Error("Une erreur est survenue avec le type d'inscription");
+        }
 
-    if (!checkMail(email)) {
-        displayMsg({ msg: "Veuillez saisir une adresse e-mail valide", type: "error" });
-        return;
-    }
+        if (!checkMail(email)) {
+            throw new Error("Veuillez saisir une adresse e-mail valide");
+        }
 
-    if (name === '' || surname === '') {
-        displayMsg({ msg: "Veuillez saisir un nom et un prénom", type: "error" });
-        console.error("Name or surname is empty");
-        return;
-    }
+        if (name === '' || surname === '') {
+            throw new Error("Veuillez saisir un nom et un prénom")
+        }
 
-    if (password.length < 1) {
-        displayMsg({ msg: "Veuillez saisir un mot de passe", type: "error" });
-        console.error("Password is too short");
-        return;
-    }
+        if (password.length < 1) {
+            throw new Error("Veuillez saisir un mot de passe");
+        }
 
-    if (password !== passwordConfirmation) {
-        displayMsg({ msg: "Les mots de passe ne correspondent pas", type: "error" });
-        console.error("Password confirmation doesn't match")
-        return;
-    }
+        if (password !== passwordConfirmation) {
+            throw new Error("Les mots de passe ne correspondent pas");
+        }
 
-    if (!tosAgreed) {
-        console.error("You must agree to the ToS");
-        displayMsg({ msg: "Vous devez accepter les conditions d'utilisation", type: "error" });
-        return;
-    }
+        if (!tosAgreed) {
+            throw new Error("Vous devez accepter les conditions d'utilisation");
+        }
 
-    const res = await store.signup({ ...formData, role: role.value });
-    if (res) {
-        displayMsg({ msg: "Inscription réussie", type: "success" });
-        //todo redirect to home
+        const res = await store.signup({ ...formData, role: role.value });
+        if (res) {
+            displayMsg({ msg: "Inscription réussie, vérifiez votre compte à l'aide du mail que vous avez reçu", type: "success" });
+            //todo redirect to home
+            setTimeout(() => {
+                router.push({ name: 'home' });
+            }, 2000);
+        }else{
+            throw new Error("Une erreur est survenue lors de l'inscription");
+        }
+    } catch (e) {
+        console.error(e.message);
+        displayMsg({ msg: e.message, type: "error" });
     }
     loading.value = false;
 }
+
+// onMounted(() => {
+//     console.log(role)
+//     if(role.value){
+//         document.title = `Panama Agency - Inscription en tant que ${role.value === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+//     }else{
+//         document.title = `Panama Agency - Inscription`;
+//     }
+// });
+
+watch(role, val => {
+    if(val){
+        document.title = `Panama Agency - Inscription en tant que ${val === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+    }else{
+        document.title = `Panama Agency - Inscription`;
+    }
+});
+
+onMounted(() => {
+    if(role.value){
+        document.title = `Panama Agency - Inscription en tant que ${role.value === ROLES.CLIENT ? 'client' : 'freelancer'}`;
+    }else{
+        document.title = `Panama Agency - Inscription`;
+    }
+});
 
 </script>
 
@@ -113,7 +131,7 @@ const onSubmit = async () => {
         </div>
         <div class="right_section">
             <template v-if="role">
-                <h3>Inscription en tant que {{ role === ROLES.CLIENT ? "CLIENT" : "FREELANCER" }}</h3>
+                <h3>Inscription en tant que {{ role === ROLES.CLIENT ? "client" : "freelancer" }}</h3>
                 <form @submit.prevent="onSubmit">
                     <Input name="name" placeholder="Nom" type="text" v-model="formData.name" />
                     <Input name="surname" placeholder="Prénom" type="text" v-model="formData.surname" />
@@ -173,7 +191,7 @@ const onSubmit = async () => {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 10px;
             border-bottom: 1px solid rgb(183, 183, 183);
             padding: 1em 0;
             margin-bottom: 1em;
@@ -192,7 +210,7 @@ const onSubmit = async () => {
             width: 100%;
             justify-content: center;
 
-            .options{
+            .options {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;

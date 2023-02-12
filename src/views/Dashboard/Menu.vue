@@ -1,5 +1,8 @@
 <script setup>
 import { ROLES } from '@/constants/roles';
+import { useAuthStore } from '../../stores/auth';
+
+const authStore = useAuthStore();
 // @todo import authStore
 
 const user = {
@@ -15,12 +18,17 @@ const dashboardRoutes = [
     {
         name: 'dashboard-propositions',
         title: 'Mes propositions',
-        role: ROLES.FREELANCER,
+        role: ROLES.FREELANCER_PREMIUM,
     },
     {
         name: 'dashboard-projects',
         title: 'Mes projets',
-        role: -1,
+        role: ROLES.FREELANCER_PREMIUM,
+    },
+    {
+        name: 'new_project',
+        title: 'Publier une offre',
+        role: ROLES.CLIENT,
     },
     {
         name: 'dashboard-settings',
@@ -29,7 +37,7 @@ const dashboardRoutes = [
     },
 ];
 
-const authorizedRoutes = dashboardRoutes.filter((route) => route.role === -1 || route.role === user.role)
+const authorizedRoutes = dashboardRoutes.filter((route) => route.role === -1 || (authStore.userData.roles.includes(route.role)))
 
 </script>
 
