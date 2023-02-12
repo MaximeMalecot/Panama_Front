@@ -126,6 +126,27 @@ class UserService {
             return false;
         }
     }
+
+    async resetPassword(payload){
+        try{
+            const res = await fetch(`${API_URL}/users/update_password`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 204){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
 }
 
 export default new UserService();

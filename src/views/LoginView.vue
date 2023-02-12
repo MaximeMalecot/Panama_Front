@@ -54,9 +54,8 @@ const onSubmit = async () => {
                 <Btn v-else type="button" disabled>Chargement...</Btn>
             </form>
             <div class="links">
-                <a href="">Mot de passe oublié</a>
+                <RouterLink :to="{ name: 'reset-password'}">Mot de passe oublié ?</RouterLink>
                 <RouterLink :to="{ name: 'signup'}">Pas de compte ? S'inscrire</RouterLink>
-                <!-- <a href="">Pas de compte? S'inscrire</a> -->
             </div>
         </div>
     </div>

@@ -41,6 +41,27 @@ class AuthService {
         }
     }
 
+    async forgotPassword(payload){
+        try{
+            const res = await fetch(`${API_URL}/users/forgot_password`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json"
+                },
+                body: JSON.stringify(payload)
+            });
+            console.log(res);
+            if(res.status === 202){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
 }
 
 export default new AuthService();
