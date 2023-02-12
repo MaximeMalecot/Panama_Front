@@ -111,6 +111,27 @@ class ProjectService {
         }
     }
 
+    async getFullProject(id) {
+        try {
+            const res = await fetch(`${API_URL}/projects/${id}/full`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader(),
+                },
+            });
+
+            if (res.status === 200) {
+                return await res.json();
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async getFreelancerProjects(userId) {
         try {
             const res = await fetch(`${API_URL}/projects/${userId}/own`, {

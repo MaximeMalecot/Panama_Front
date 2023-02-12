@@ -57,7 +57,7 @@ watch(selectedStatus, (value) => {
         </div>
         <div v-else-if="offers.length > 0" class="projets__list">
             <OfferCard v-for="offer in offers" :offerData="offer" status="inprogress" hasLink
-                @click="router.push({ name: 'dashboard-project', params: { id: 1 } })"></OfferCard>
+                @click="router.push({ name: 'dashboard-project', params: { id: offer.id } })"></OfferCard>
         </div>
         <div v-else class="projets__no-results">
             <NoResults>Vous ne vous êtes positionné sur aucune offre dernièrement.</NoResults>
