@@ -31,7 +31,7 @@ const showKYC = computed(()=>{
 const showSubscription = computed(() => {
     if(!authStore) return false;
     const userData=(authStore).userData;
-    return userData.roles && (userData.roles.includes(ROLES.FREELANCER) || userData.roles.includes(ROLES.FREELANCER_PREMIUM)) && userData.isInfoVerified;
+    return userData.roles && (userData.roles.includes(ROLES.FREELANCER) || userData.roles.includes(ROLES.FREELANCER_PREMIUM));
 })
 
 const infos = computed(() => {

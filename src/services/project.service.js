@@ -156,7 +156,7 @@ class ProjectService {
         try {
             let url = `${API_URL}/projects`;
             if (status.length > 0) {
-                url = `${url}?status[]=${status.join("&status=")}`;
+                url = `${url}?status[]=${status.join("&status[]=")}`;
             }
             const res = await fetch(url, {
                 method: "GET",
