@@ -3,6 +3,7 @@ import HomeView from "@/views/Home/HomeView.vue";
 import { ROLES } from "@/constants/roles";
 import { useAuthStore } from "@/stores/auth";
 import adminRoutes from "./admin-router";
+import redirectionsRoutes from "./redirections-router";
 
 // @todo change this to the store data
 const userRole = ROLES.CLIENT;
@@ -229,6 +230,11 @@ const router = createRouter({
                 return next();
             },
             children: adminRoutes
+        },
+        {
+            path: "/redirection",
+            name: "redirection-index",
+            children: redirectionsRoutes
         }
     ],
 });
