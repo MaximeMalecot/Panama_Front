@@ -71,7 +71,7 @@ onMounted(async () => {
 
     if (authStore.isSubscribed) {
         const application = await PropositionService.getSelfPropositionOfProject(route.params.id);
-        if (application && application?.proposition?.id) {
+        if (application && application?.id) {
             alreadyApplied.value = true;
         }
     }
