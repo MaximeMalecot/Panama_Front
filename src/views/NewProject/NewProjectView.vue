@@ -15,8 +15,8 @@ const formData = reactive({
     title: "",
     description: "",
     filters: [],
-    price_range: { minPrice: 0, maxPrice: 0 },
-    duration: { value: null, unit: null },
+    price_range: { minPrice: 0, maxPrice: 100 },
+    duration: { value: 1, unit: "mois" },
 });
 
 const nextStep = () => {
