@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref } from "vue";
 import authService from "@/services/auth.service";
 import Btn from "@/components/common/Btn.vue";
 import Input from "@/components/common/InputField.vue";
@@ -24,7 +24,7 @@ const resetPassword = async() => {
 </script>
 <template>
     <div class="container">
-        <h1>Reset password</h1>
+        <h1>Forgotten password</h1>
         <section class="form">
             <p>Enter your email</p>
             <Input v-model="email" type="email" />
