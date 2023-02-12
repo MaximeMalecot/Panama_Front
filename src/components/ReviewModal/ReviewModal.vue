@@ -104,7 +104,7 @@ const publishReview = async () => {
                     name="rating"
                     min="0"
                     max="10"
-                    placeholder="Note sur 5"
+                    placeholder="Note sur 10"
                     step="any"
                     v-model="reviewForm.rating"
                 />
