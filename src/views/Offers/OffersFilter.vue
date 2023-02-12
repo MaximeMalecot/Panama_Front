@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, reactive, watch, computed, onMounted } from "vue";
+import { ref, reactive, watch, computed, onMounted } from "vue";
 import SelectField from "@/components/common/SelectField.vue";
 import Btn from "@/components/common/Btn.vue";
 import InputField from "../../components/common/InputField.vue";
