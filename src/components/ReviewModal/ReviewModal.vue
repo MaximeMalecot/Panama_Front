@@ -51,6 +51,7 @@ const publishReview = async () => {
         props.close();
     }
     loading.value = false;
+    props.close();
 };
 </script>
 
