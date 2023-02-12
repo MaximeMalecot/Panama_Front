@@ -63,20 +63,6 @@ const labelToShow = computed(()=>{
         ></div>
         <div class="card__content">
             <p class="card__content__title">{{ data.name }}</p>
-            <div class="card__content__technos">
-                <Tag
-                    v-for="techno in data.filters"
-                    :color="'gray'"
-                    >{{ techno.name }}</Tag
-                >
-            </div>
-            <div class="card__content__footer">
-                <span class="card__content__footer__price">
-                    {{ data.minPrice }} - {{ data.maxPrice }} €</span>
-                <span class="card__content__footer__time"
-                    >{{ data['length'] }} mois</span
-                >
-            </div>
         </div>
         <div v-if="hasLink" class="card__link">{{ customLinkText }}</div>
     </article>
