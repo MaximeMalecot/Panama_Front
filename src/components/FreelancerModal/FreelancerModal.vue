@@ -100,9 +100,12 @@ onMounted(async () => {
                         />
                         </div>
                     <div class="infos">
-                        <p>{{ freelancerData.email }}</p>
+                        <p>Mail: <b>{{ freelancerData.email }}</b></p>
+                        <hr/>
+                        <label>A propos de ce freelancer:</label>
                         <p>{{ freelancerData.freelancerInfo.description }}</p>
-                        <p>{{ freelancerData.freelancerInfo.city }}</p>
+                        <p>Ville: <b>{{ freelancerData.freelancerInfo.city }}</b></p>
+                        <p>Téléphone: <b>{{ freelancerData.freelancerInfo.phoneNb??"unset" }}</b></p>
                     </div>
                 </section>
             </template>
