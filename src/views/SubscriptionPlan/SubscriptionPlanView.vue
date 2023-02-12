@@ -22,12 +22,13 @@ const canSubscribe = computed(() => {
         return [false, "Vous êtes déjà abonné à un forfait premium"];
     }
 
-    if (roles.includes(ROLES.CLIENT)) {
+    if (!roles.includes(ROLES.FREELANCER)) {
         return [
             false,
             "Seuls les freelances peuvent souscrire à un abonnement",
         ];
     }
+    
     if (authStore.userData?.isInfoVerified === false) {
         return [
             false,
