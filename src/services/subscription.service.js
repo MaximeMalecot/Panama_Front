@@ -86,6 +86,27 @@ class SubscriptionService {
         }
     }
 
+    async cancel(){
+        try{
+            const res = await fetch(`${API_URL}/subscriptions/cancel`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader()
+                },
+                body: JSON.stringify({})
+            });
+            if(res.status === 204){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async createPlan(payload){
         try{
             const res = await fetch(`${API_URL}/subscription_plans`, {

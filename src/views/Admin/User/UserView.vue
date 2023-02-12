@@ -38,7 +38,7 @@ const propositions = computed(() =>
 );
 
 onMounted(async () => {
-    const res = await userService.getUserAdmin(id);
+    const res = await userService.getSelfUser(id);
     if (res) {
         user.value = res;
         if (res.roles.includes(ROLES.CLIENT)) {

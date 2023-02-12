@@ -28,6 +28,12 @@ const canSubscribe = computed(() => {
             "Seuls les freelances peuvent souscrire à un abonnement",
         ];
     }
+    if (authStore.userData?.isInfoVerified === false) {
+        return [
+            false,
+            "Vous devez vérifier vos informations avant de souscrire à un abonnement",
+        ];
+    }
 
     return [true, ""];
 });

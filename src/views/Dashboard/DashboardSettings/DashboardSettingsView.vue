@@ -5,8 +5,12 @@ import Input from "@/components/common/InputField.vue";
 import Btn from "@/components/common/Btn.vue";
 import { ROLES } from "@/constants/roles";
 import userService from "@/services/user.service";
+import clientInfoService from "@/services/client-info.service";
+import freelancerInfoService from "@/services/freelancer-info.service";
+import subscriptionService from "@/services/subscription.service";
 import InputWithCounter from "@/components/common/InputWithCounter.vue";
 import KYCVerification from "./KYCVerification.vue";
+import { displayMsg } from "@/utils/toast";
 
 const loading = ref(true);
 
@@ -23,6 +27,12 @@ const showKYC = computed(()=>{
     return true;
 });
 
+const showSubscription = computed(() => {
+    if(!authStore) return false;
+    const userData=(authStore).userData;
+    return userData.roles && (userData.roles.includes(ROLES.FREELANCER) || userData.roles.includes(ROLES.FREELANCER_PREMIUM)) && userData.isInfoVerified;
+})
+
 const infos = computed(() => {
     if (user.value.roles) {
         if (user.value.roles.includes(ROLES.CLIENT)) {
@@ -37,6 +47,10 @@ const infos = computed(() => {
     return null;
 });
 
+const subscription = computed(() =>
+    user.value.subscription ? user.value.subscription : null
+);
+
 onMounted(async () => {
     const res = await userService.getSelfUser(id);
     if (res) {
@@ -50,8 +64,44 @@ onMounted(async () => {
             infos.value = res.freelancerInfo;
         }
     }
+    console.log(res);
     loading.value = false;
 });
+
+const updateInfos = async (id, data, type) => {
+    loading.value = true;
+    const res =
+        type === "ClientInfo"
+            ? await clientInfoService.updateInfo(id, data)
+            : await freelancerInfoService.updateInfo(id, data);
+    if (res) {
+        infos.value = res;
+        displayMsg({ msg: "User informations updated", type: "success" });
+    }
+    loading.value = false;
+};
+
+const updateInfosWrapper = () => {
+    let { description, phoneNb, address, city } = infos.value;
+    updateInfos(
+        infos.value.id,
+        { description, phoneNb, address, city },
+        infos.value["@type"]
+    );
+};
+
+const cancelSubscription = async () => {
+    if(subscription.value){
+        let res = await subscriptionService.cancel();
+        if(!res){
+            displayMsg({ msg: "Error while cancelling subscription", type: "error" });
+        } else {
+            displayMsg({ msg: "Subscription cancelled", type: "success" });
+            user.value.subscription.isActive = false;
+        }
+    }
+}
+
 </script>
 
 <template>
@@ -87,6 +137,23 @@ onMounted(async () => {
                 </div>
             </div>
             <KYCVerification v-if="showKYC" />
+        </template>
+        <template v-if="showSubscription">
+            <h3>Subscription</h3>
+            <template v-if="subscription">
+                <div class="subscription" v-if="subscription">
+                    <hr style="width: 100%" />
+                    <div>
+                        <p>Subscripted to subscription {{ subscription.plan.name }}</p>
+                        <p v-if="subscription.isActive == true">CreatedAt : {{ subscription.createdAt }}</p>
+                        <p v-else>CanceledAt : {{ subscription.updatedAt }}</p>
+                    </div>
+                    <Btn v-if="subscription.isActive == true" @click="() => cancelSubscription()">Cancel</Btn>
+                </div>
+            </template>
+            <template v-else>
+                <p>Vous n'avez aucun abonnement...</p>
+            </template>
         </template>
     </main>
 </template>
