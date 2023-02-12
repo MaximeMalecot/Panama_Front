@@ -12,15 +12,15 @@ const subscriptionPlan = ref({
     name: '',
     description: '',
     color: '',
-    stripeId : '',
-})
+    price : ''
+});
 
 const createSubscriptionPlan = async () => {
     let payload = {
         name: subscriptionPlan.value.name,
         description: subscriptionPlan.value.description,
         color: subscriptionPlan.value.color,
-        stripeId : subscriptionPlan.value.stripeId,
+        price : subscriptionPlan.value.price,
     }
     if(!/^#[0-9a-f]{6}$/i.test(payload.color)){
         displayMsg({ msg: "Color isn't and hexadecimal value", type: "error" });
@@ -44,9 +44,9 @@ const createSubscriptionPlan = async () => {
         <label>Description : </label>
         <textarea v-model="subscriptionPlan.description">{{ subscriptionPlan.description }}</textarea>
         <label>Color : </label>
-        <Input type="text" v-model="subscriptionPlan.color" />
-        <label>StripeId : </label>
-        <Input type="text" v-model="subscriptionPlan.stripeId" />
+        <Input maxLength="7" type="text" v-model="subscriptionPlan.color" />
+        <label>Price : </label>
+        <Input type="number" min="1" step="any" v-model="subscriptionPlan.price" />
         <Btn type="button" @click="createSubscriptionPlan">Create</Btn>
     </div>
 </template>

@@ -53,6 +53,7 @@ export const useAuthStore = defineStore("auth", () => {
         if (res && res?.token) {
             const decoded = checkToken(res.token);
             if (decoded) {
+                if(!decoded.isVerified) return false;
                 localStorage.setItem(TOKEN_STORAGE_KEY, res.token);
                 userData.value = { ...decoded, token: res.token };
                 return true;
