@@ -82,10 +82,10 @@ const onSubmit = async () => {
 
         const res = await store.signup({ ...formData, role: role.value });
         if (res) {
-            displayMsg({ msg: "Inscription réussie", type: "success" });
+            displayMsg({ msg: "Inscription réussie, vérifiez votre compte à l'aide du mail que vous avez reçu", type: "success" });
             //todo redirect to home
             setTimeout(() => {
-                router.push({ name: 'login' });
+                router.push({ name: 'home' });
             }, 2000);
         }else{
             throw new Error("Une erreur est survenue lors de l'inscription");

@@ -204,6 +204,21 @@ const router = createRouter({
             },
         },
         {
+            path: "/verify-account/:token",
+            name: "verify-account",
+            component: () => import("../views/VerifyAccountView.vue"),
+        },
+        {
+            path: "/reset-password",
+            name: "reset-password",
+            component: () => import("../views/ResetPasswordView.vue"),
+        },
+        {
+            path: "/reset-password/:token",
+            name: "reset-password-token",
+            component: () => import("../views/ResetPasswordTokenView.vue"),
+        },
+        {
             path: "/admin",
             name: "admin-index",
             component: () => import("../views/Admin/AdminView.vue"),
