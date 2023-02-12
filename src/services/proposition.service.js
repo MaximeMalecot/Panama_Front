@@ -26,7 +26,7 @@ class SubscriptionService {
 
     async getSelfPropositions(userId, status){
         try{
-            let url = `${API_URL}/users/${userId}/propositions?order=DESC`;
+            let url = `${API_URL}/users/${userId}/propositions?order[propositions.createdAt]=desc`;
             if(status) url += `&propositions.project.status=${status}`;
             const res = await fetch(url, {
                 method: "GET",
