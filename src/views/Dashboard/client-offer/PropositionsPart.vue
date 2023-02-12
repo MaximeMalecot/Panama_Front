@@ -1,6 +1,8 @@
 <script setup>
 import { PROPOSITION_STATUS } from "@/constants/status.js";
 import Btn from "../../../components/common/Btn.vue";
+import { ref, watch } from "vue";
+import FreelancerModal from "@/components/FreelancerModal/FreelancerModal.vue";
 
 const props = defineProps({
     propositions: {
@@ -12,6 +14,14 @@ const props = defineProps({
         required: true,
     },
 });
+
+const showProfilModal = ref(false);
+const selectedFreelancer = ref(null);
+
+const selectFreelancer = (id) => {
+    selectedFreelancer.value = id;
+    showProfilModal.value = true;
+};
 </script>
 
 <template>
@@ -27,6 +37,12 @@ const props = defineProps({
                     From {{ proposition.freelancer?.surname }}
                     {{ proposition.freelancer?.name }}
                 </p>
+                <button
+                v-if="!(proposition.status === PROPOSITION_STATUS.REFUSED)"
+                    @click="() => selectFreelancer(proposition.freelancer.id)"
+                >
+                    Voir le profil
+                </button>
                 <div
                     class="actions"
                     v-if="proposition.status === PROPOSITION_STATUS.AWAITING"
@@ -73,6 +89,11 @@ const props = defineProps({
         </div>
         <p v-else>No proposition</p>
     </section>
+    <FreelancerModal
+        v-if="showProfilModal"
+        :close="() => showProfilModal = false"
+        :freelancerId="selectedFreelancer"
+    />
 </template>
 
 <style lang="scss" scoped>
