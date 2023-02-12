@@ -64,6 +64,27 @@ class UserService {
         }
     }
 
+    async modifyPwd(id, payload){
+        try{
+            const res = await fetch(`${API_URL}/users/modify_password/${id}`, {
+                method: "Patch",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                    ...authHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.status === 200){
+                return await res.json();
+            }else{
+                return false;
+            }
+        }catch(e){
+            console.error(e.message);
+            return false;
+        }
+    }
+
     async submitKYC(siret){
         try{
             const res = await fetch(`${API_URL}/freelancer_infos/kyc`, {
