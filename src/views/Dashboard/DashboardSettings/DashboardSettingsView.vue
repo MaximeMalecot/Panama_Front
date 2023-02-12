@@ -27,6 +27,12 @@ const showKYC = computed(()=>{
     return true;
 });
 
+const showSubscription = computed(() => {
+    if(!authStore) return false;
+    const userData=(authStore).userData;
+    return userData.roles && (userData.roles.includes(ROLES.FREELANCER) || userData.roles.includes(ROLES.FREELANCER_PREMIUM)) && userData.isInfoVerified;
+})
+
 const infos = computed(() => {
     if (user.value.roles) {
         if (user.value.roles.includes(ROLES.CLIENT)) {
@@ -132,17 +138,22 @@ const cancelSubscription = async () => {
             </div>
             <KYCVerification v-if="showKYC" />
         </template>
-        <template v-if="subscription">
-            <div class="subscription" v-if="subscription">
-                <hr style="width: 100%" />
-                <h3>Subscription</h3>
-                <div>
-                    <p>Subscripted to subscription {{ subscription.plan.name }}</p>
-                    <p v-if="subscription.isActive == true">CreatedAt : {{ subscription.createdAt }}</p>
-                    <p v-else>CanceledAt : {{ subscription.updatedAt }}</p>
+        <template v-if="showSubscription">
+            <h3>Subscription</h3>
+            <template v-if="subscription">
+                <div class="subscription" v-if="subscription">
+                    <hr style="width: 100%" />
+                    <div>
+                        <p>Subscripted to subscription {{ subscription.plan.name }}</p>
+                        <p v-if="subscription.isActive == true">CreatedAt : {{ subscription.createdAt }}</p>
+                        <p v-else>CanceledAt : {{ subscription.updatedAt }}</p>
+                    </div>
+                    <Btn v-if="subscription.isActive == true" @click="() => cancelSubscription()">Cancel</Btn>
                 </div>
-                <Btn v-if="subscription.isActive == true" @click="() => cancelSubscription()">Cancel</Btn>
-            </div>
+            </template>
+            <template v-else>
+                <p>Vous n'avez aucun abonnement...</p>
+            </template>
         </template>
     </main>
 </template>
